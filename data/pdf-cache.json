@@ -592,5 +592,20 @@
     ]
    }
   ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/all-new-hiace/september-2026/v2/1.0-pm-(ipte)(cpte)-hiace-slwb.pdf": {
+  "cols": [
+   "HIACE SLWB 2.8D AT WINDOW VAN"
+  ],
+  "rows": [
+   {
+    "name": "Solid White",
+    "code": "058",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   }
+  ]
  }
 }
