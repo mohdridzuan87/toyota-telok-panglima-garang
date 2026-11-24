@@ -188,7 +188,7 @@
 
   /* ---------- PROSES ---------- */
   const STEPS = [
-    ["Pandu uji & pilih varian", "Rasa sendiri bagaimana kereta itu dipandu sebelum buat keputusan. Wan Jasni sediakan kereta pandu uji dan bantu bandingkan varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan Jasni di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
+    ["Lihat kereta & pilih varian", "Lihat sendiri kereta di showroom dan bandingkan varian sebelum buat keputusan. Wan Jasni bantu terangkan beza setiap varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan Jasni di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
     ["Sebut harga & rebate", "Wan Jasni sediakan pecahan harga penuh supaya tiada kejutan kemudian.", ["Harga OTR varian dan warna pilihan", "Rebate dan promosi bulan semasa, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori jika mahu"], "Boleh dibuat melalui WhatsApp"],
     ["Semakan & permohonan loan", "Wan Jasni bantu hantar permohonan loan kepada bank supaya awak dapat tawaran yang selesa.", ["Dokumen lazim: IC, slip gaji dan penyata bank terkini", "Pekerja sendiri: dokumen perniagaan dan penyata akaun", "Wan Jasni maklumkan status kelulusan kepada awak"], "Bergantung pada bank"],
     ["Tempahan & pengesahan", "Selepas setuju harga dan loan, tempahan dibuat dan varian serta warna disahkan.", ["Bayar yuran tempahan", "Sahkan varian, warna dan aksesori", "Wan Jasni semak stok dan anggaran tarikh kereta sampai"], "Tempoh tunggu ikut model dan warna"],
@@ -203,37 +203,5 @@
   };
   $("stepList").addEventListener("click", e => { const b = e.target.closest("button"); if (b) step(+b.dataset.i); });
   step(0);
-
-  /* ---------- PANDU UJI ---------- */
-  const TIMES = ["10:00 pagi", "11:30 pagi", "2:00 petang", "3:30 petang", "5:00 petang"];
-  const PURP = ["Pandu uji", "Sebut harga dan loan", "Lihat kereta di showroom"];
-  const DOW = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
-  const MON = ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogo", "Sep", "Okt", "Nov", "Dis"];
-  const B = { t: 1, p: 0 };
-  $("bModel").innerHTML = M.map(m => `<option value="${m.id}">Toyota ${m.name}</option>`).join("");
-  $("bModel").value = "corolla-cross";
-  $("bTime").innerHTML = TIMES.map((t, i) => `<button type="button" data-i="${i}">${t}</button>`).join("");
-  $("bPurpose").innerHTML = PURP.map((t, i) => `<button type="button" data-i="${i}">${t}</button>`).join("");
-  const today = new Date(); const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  const tmr = new Date(today); tmr.setDate(today.getDate() + 1);
-  $("bDate").min = iso(today); $("bDate").value = iso(tmr);
-  $("bTime").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { B.t = +b.dataset.i; book(); } });
-  $("bPurpose").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { B.p = +b.dataset.i; book(); } });
-  ["bName", "bDate", "bModel"].forEach(id => $(id).addEventListener("input", book));
-  function book() {
-    [...$("bTime").children].forEach((b, i) => b.classList.toggle("on", i === B.t));
-    [...$("bPurpose").children].forEach((b, i) => b.classList.toggle("on", i === B.p));
-    const name = $("bName").value.trim(), dv = $("bDate").value, model = "Toyota " + byId($("bModel").value).name;
-    let dateTxt = "";
-    if (dv) {
-      const [y, mo, d] = dv.split("-").map(Number), dt = new Date(y, mo - 1, d);
-      $("pDay").textContent = d; $("pMon").textContent = MON[mo - 1]; $("pDow").textContent = DOW[dt.getDay()];
-      dateTxt = `${DOW[dt.getDay()]}, ${d} ${MON[mo - 1]} ${y}`;
-      $("pTime").textContent = `${TIMES[B.t]}, ${y}`;
-    }
-    $("pName").textContent = name || "Nama awak"; $("pModel").textContent = model; $("pPurpose").textContent = PURP[B.p];
-    $("bSend").href = wa(`Salam Wan Jasni, saya nak tempah slot:\n\nNama: ${name || "-"}\nTarikh: ${dateTxt || "-"}\nMasa: ${TIMES[B.t]}\nModel: ${model}\nTujuan: ${PURP[B.p]}\n\nBoleh Wan Jasni sahkan?`);
-  }
-  book();
 
 })();

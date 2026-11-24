@@ -217,30 +217,6 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .step-detail li::before{content:"";position:absolute;left:0;top:15px;width:10px;height:2px;background:var(--red)}
 .step-detail .meta{margin-top:18px;font-size:12.5px;color:#8d8d96}
 
-/* booking */
-.book{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;margin-top:44px;align-items:start}
-.book-form{display:grid;grid-template-columns:1fr 1fr;gap:18px;background:#e9e9eb;padding:30px}
-.field.full{grid-column:1/-1}
-.field label,.flbl{display:block;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin:0 0 8px}
-.field input,.field select{width:100%;padding:13px 14px;border:1px solid #d2d2d6;background:#fff;font:inherit;font-size:15px;color:var(--ink);border-radius:0}
-.field input:focus,.field select:focus{outline:2px solid var(--ink);outline-offset:-1px}
-.pass{background:var(--ink);color:#fff;position:relative}
-.pass-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--line-d)}
-.pass-head strong{display:block;font-family:var(--fd);letter-spacing:.14em;font-size:14px}
-.pass-head span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9a9aa3}
-.pass-head img{width:44px;height:44px;object-fit:cover;object-position:50% 20%;border:2px solid #fff}
-.pass-date{display:flex;gap:18px;align-items:center;padding:22px 24px;border-bottom:1px dashed #3a3a40}
-.cal{width:64px;height:68px;background:#fff;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.cal b{font-family:var(--fd);font-size:28px;font-weight:900;line-height:1}
-.cal span{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
-.pass-date strong{display:block;font-family:var(--fd);font-size:22px;text-transform:uppercase}
-.pass-date span{color:#b0b0b8;font-size:13px}
-.pass-rows{padding:8px 24px}
-.pass-rows div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line-d);font-size:13.5px}
-.pass-rows dt{color:#9a9aa3;flex:none}
-.pass-rows dd{text-align:right;font-weight:600}
-.pass .btn{margin:0;border-radius:0}
-
 /* location */
 .addr{margin-top:22px;font-size:16px;color:#ddd;line-height:1.7}
 .addr strong{color:#fff}
@@ -273,7 +249,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 @media (max-width:980px){
   .nav{display:none}
   .top .btn-wa{margin-left:auto}
-  .hero-grid,.two,.calc,.steps,.book,.pick-res{grid-template-columns:1fr}
+  .hero-grid,.two,.calc,.steps,.pick-res{grid-template-columns:1fr}
   .hero-car img{margin:0 auto}
   .strip{grid-template-columns:repeat(2,1fr)}
   .strip a{grid-column:1/-1;padding:14px 0 18px}
@@ -295,13 +271,12 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
   .trust-item:first-child{border-top:0}
   .stage-car{min-height:0;margin:12px 0}
   .stage{padding:22px 16px;margin-left:-16px;margin-right:-16px}
-  .calc-in,.calc-out,.check-card,.step-detail,.book-form{padding:22px 16px}
+  .calc-in,.calc-out,.check-card,.step-detail{padding:22px 16px}
   .calc{margin-left:-16px;margin-right:-16px;border-left:0;border-right:0}
   .ncd{grid-template-columns:repeat(3,1fr)}
   .ncd button:nth-child(3){border-right:0}
   .ncd button:nth-child(-n+3){border-bottom:1px solid var(--line)}
   .q{grid-template-columns:1fr;gap:6px}
-  .book-form{grid-template-columns:1fr}
   .pick-empty,.pick-res{padding:24px 18px}
   .float-wa{width:52px;height:52px;right:14px;bottom:14px}
 }
