@@ -47,10 +47,24 @@
     const all = [...document.querySelectorAll("main > section, footer.foot")];
     all.forEach((s, i) => { s.classList.add("panel"); s.style.zIndex = String(i + 1); });
     const panels = all.filter(s => !s.classList.contains("trust")); // jalur trust terlalu nipis untuk dipin; ia meluncur bersama
+    // Tinggi sebenar kandungan (bukan tinggi tetap yang GSAP letak semasa dipin)
+    const contentH = p => Math.max(p.scrollHeight, [...p.children].reduce((a, c) => a + c.offsetHeight, 0));
+    // Bila kandungan halaman berubah tinggi (buka jawapan FAQ, keputusan kuiz, langkah lain), kira semula pin:
+    // halaman yang kini lebih tinggi daripada skrin akan diskrol habis dahulu sebelum halaman seterusnya menutupnya
+    let roT, lastH = new Map();
+    const ro = new ResizeObserver(() => {
+      clearTimeout(roT);
+      roT = setTimeout(() => {
+        const changed = panels.some(p => { const h = contentH(p); const c = Math.abs(h - (lastH.get(p) || h)) > 4; lastH.set(p, h); return c; });
+        if (changed) ScrollTrigger.refresh();
+      }, 120);
+    });
+    panels.forEach(p => { lastH.set(p, contentH(p)); [...p.children].forEach(c => ro.observe(c)); });
+    document.querySelectorAll(".faq details").forEach(d => d.addEventListener("toggle", () => setTimeout(() => ScrollTrigger.refresh(), 60)));
     panels.forEach((p, i) => {
       const next = panels[i + 1]; if (!next) return;
       const cover = all[all.indexOf(p) + 1];
-      ScrollTrigger.create({ trigger: p, start: () => (p.offsetHeight <= innerHeight ? "top top" : "bottom bottom"),
+      ScrollTrigger.create({ trigger: p, start: () => (contentH(p) <= innerHeight ? "top top" : "bottom bottom"),
         endTrigger: next, end: "top top", pin: true, pinSpacing: false, anticipatePin: 1, invalidateOnRefresh: true });
       gsap.fromTo(p, { "--dim": 0 }, { "--dim": 0.62, ease: "none",
         scrollTrigger: { trigger: cover, start: "top bottom", endTrigger: next, end: "top top", scrub: true, invalidateOnRefresh: true } });
@@ -103,6 +117,6 @@
 
     // Kandungan dinamik (cadangan kuiz) & imej lewat dimuat: kira semula kedudukan
     window.addEventListener("load", () => ScrollTrigger.refresh());
-    return () => { bar.remove(); clearInterval(timer); clearInterval(sync); removeEventListener("scroll", onScroll); gsap.set([...document.querySelectorAll(blocks + ",.w > span")], { clearProps: "all" }); };
+    return () => { ro.disconnect(); bar.remove(); clearInterval(timer); clearInterval(sync); removeEventListener("scroll", onScroll); gsap.set([...document.querySelectorAll(blocks + ",.w > span")], { clearProps: "all" }); };
   });
 })();
