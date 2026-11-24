@@ -155,7 +155,7 @@ for (const link of pdfLinks) {
     const f = path.join(tmpdir(), "pl-" + Date.now() + ".pdf"); writeFileSync(f, buf);
     const txt = execFileSync("pdftotext", ["-layout", f, "-"], { encoding: "utf8" }); unlinkSync(f);
     cache[link] = parsePdfText(txt);
-    console.log("PDF dibaca:", link, Object.keys(cache[link].byCode).length, "warna");
+    console.log("PDF dibaca:", link, cache[link].rows.length, "warna, lajur:", cache[link].cols.join(" | "));
   } catch (e) { console.warn("PDF gagal:", link, e.message); }
 }
 for (const k of Object.keys(cache)) if (!pdfLinks.has(k)) delete cache[k];
