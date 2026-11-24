@@ -1,0 +1,27 @@
+name: probe-pdf (sementara)
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils webp >/dev/null
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - name: Muat turun PDF senarai harga
+        run: |
+          mkdir out && cd out
+          node -e '
+          const r=await fetch("https://www.toyota.com.my/en/price-and-model-tools/price-list.html",{headers:{"User-Agent":"Mozilla/5.0"}});
+          const h=await r.text();const d=JSON.parse(h.match(/window\.data_price_list\s*=\s*(\{[\s\S]*?\});\s*\n/)[1]);
+          const pen=d.states.find(s=>s.id==="Peninsular Malaysia");const s=new Set();
+          for(const t of pen.tabs)for(const i of t.items||[])for(const c of i.categories||[])for(const g of c.gradeLists||[])for(const p of g.priceTypes||[])if(p.type==="Individual Private"&&p.pdfLink)s.add(p.pdfLink);
+          require("fs").writeFileSync("links.txt",[...s].join("\n"));' --input-type=module || node --input-type=module -e '
+          const r=await fetch("https://www.toyota.com.my/en/price-and-model-tools/price-list.html",{headers:{"User-Agent":"Mozilla/5.0"}});
+          const h=await r.text();const d=JSON.parse(h.match(/window\.data_price_list\s*=\s*(\{[\s\S]*?\});\s*\n/)[1]);
+          const pen=d.states.find(s=>s.id==="Peninsular Malaysia");const s=new Set();
+          for(const t of pen.tabs)for(const i of t.items||[])for(const c of i.categories||[])for(const g of c.gradeLists||[])for(const p of g.priceTypes||[])if(p.type==="Individual Private"&&p.pdfLink)s.add(p.pdfLink);
+          (await import("fs")).writeFileSync("links.txt",[...s].join("\n"));'
+          n=0; while read -r l; do n=$((n+1)); curl -s -A "Mozilla/5.0" "https://www.toyota.com.my$l" -o "p$n.pdf"; echo "p$n $l" >> index.txt; pdftotext -layout "p$n.pdf" "p$n.txt"; done < links.txt
+          ls -la
+      - uses: actions/upload-artifact@v4
+        with: { name: pdftext, path: out/*.txt }
