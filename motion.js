@@ -84,10 +84,21 @@
        laman dibuka tidak disembunyikan langsung. */
     const below = el => el.getBoundingClientRect().top > innerHeight * 0.92;
     const pending = [];
+    // Gradien bersambung merentas perkataan bahagian tebal: setiap perkataan guna gradien selebar frasa, dianjak ke kedudukannya
+    const gradBolds = [];
+    const alignGrad = () => gradBolds.forEach(b => {
+      const br = b.getBoundingClientRect();
+      b.querySelectorAll(".w").forEach(w => { const r = w.getBoundingClientRect(), s = w.firstElementChild;
+        s.style.setProperty("--gw", br.width.toFixed(1) + "px"); s.style.setProperty("--gx", (br.left - r.left).toFixed(1) + "px"); });
+    });
     document.querySelectorAll(".sec h2").forEach(h => {
       const words = splitWords(h);
+      h.querySelectorAll("b").forEach(b => { if (b.querySelector(".w")) { b.classList.add("split"); gradBolds.push(b); } });
       if (below(h)) { gsap.set(words, { yPercent: 110, opacity: 0 }); pending.push({ el: h, play: () => gsap.to(words, { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out", stagger: 0.045, overwrite: true }) }); }
     });
+    alignGrad();
+    addEventListener("resize", alignGrad);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignGrad);
     const blocks = ".sec .eyebrow,.sec .sub,.trust-item,.tabs,.quiz .q,.pick,.check-card,.step-list li,.step-detail,.faq details,.addr,.map,.calc-in > *,.foot-top,.stage";
     document.querySelectorAll(blocks).forEach(el => {
       if (below(el)) { gsap.set(el, { opacity: 0, y: 44 }); pending.push({ el, play: i => gsap.to(el, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out", delay: i * 0.07, overwrite: true }) }); }
@@ -117,6 +128,6 @@
 
     // Kandungan dinamik (cadangan kuiz) & imej lewat dimuat: kira semula kedudukan
     window.addEventListener("load", () => ScrollTrigger.refresh());
-    return () => { ro.disconnect(); bar.remove(); clearInterval(timer); clearInterval(sync); removeEventListener("scroll", onScroll); gsap.set([...document.querySelectorAll(blocks + ",.w > span")], { clearProps: "all" }); };
+    return () => { removeEventListener("resize", alignGrad); gradBolds.forEach(b => b.classList.remove("split")); ro.disconnect(); bar.remove(); clearInterval(timer); clearInterval(sync); removeEventListener("scroll", onScroll); gsap.set([...document.querySelectorAll(blocks + ",.w > span")], { clearProps: "all" }); };
   });
 })();
