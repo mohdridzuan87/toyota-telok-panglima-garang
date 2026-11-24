@@ -26,7 +26,7 @@
     ask: (g, c) => `Hi Wan Jasni, I'm interested in the Toyota ${g}${c ? " in " + c : ""}. Could you share the latest price and this month's rebate?`,
     ncd: [[0, "First car"], [25, "1 year"], [30, "2 years"], [38.33, "3 years"], [45, "4 years"], [55, "5 years +"]],
     years: y => y + (y === 1 ? " year" : " years"),
-    send: (g, p, d, dp, y, r, n, mo) => `Hi Wan Jasni, I calculated an instalment on your website:\n\nModel: Toyota ${g}\nOTR price: ${p}\nDeposit: ${d}% (${dp})\nTenure: ${y} years\nRate: ${r}% per year\nNCD: ${n}%\nEstimated instalment: ${mo}/month\n\nCould you check it with the bank and share this month's rebate?`,
+    send: (g, p, d, dp, y, r, n, mo) => `Hi Wan Jasni, I calculated an instalment on your website:\n\nModel: Toyota ${g}\nOTR price: ${p}\nDeposit: ${d}% (${dp})\nTenure: ${y} years\nRate: ${r}% per year\nNCD: ${n}%\nEstimated instalment: ${mo}/month\n\nCould you check it with the bank?`,
     why: {
       city: "Easy to drive and park in daily traffic, and economical for the commute.",
       far: "Comfortable on long trips, with enough cabin and boot space for the balik kampung run.",
@@ -61,7 +61,7 @@
     ask: (g, c) => `Salam Wan Jasni, saya berminat dengan Toyota ${g}${c ? " warna " + c : ""}. Boleh share harga terkini dan rebate bulan ini?`,
     ncd: [[0, "Kereta pertama"], [25, "1 tahun"], [30, "2 tahun"], [38.33, "3 tahun"], [45, "4 tahun"], [55, "5 tahun ke atas"]],
     years: y => y + " tahun",
-    send: (g, p, d, dp, y, r, n, mo) => `Salam Wan Jasni, saya dah kira ansuran di laman Wan Jasni:\n\nModel: Toyota ${g}\nHarga OTR: ${p}\nDeposit: ${d}% (${dp})\nTempoh: ${y} tahun\nKadar: ${r}% setahun\nNCD: ${n}%\nAnggaran ansuran: ${mo}/bulan\n\nBoleh Wan Jasni semak dengan bank dan share rebate bulan ini?`,
+    send: (g, p, d, dp, y, r, n, mo) => `Salam Wan Jasni, saya dah kira ansuran di laman Wan Jasni:\n\nModel: Toyota ${g}\nHarga OTR: ${p}\nDeposit: ${d}% (${dp})\nTempoh: ${y} tahun\nKadar: ${r}% setahun\nNCD: ${n}%\nAnggaran ansuran: ${mo}/bulan\n\nBoleh Wan Jasni semak dengan bank?`,
     why: {
       city: "Saiz mudah untuk trafik dan parkir harian, dan jimat untuk ulang-alik kerja.",
       far: "Selesa untuk perjalanan jauh, ruang kabin dan bagasi cukup untuk balik kampung.",
