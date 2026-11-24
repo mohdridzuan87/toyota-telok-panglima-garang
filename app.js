@@ -50,37 +50,37 @@
   } : {
     locale: "ms-MY", from: "dari",
     month: s => s.replace("January", "Januari").replace("February", "Februari").replace("March", "Mac").replace("May", "Mei").replace("June", "Jun").replace("July", "Julai").replace("August", "Ogos").replace("October", "Oktober").replace("December", "Disember"),
-    rebNote: (mo, r) => `Rebate ${mo}: −${r}*`, rebToggle: (mo, r) => r ? `Tolak rebate ${mo} (${r})` : "Tiada rebate bulan ini untuk varian ini",
+    rebNote: (mo, r) => `Rebate ${mo}: −${r}*`, rebToggle: (mo, r) => r ? `Tolak rebate ${mo} (${r})` : "Varian ni takde rebate bulan ni",
     colLbl: c => `Warna: ${c}`, free: "tiada caj tambahan", noRebate: "tiada rebate",
     sendX: (c, cp, rb) => `\nWarna: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Senarai penuh ${n} model →`, models: n => `${n} MODEL,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van", Coupe: "Coupe" }, electric: "Elektrik",
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Elektrik (EV)" },
     colourWord: " warna ", askColour: "Warna: tanya Wan Jasni", illus: "gambar ilustrasi warna",
     specs: ["Enjin", "Bahan api", "Jenis badan", "Varian"],
-    colNote: (c, p) => `Warna ${c} tambah ${p}.`, otrNote: "Harga OTR Semenanjung, termasuk SST, tanpa insurans.",
+    colNote: (c, p) => `Warna ${c} tambah ${p}.`, otrNote: "Harga on-the-road Semenanjung, dah masuk SST, belum masuk insurans.",
     ask: (g, c) => `Salam Wan Jasni, saya berminat dengan Toyota ${g}${c ? " warna " + c : ""}. Boleh semak stok warna ini?`,
     ncd: [[0, "Kereta pertama"], [25, "1 tahun"], [30, "2 tahun"], [38.33, "3 tahun"], [45, "4 tahun"], [55, "5 tahun ke atas"]],
     years: y => y + " tahun",
     send: (g, p, d, dp, y, r, n, mo) => `Salam Wan Jasni, saya dah kira ansuran di laman Wan Jasni:\n\nModel: Toyota ${g}\nHarga OTR: ${p}\nDeposit: ${d}% (${dp})\nTempoh: ${y} tahun\nKadar: ${r}% setahun\nNCD: ${n}%\nAnggaran ansuran: ${mo}/bulan\n\nBoleh Wan Jasni semak dengan bank?`,
     why: {
-      city: "Saiz mudah untuk trafik dan parkir harian, dan jimat untuk ulang-alik kerja.",
-      far: "Selesa untuk perjalanan jauh, ruang kabin dan bagasi cukup untuk balik kampung.",
-      work: "Tahan lasak, four wheel drive dan cargo bed untuk kerja serta angkut barang.",
-      save: "Enjin HEV paling jimat minyak, sesuai kalau awak banyak memandu setiap hari."
+      city: "Senang bawa dalam jem, senang parking, dan jimat untuk pergi balik kerja.",
+      far: "Selesa untuk jalan jauh, ruang dalam dan bonet cukup untuk balik kampung.",
+      work: "Tahan lasak, ada four wheel drive dan cargo bed untuk kerja dan angkut barang.",
+      save: "Enjin HEV paling jimat minyak, sesuai kalau awak drive banyak setiap hari."
     },
-    over: " Model ini sedikit melebihi bajet awak; Wan Jasni boleh bantu cari susunan deposit yang selesa.",
-    pickK: "Pilihan Wan Jasni", talkH: "MARI BINCANG", talkP: "Gabungan ini perlukan perbincangan. WhatsApp Wan Jasni untuk cadangan terbaik.",
+    over: " Model ni lebih sikit dari bajet awak, tapi Wan Jasni boleh tolong susun deposit supaya bayaran sebulan selesa.",
+    pickK: "Pilihan Wan Jasni", talkH: "JOM BINCANG", talkP: "Yang ni kena bincang sikit. WhatsApp Wan Jasni, nanti Wan Jasni bagi cadangan terbaik.",
     otrNoRebate: "Harga OTR tanpa rebate*", perMonth: "Sebulan selepas rebate (deposit 10%, 9 tahun, 2.3%)",
     view: "Lihat model", askWan: "Tanya Wan Jasni", others: "Pilihan lain", mo: "/bulan",
     pickMsg: g => `Salam Wan Jasni, pemilih model di laman Wan Jasni cadangkan Toyota ${g} untuk saya. Boleh terangkan lebih lanjut?`,
-    chk: (n, t) => `${n}/${t}`, chkDone: "Sedia dipandu pulang", chkSome: "Hampir siap", chkNone: "Tekan setiap perkara",
+    chk: (n, t) => `${n}/${t}`, chkDone: "Siap, jom bawa balik!", chkSome: "Hampir siap", chkNone: "Tekan setiap satu",
     steps: [
-      ["Lihat kereta & pilih varian", "Lihat sendiri kereta di showroom dan bandingkan varian sebelum buat keputusan. Wan Jasni bantu terangkan beza setiap varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan Jasni di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
-      ["Sebut harga & rebate", "Wan Jasni sediakan pecahan harga penuh supaya tiada kejutan kemudian.", ["Harga OTR varian dan warna pilihan", "Rebate dan promosi bulan semasa, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori jika mahu"], "Boleh dibuat melalui WhatsApp"],
-      ["Semakan & permohonan loan", "Wan Jasni bantu hantar permohonan loan kepada bank supaya awak dapat tawaran yang selesa.", ["Dokumen lazim: IC, slip gaji dan penyata bank terkini", "Pekerja sendiri: dokumen perniagaan dan penyata akaun", "Wan Jasni maklumkan status kelulusan kepada awak"], "Bergantung pada bank"],
-      ["Tempahan & pengesahan", "Selepas setuju harga dan loan, tempahan dibuat dan varian serta warna disahkan.", ["Bayar yuran tempahan", "Sahkan varian, warna dan aksesori", "Wan Jasni semak stok dan anggaran tarikh kereta sampai"], "Tempoh tunggu ikut model dan warna"],
-      ["Pendaftaran & insurans", "Kereta didaftarkan atas nama awak dan insurans serta road tax disediakan.", ["Pendaftaran JPJ dan nombor plat", "Polisi insurans dan road tax", "Wan Jasni kemas kini setiap peringkat melalui WhatsApp"], "Diuruskan oleh pengedar"],
-      ["Penyerahan & service pertama", "Hari ambil kunci. Kereta disemak bersama awak dan setiap ciri diterangkan.", ["Pemeriksaan kereta dan dokumen bersama awak", "Penerangan ciri dan sambungan telefon", "Pemeriksaan percuma pertama pada 1,000 km; Wan Jasni ingatkan jadual service"], "Wan Jasni kekal sebagai satu nombor untuk dihubungi"]
+      ["Tengok kereta & pilih varian", "Datang showroom, tengok sendiri kereta dan banding varian. Wan Jasni terangkan beza setiap satu, termasuk petrol dengan HEV.",["Banding saiz, ruang dan ciri keselamatan", "Tanya apa-apa terus kat Wan Jasni", "Ambil gambar dan brochure, bincang dengan family kat rumah"], "Biasanya 30 hingga 60 minit"],
+      ["Harga penuh & rebate", "Wan Jasni bagi pecahan harga penuh, supaya takde kejutan lepas ni.",["Harga on-the-road untuk varian dan warna pilihan awak", "Rebate dan promosi bulan ni, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori kalau nak"], "Boleh buat terus dalam WhatsApp"],
+      ["Mohon loan", "Wan Jasni tolong hantar permohonan loan ke bank, cari bayaran sebulan yang selesa untuk awak.",["Dokumen biasa: IC, slip gaji dan penyata bank terkini", "Kerja sendiri: dokumen bisnes dan penyata akaun", "Wan Jasni update bila bank dah lulus"], "Ikut bank"],
+      ["Buat booking", "Bila harga dan loan dah okay, kita buat booking dan confirm varian dan warna.",["Bayar booking fee", "Confirm varian, warna dan aksesori", "Wan Jasni check stok dan bila kereta sampai"], "Masa tunggu ikut model dan warna"],
+      ["Daftar kereta & insurans", "Kereta didaftarkan atas nama awak, insurans dan road tax pun disiapkan.",["Daftar JPJ dan dapat nombor plat", "Polisi insurans dan road tax", "Wan Jasni update setiap langkah dalam WhatsApp"], "Showroom yang uruskan"],
+      ["Ambil kunci & service pertama", "Hari yang ditunggu! Kita check kereta sama-sama dan Wan Jasni tunjuk semua fungsi.",["Check kereta dan dokumen sama-sama", "Belajar guna kereta dan sambung telefon", "Pemeriksaan percuma pertama pada 1,000 km; Wan Jasni ingatkan jadual service"], "Lepas tu pun, Wan Jasni masih boleh dihubungi"]
     ]
   };
   const TYPE = L.type;
