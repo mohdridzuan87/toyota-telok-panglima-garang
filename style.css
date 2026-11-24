@@ -142,6 +142,16 @@ output{font-family:var(--fd);font-weight:800;font-size:15px}
 .chips button{padding:9px 14px;border:1px solid var(--line);font-size:13px;font-weight:600;background:#fff;transition:border-color .15s}
 .chips button:hover{border-color:#999}
 .chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chips.cols button{display:inline-flex;align-items:center;gap:8px}
+.chips.cols i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.2);flex:none}
+.chips.cols button.on i{border-color:#fff}
+.chips.cols em{font-style:normal;color:var(--red);font-weight:700}
+.chips.cols button.on em{color:#ff8a94}
+.reb-toggle{display:flex;align-items:center;gap:10px;margin-top:22px;padding:12px 14px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600;cursor:pointer}
+.reb-toggle input{width:18px;height:18px;accent-color:var(--red);flex:none}
+.reb-toggle:has(input:disabled){color:var(--mute);cursor:default}
+.reb-note{font-family:var(--fd);font-weight:700;font-size:15px;color:var(--red);margin-top:2px}
+.brk div[hidden]{display:none}
 .money{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--ink);padding:6px 0}
 .money span{font-size:16px;color:var(--mute)}
 .money input{border:0;outline:0;font-family:var(--fd);font-weight:800;font-size:28px;width:100%;background:none;color:var(--ink)}

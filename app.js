@@ -14,7 +14,10 @@
 
   /* ---------- TEKS BM / EN ---------- */
   const L = EN ? {
-    locale: "en-MY", from: "from", seeAll: n => `See all ${n} models →`, models: n => `${n} MODELS,`,
+    locale: "en-MY", from: "from",
+    month: s => s, rebNote: (mo, r) => `${mo} rebate: −${r}*`, rebToggle: (mo, r) => r ? `Deduct ${mo} rebate (${r})` : "No rebate this month for this variant",
+    colLbl: c => `Colour: ${c}`, free: "no extra charge", noRebate: "no rebate",
+    sendX: (c, cp, rb) => `\nColour: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `See all ${n} models →`, models: n => `${n} MODELS,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van" },
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel" },
     colourWord: " in ", askColour: "Colour: ask Wan Jasni",
@@ -32,7 +35,7 @@
     },
     over: " This is slightly above your budget; Wan Jasni can help find a comfortable deposit arrangement.",
     pickK: "Wan Jasni's pick", talkH: "LET'S TALK", talkP: "This combination needs a chat. WhatsApp Wan Jasni for the best suggestion.",
-    otrNoRebate: "OTR price without rebate*", perMonth: "Per month (10% deposit, 9 years, 2.3%)",
+    otrNoRebate: "OTR price without rebate*", perMonth: "Per month after rebate (10% deposit, 9 years, 2.3%)",
     view: "View model", askWan: "Ask Wan Jasni", others: "Other options", mo: "/month",
     pickMsg: g => `Hi Wan Jasni, the model finder on your website suggested the Toyota ${g} for me. Could you tell me more?`,
     chk: (n, t) => `${n} of ${t}`, chkDone: "Ready to drive home", chkSome: "Checking", chkNone: "Tap each item",
@@ -45,7 +48,11 @@
       ["Handover & first service", "Key day. The car is checked with you and every feature is explained.", ["Car and document check with you", "Feature walkthrough and phone pairing", "First free inspection at 1,000 km; Wan Jasni reminds you of the service schedule"], "Wan Jasni stays your one number to call"]
     ]
   } : {
-    locale: "ms-MY", from: "dari", seeAll: n => `Lihat semua ${n} model →`, models: n => `${n} MODEL,`,
+    locale: "ms-MY", from: "dari",
+    month: s => s.replace("January", "Januari").replace("February", "Februari").replace("March", "Mac").replace("May", "Mei").replace("June", "Jun").replace("July", "Julai").replace("August", "Ogos").replace("October", "Oktober").replace("December", "Disember"),
+    rebNote: (mo, r) => `Rebate ${mo}: −${r}*`, rebToggle: (mo, r) => r ? `Tolak rebate ${mo} (${r})` : "Tiada rebate bulan ini untuk varian ini",
+    colLbl: c => `Warna: ${c}`, free: "tiada caj tambahan", noRebate: "tiada rebate",
+    sendX: (c, cp, rb) => `\nWarna: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Lihat semua ${n} model →`, models: n => `${n} MODEL,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van" },
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel" },
     colourWord: " warna ", askColour: "Warna: tanya Wan Jasni",
@@ -63,7 +70,7 @@
     },
     over: " Model ini sedikit melebihi bajet awak; Wan Jasni boleh bantu cari susunan deposit yang selesa.",
     pickK: "Cadangan Wan Jasni", talkH: "MARI BINCANG", talkP: "Gabungan ini perlukan perbincangan. WhatsApp Wan Jasni untuk cadangan terbaik.",
-    otrNoRebate: "Harga OTR tanpa rebate*", perMonth: "Sebulan (deposit 10%, 9 tahun, 2.3%)",
+    otrNoRebate: "Harga OTR tanpa rebate*", perMonth: "Sebulan selepas rebate (deposit 10%, 9 tahun, 2.3%)",
     view: "Lihat model", askWan: "Tanya Wan Jasni", others: "Pilihan lain", mo: "/bulan",
     pickMsg: g => `Salam Wan Jasni, pemilih model di laman Wan Jasni cadangkan Toyota ${g} untuk saya. Boleh terangkan lebih lanjut?`,
     chk: (n, t) => `${n} daripada ${t}`, chkDone: "Sedia dipandu pulang", chkSome: "Sedang disemak", chkNone: "Tekan setiap perkara",
@@ -77,6 +84,7 @@
     ]
   };
   const TYPE = L.type;
+  const MONTH = L.month(D.rebateMonth || "");
 
   // data-wa: mesej lalai pada pautan WhatsApp statik
   document.querySelectorAll("[data-wa]").forEach(a => a.href = wa(a.dataset.wa));
@@ -126,13 +134,14 @@
     $("mSpecs").innerHTML = [[L.specs[0], engineOf(m, g) + " L"], [L.specs[1], L.fuel[g.fuel] || g.fuel], [L.specs[2], TYPE[m.type] || m.type], [L.specs[3], m.grades.length + " (" + fuels + ")"]]
       .map(([k, v]) => `<dl><dt>${k}</dt><dd>${v}</dd></dl>`).join("");
     $("mPrice").textContent = rm(g.price);
+    $("mReb").textContent = g.rebate ? L.rebNote(MONTH, rm(g.rebate)) : "";
     $("mColNote").textContent = col && col.p ? L.colNote(col.n, rm(col.p)) : L.otrNote;
     $("mAsk").href = wa(L.ask(g.name, col && col.n));
     $("mBrochure").href = m.url;
   }
   $("mGrades").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; cur.g = +b.dataset.i; const f = cur.m.grades[cur.g].cols.findIndex(c => !c.p); cur.c = f < 0 ? 0 : f; renderModel(); });
   $("mSwatches").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; cur.c = +b.dataset.i; renderModel(); });
-  $("mCalc").addEventListener("click", () => { calcSet(cur.m.id, cur.g); $("kalkulator").scrollIntoView({ behavior: "smooth" }); });
+  $("mCalc").addEventListener("click", () => { calcSet(cur.m.id, cur.g, cur.c); $("kalkulator").scrollIntoView({ behavior: "smooth" }); });
   showModel(M[0].id);
 
   /* ---------- KALKULATOR ---------- */
@@ -146,29 +155,46 @@
     return (gross * (1 - ncd / 100) * 1.08 + 10) * 1.2;
   };
   const NCDS = L.ncd;
-  const C = { m: M[0], g: 0, ncd: 0 };
-  const calcModels = M.filter(m => m.id !== "hiace");
+  const C = { m: M[0], g: 0, c: 0, ncd: 0 };
+  const calcModels = M.filter(m => m.type !== "Van");
+  const gradeLabel = (m, g) => g.name.replace(m.name === "Innova Zenix" ? "Innova Zenix " : m.name + " ", "");
+  const freeCol = g => g.cols.reduce((b, c, i, a) => (c.p || 0) < (a[b].p || 0) ? i : b, 0);
   $("cModels").innerHTML = calcModels.map(m => `<button type="button" data-id="${m.id}">${m.name}</button>`).join("");
   $("cNcd").innerHTML = NCDS.map(([v, t], i) => `<button type="button" data-i="${i}">${v}%<small>${t}</small></button>`).join("");
-  function calcSet(id, gi = 0) {
-    C.m = byId(id); C.g = gi;
+  function calcSet(id, gi = 0, ci) {
+    C.m = byId(id); C.g = gi; const g = C.m.grades[gi]; C.c = ci != null && g.cols[ci] ? ci : freeCol(g);
     [...$("cModels").children].forEach(b => b.classList.toggle("on", b.dataset.id === id));
-    $("cGrades").innerHTML = C.m.grades.map((g, i) => `<button type="button" data-i="${i}" class="${i === gi ? "on" : ""}">${g.name.replace(/^Innova Zenix |^[A-Za-z]+ (Cross )?/, "")}</button>`).join("");
-    $("cPrice").value = num(C.m.grades[gi].price);
+    $("cGrades").innerHTML = C.m.grades.map((x, i) => `<button type="button" data-i="${i}" class="${i === gi ? "on" : ""}">${gradeLabel(C.m, x)}</button>`).join("");
+    $("cPrice").value = num(g.price);
     calc();
   }
+  const colourChips = () => {
+    const g = C.m.grades[C.g];
+    $("cColours").innerHTML = g.cols.length ? g.cols.map((c, i) => `<button type="button" data-i="${i}" class="${i === C.c ? "on" : ""}"><i style="background:${c.hex}"></i>${c.n}${c.p ? ` <em>+${rm(c.p)}</em>` : ""}</button>`).join("") : `<span class="hint">${L.askColour}</span>`;
+  };
   $("cModels").addEventListener("click", e => { const b = e.target.closest("button"); if (b) calcSet(b.dataset.id); });
   $("cGrades").addEventListener("click", e => { const b = e.target.closest("button"); if (b) calcSet(C.m.id, +b.dataset.i); });
+  $("cColours").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; C.c = +b.dataset.i; calc(); });
+  $("cReb").addEventListener("change", calc);
   $("cNcd").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; C.ncd = +b.dataset.i; calc(); });
   $("cPrice").addEventListener("input", e => { const v = e.target.value.replace(/[^\d]/g, ""); e.target.value = v ? num(+v) : ""; calc(); });
   ["cDep", "cYears", "cRate"].forEach(id => $(id).addEventListener("input", calc));
   function calc() {
+    const g = C.m.grades[C.g], col = g.cols[C.c];
+    colourChips();
     const price = +$("cPrice").value.replace(/[^\d]/g, "") || 0;
+    const colP = col ? col.p || 0 : 0, reb = g.rebate || 0;
+    $("cReb").disabled = !reb; $("cRebLbl").textContent = L.rebToggle(MONTH, rm(reb));
+    const rebUsed = reb && $("cReb").checked ? reb : 0;
+    const net = Math.max(0, price + colP - rebUsed);
     const depPct = +$("cDep").value, years = +$("cYears").value, rate = +$("cRate").value;
-    const dep = price * depPct / 100, loan = price - dep, interest = loan * rate / 100 * years, total = loan + interest;
+    const dep = net * depPct / 100, loan = net - dep, interest = loan * rate / 100 * years, total = loan + interest;
     const monthly = years ? total / (years * 12) : 0;
-    const g = C.m.grades[C.g], cc = CCN[engineOf(C.m, g)] || 1496, ncdV = NCDS[C.ncd][0];
-    const ins = insurance(cc, price, ncdV);
+    const cc = CCN[engineOf(C.m, g)] || 1496, ncdV = NCDS[C.ncd][0];
+    const ins = insurance(cc, price + colP, ncdV);
+    $("rColRow").hidden = !colP; $("rColLbl").textContent = L.colLbl(col ? col.n : ""); $("rCol").textContent = "+" + rm(colP);
+    $("rRebRow").hidden = !rebUsed; $("rRebLbl").textContent = "Rebate " + MONTH; $("rReb").textContent = "−" + rm(rebUsed);
+    $("rNet").textContent = rm(net);
     ["cDep", "cYears", "cRate"].forEach(id => fill($(id)));
     $("cDepOut").textContent = `${depPct}% (${rm(dep)})`;
     $("cYearsOut").textContent = L.years(years);
@@ -179,7 +205,8 @@
     $("rPrice").textContent = rm(price); $("rDep").textContent = rm(dep); $("rLoan").textContent = rm(loan);
     $("rInt").textContent = rm(interest); $("rTotal").textContent = rm(total);
     $("rIns").textContent = "±" + rm(ins); $("rUpfront").textContent = "±" + rm(dep + ins);
-    $("rSend").href = wa(L.send(g.name, rm(price), depPct, rm(dep), years, rate.toFixed(2), ncdV, rm(monthly)));
+    const extra = L.sendX(col ? col.n : "-", colP ? rm(colP) : "", rebUsed ? `−${rm(rebUsed)} (${MONTH})` : L.noRebate);
+    $("rSend").href = wa(L.send(g.name, rm(price), depPct, rm(dep), years, rate.toFixed(2), ncdV, rm(monthly)).replace(/(\n[^\n]*OTR[^\n]*)/, "$1" + extra));
   }
   calcSet("vios");
 
@@ -209,7 +236,7 @@
         if (t.pax[0] === pax) s += 3; else if (t.pax.includes(pax)) s += 2; else if (pax === 2 && t.pax.includes(5)) s += 1; else return;
         if (use === "save") { if (g.fuel !== "HEV") return; s += 4; }
         else if (t.use[0] === use) s += 4; else if (t.use.includes(use)) s += 2; else if (use === "work") return;
-        list.push({ m, g, gi, s, mo: est(g.price) });
+        list.push({ m, g, gi, s, mo: est(g.price - (g.rebate || 0)) });
       });
     }
     const within = list.filter(x => x.mo <= budget);

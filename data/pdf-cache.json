@@ -1,0 +1,596 @@
+{
+ "/content/dam/malaysia/price-list-maintenance-packages/corolla-cross/july-2026/v2/1.0-pm(ip)-corolla-cross-price-list.pdf": {
+  "cols": [
+   "1.8V A/T",
+   "1.8 HEV A/T",
+   "1.8 HEV GR-S A/T"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl ",
+    "code": "089",
+    "price": 800,
+    "avail": null
+   },
+   {
+    "name": "Red Mica Metallic",
+    "code": "3R3",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Dark Turquoise",
+    "code": "B88",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Silver Metallic",
+    "code": "1D4",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Celestite Grey Metallic",
+    "code": "1K3",
+    "price": 0,
+    "avail": [
+     false,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "(2-tone) Platinum White Pearl ",
+    "code": "2PS",
+    "price": 2000,
+    "avail": null
+   },
+   {
+    "name": "(2-tone) Red Mica Metallic ",
+    "code": "2QL",
+    "price": 1500,
+    "avail": null
+   },
+   {
+    "name": "(2-tone) Dark Turquoise ",
+    "code": "XM2",
+    "price": 1500,
+    "avail": null
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/hilux/july-2026/v3/1.0-pm-(ipte)-hilux-price-list.pdf": {
+  "cols": [
+   "HILUX D/CAB GR-S",
+   "HILUX D/CAB",
+   "HILUX S/CAB"
+  ],
+  "rows": [
+   {
+    "name": "Crimson Spark Red Metallic",
+    "code": "3T6",
+    "price": 0,
+    "avail": [
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Attitude Black",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Super White 2",
+    "code": "040",
+    "price": 0,
+    "avail": [
+     true,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Bronze Mica Metallic",
+    "code": "4T3",
+    "price": 0,
+    "avail": [
+     false,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Phantom Brown Metallic",
+    "code": "4W9",
+    "price": 0,
+    "avail": [
+     false,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Medium Silver Metallic",
+    "code": "1F8",
+    "price": 0,
+    "avail": [
+     false,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Silver Metallic",
+    "code": "1D4",
+    "price": 0,
+    "avail": [
+     false,
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Solid White",
+    "code": "058",
+    "price": 0,
+    "avail": [
+     false,
+     false,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/corolla/july-2026/1.0-pm-(ipte)-corolla.pdf": {
+  "cols": [
+   "1.8G A/T",
+   "1.8GR Sport A/T"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl    ",
+    "code": "089",
+    "price": 800,
+    "avail": [
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Cement Gray Metallic",
+    "code": "1H5",
+    "price": 0,
+    "avail": [
+     true,
+     false
+    ]
+   },
+   {
+    "name": "Attitude Black",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Metal Stream Metallic",
+    "code": "1K0",
+    "price": 0,
+    "avail": [
+     true,
+     false
+    ]
+   },
+   {
+    "name": "(2-tone) Platinum White Pearl    ",
+    "code": "2PS",
+    "price": 2000,
+    "avail": [
+     false,
+     true
+    ]
+   },
+   {
+    "name": "(2-tone) Red Mica Metallic      ",
+    "code": "2QL",
+    "price": 1500,
+    "avail": [
+     false,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/vios-hev/july-2026/1.0-pm(ip)-vios.pdf": {
+  "cols": [
+   "1.5E AT",
+   "1.5G AT",
+   "1.5 HEV AT",
+   "1.5 HEV GR-S AT"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl ",
+    "code": "089",
+    "price": 400,
+    "avail": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Attitude Black",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Spicy Scarlet SE.",
+    "code": "R77",
+    "price": 0,
+    "avail": [
+     true,
+     true,
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Silver Metallic",
+    "code": "1D4",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Nebula Blue Metallic",
+    "code": "8X2",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Celestite Grey Metallic",
+    "code": "1K3",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "(2-tone) Spicy Scarlet SE. ",
+    "code": "XM1",
+    "price": 1500,
+    "avail": null
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/toyota-yaris-cros-and-hev/july-2026/1.0-pm(ip)-yaris-cross.pdf": {
+  "cols": [
+   "1.5S",
+   "1.5S HEV"
+  ],
+  "rows": [
+   {
+    "name": "Platinum Pearl White ",
+    "code": "089",
+    "price": 400,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Attitude Black",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Silver Metallic",
+    "code": "1D4",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Spicy Scarlet SE",
+    "code": "R77",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Dark Turquoise",
+    "code": "B88",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/harrier-hev/november-2026/1.0-pm-ipte-cpte-harrier.pdf": {
+  "cols": [
+   "2.5 HEV"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl Mica       ",
+    "code": "089",
+    "price": 800,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Precious Black         ",
+    "code": "219",
+    "price": 800,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Grey Metallic",
+    "code": "1G3",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/camry-hev-and-ice/july-2026/1.0-pm-(ipte)-camry.pdf": {
+  "cols": [
+   "Camry 2.5V A/T Camry 2.5 HEV"
+  ],
+  "rows": [
+   {
+    "name": "Emotional Red 2 ",
+    "code": "3U5",
+    "price": 800,
+    "avail": null
+   },
+   {
+    "name": "Platinum White Pearl Mica ",
+    "code": "089",
+    "price": 800,
+    "avail": null
+   },
+   {
+    "name": "Precious Metal     ",
+    "code": "1L5",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Attitude Black Mica",
+    "code": "218",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Cement Grey Metallic",
+    "code": "1H5",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Dark Blue Mica",
+    "code": "8X8",
+    "price": 0,
+    "avail": null
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/zenix/july-2026/1.0-pm-(ipte)-innova-zenix.pdf": {
+  "cols": [
+   "2.0V",
+   "2.0 HEV"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl ",
+    "code": "089",
+    "price": 1000,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Silver Metallic",
+    "code": "1D6",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Grey Metallic",
+    "code": "1G3",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Attitude Black Mica",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/fortuner/july-2026/v4/1.0-pm-(ipte)-fortuner-price-list.pdf": {
+  "cols": [
+   "2.4 A/T 4x4",
+   "2.8 VRZ A/T 4x4 2.7 SRZ A/T 4x4"
+  ],
+  "rows": [
+   {
+    "name": "Bronze Mica Metallic with Black Roof              ",
+    "code": "2VM",
+    "price": 1500,
+    "avail": null
+   },
+   {
+    "name": "Super White 2 with Black Roof ",
+    "code": "2UE",
+    "price": 1500,
+    "avail": null
+   },
+   {
+    "name": "Bronze Mica Metallic",
+    "code": "4T3",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Super White 2",
+    "code": "040",
+    "price": 0,
+    "avail": null
+   },
+   {
+    "name": "Silver Metallic",
+    "code": "1D4",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Attitude Black",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Medium Silver Metallic",
+    "code": "1F8",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Phantom Brown Metallic",
+    "code": "4W9",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/yaris/november-2026/1.0-pm(ipte)-yaris-price-list.pdf": {
+  "cols": [],
+  "rows": [
+   {
+    "name": "Silver Metallic",
+    "code": "1D4",
+    "price": 0,
+    "avail": []
+   },
+   {
+    "name": "Red Mica Metallic",
+    "code": "3R3",
+    "price": 0,
+    "avail": []
+   },
+   {
+    "name": "(2-tone) Red Mica Metallic ",
+    "code": "2QL",
+    "price": 1500,
+    "avail": []
+   },
+   {
+    "name": "(2-tone) Platinum White Pearl ",
+    "code": "2PS",
+    "price": 1800,
+    "avail": []
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/veloz/july-2026/1.0-pm-veloz-price-list.pdf": {
+  "cols": [
+   "Veloz 1.5 A/T"
+  ],
+  "rows": [
+   {
+    "name": "Silver Metallic with Black Roof        ",
+    "code": "XL2",
+    "price": 1300,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Blue Metallic with Black Roof          ",
+    "code": "XL3",
+    "price": 1300,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "White",
+    "code": "W09",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Red Metallic",
+    "code": "R67",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Metallic Bluish Black",
+    "code": "X16",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   }
+  ]
+ }
+}

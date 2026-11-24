@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=6">
+<link rel="stylesheet" href="../style.css?v=7">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -136,7 +136,7 @@
       <div class="stage-colour"><span id="mColName"></span><div class="swatches" id="mSwatches" role="group" aria-label="Colour"></div></div>
       <div class="specs" id="mSpecs"></div>
       <div class="stage-foot">
-        <div><p class="kicker">OTR price without rebate*</p><p class="price" id="mPrice"></p><p class="note" id="mColNote"></p></div>
+        <div><p class="kicker">OTR price without rebate*</p><p class="price" id="mPrice"></p><p class="reb-note" id="mReb"></p><p class="note" id="mColNote"></p></div>
         <div class="stage-btns">
           <button class="btn btn-red" id="mCalc" type="button">Calculate this model</button>
           <a class="btn btn-ghost" id="mAsk" target="_blank" rel="noopener" href="#">Ask Wan Jasni for price &amp; rebate</a>
@@ -159,8 +159,11 @@
         <div class="chips" id="cModels"></div>
         <label class="lbl">Variant</label>
         <div class="chips" id="cGrades"></div>
+        <label class="lbl">Colour</label>
+        <div class="chips cols" id="cColours"></div>
         <label class="lbl" for="cPrice">Car price (OTR)</label>
         <div class="money"><span>RM</span><input id="cPrice" inputmode="numeric" autocomplete="off"></div>
+        <label class="reb-toggle"><input type="checkbox" id="cReb" checked><span id="cRebLbl">Deduct this month's rebate</span></label>
         <div class="row-lbl"><label class="lbl" for="cDep">Deposit</label><output id="cDepOut"></output></div>
         <input type="range" id="cDep" min="0" max="30" step="1" value="10">
         <div class="row-lbl"><label class="lbl" for="cYears">Loan tenure</label><output id="cYearsOut"></output></div>
@@ -176,6 +179,9 @@
         <p class="big"><small>RM</small><span id="rMonthly">0</span><small>/month</small></p>
         <dl class="brk">
           <div><dt>OTR price</dt><dd id="rPrice"></dd></div>
+          <div id="rColRow"><dt id="rColLbl">Premium colour</dt><dd id="rCol"></dd></div>
+          <div id="rRebRow"><dt id="rRebLbl">Rebate</dt><dd id="rReb"></dd></div>
+          <div><dt>Price after rebate</dt><dd id="rNet"></dd></div>
           <div><dt>Deposit</dt><dd id="rDep"></dd></div>
           <div><dt>Loan amount</dt><dd id="rLoan"></dd></div>
           <div><dt>Total interest</dt><dd id="rInt"></dd></div>
@@ -184,7 +190,7 @@
           <div><dt>Upfront (deposit + insurance)</dt><dd id="rUpfront"></dd></div>
         </dl>
         <a class="btn btn-wa wide" id="rSend" target="_blank" rel="noopener" href="#">Send calculation to Wan Jasni</a>
-        <p class="fine">Estimate only, subject to bank approval. Insurance is estimated from the Peninsular motor tariff (by cc and price, less NCD, including SST and stamp duty); the actual premium depends on the insurer. This month's rebate is not deducted.</p>
+        <p class="fine">Estimate only, subject to bank approval. Insurance is estimated from the Peninsular motor tariff (by cc and price, less NCD, including SST and stamp duty); the actual premium depends on the insurer. Rebates and colour prices are taken automatically from the Toyota Malaysia website, subject to terms and conditions.</p>
       </div>
     </div>
   </div>
@@ -297,7 +303,7 @@
 </a>
 
 <script>window.SITE_BASE = "../";</script>
-<script src="../data.js?v=1"></script>
-<script src="../app.js?v=4"></script>
+<script src="../data.js"></script>
+<script src="../app.js?v=5"></script>
 </body>
 </html>
