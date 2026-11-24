@@ -88,15 +88,17 @@
 
   // data-wa: mesej lalai pada pautan WhatsApp statik
   document.querySelectorAll("[data-wa]").forEach(a => a.href = wa(a.dataset.wa));
-  $("updatedAt").textContent = new Date(D.updatedAt).toLocaleDateString(L.locale, { day: "numeric", month: "long", year: "numeric" });
+  $("updatedAt").textContent = new Date(D.checkedAt || D.updatedAt).toLocaleDateString(L.locale, { day: "numeric", month: "long", year: "numeric" });
   $("modelCount").textContent = L.models(M.length);
 
   // slider fill
   const fill = r => r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min) * 100) + "%");
 
   /* ---------- HERO STRIP ---------- */
-  const HERO = ["vios", "yaris-cross", "corolla-cross", "hilux"];
-  let heroI = 2, heroTimer;
+  // Model pilihan untuk jalur hero; jika Toyota buang model, isi dengan model lain secara automatik
+  const HERO = ["vios", "yaris-cross", "corolla-cross", "hilux"].filter(byId);
+  for (const m of M) { if (HERO.length >= 4) break; if (!HERO.includes(m.id)) HERO.push(m.id); }
+  let heroI = Math.min(2, HERO.length - 1), heroTimer;
   const heroSet = i => {
     heroI = i; const m = byId(HERO[i]), img = $("heroCar");
     img.style.opacity = 0;
@@ -238,7 +240,7 @@
     const extra = L.sendX(col ? col.n : "-", colP ? rm(colP) : "", rebUsed ? `−${rm(rebUsed)} (${MONTH})` : L.noRebate);
     $("rSend").href = wa(L.send(g.name, rm(price), depPct, rm(dep), years, rate.toFixed(2), ncdV, rm(monthly)).replace(/(\n[^\n]*OTR[^\n]*)/, "$1" + extra));
   }
-  calcSet("vios");
+  calcSet((byId("vios") || calcModels[0] || M[0]).id);
 
   /* ---------- PEMILIH MODEL ---------- */
   const TAGS = {
@@ -260,7 +262,7 @@
   function recommend() {
     const pax = +A.pax, use = A.use, budget = +A.budget, list = [];
     for (const [id, t] of Object.entries(TAGS)) {
-      const m = byId(id);
+      const m = byId(id); if (!m) continue; // model sudah tiada di senarai Toyota
       m.grades.forEach((g, gi) => {
         let s = 0;
         if (t.pax[0] === pax) s += 3; else if (t.pax.includes(pax)) s += 2; else if (pax === 2 && t.pax.includes(5)) s += 1; else return;
