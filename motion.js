@@ -40,11 +40,25 @@
     gsap.from(".hero-copy > *", { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.08 });
     gsap.from(".strip > *", { y: 20, opacity: 0, duration: 0.7, ease: "power2.out", stagger: 0.06, delay: 0.5 });
 
-    /* Hero: bila skrol, teks naik & pudar, kereta membesar (desktop: hero dipin seketika) */
+    /* Halaman bertindan: setiap seksyen jadi "halaman"; halaman seterusnya meluncur naik menutup halaman semasa,
+       yang kekal di tempat & menjadi gelap. Seksyen lebih tinggi daripada skrin diskrol habis dahulu (pin pada bawah).
+       pinSpacing:false = tinggi dokumen & pautan menu (#kalkulator dll.) tidak berubah. */
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    const all = [...document.querySelectorAll("main > section, footer.foot")];
+    all.forEach((s, i) => { s.classList.add("panel"); s.style.zIndex = String(i + 1); });
+    const panels = all.filter(s => !s.classList.contains("trust")); // jalur trust terlalu nipis untuk dipin; ia meluncur bersama
+    panels.forEach((p, i) => {
+      const next = panels[i + 1]; if (!next) return;
+      const cover = all[all.indexOf(p) + 1];
+      ScrollTrigger.create({ trigger: p, start: () => (p.offsetHeight <= innerHeight ? "top top" : "bottom bottom"),
+        endTrigger: next, end: "top top", pin: true, pinSpacing: false, anticipatePin: 1, invalidateOnRefresh: true });
+      gsap.fromTo(p, { "--dim": 0 }, { "--dim": 0.62, ease: "none",
+        scrollTrigger: { trigger: cover, start: "top bottom", endTrigger: next, end: "top top", scrub: true, invalidateOnRefresh: true } });
+    });
+
+    /* Hero: semasa halaman seterusnya menutup, teks naik & pudar, kereta membesar */
     const heroTl = gsap.timeline({
-      scrollTrigger: desktop
-        ? { trigger: ".hero", start: "top top", end: "+=70%", pin: true, scrub: 0.6, anticipatePin: 1 }
-        : { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.6 }
+      scrollTrigger: { trigger: all[1], start: "top bottom", endTrigger: panels[1], end: "top top", scrub: 0.6, invalidateOnRefresh: true }
     });
     heroTl.to(".hero-copy", { y: -110, opacity: 0, ease: "none" }, 0)
       .to(".hero-car", { scale: desktop ? 1.35 : 1.15, xPercent: desktop ? -18 : -6, ease: "none" }, 0)
