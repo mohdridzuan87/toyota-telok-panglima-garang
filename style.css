@@ -1,7 +1,7 @@
 :root{
   --red:#eb0a1e; --red-d:#c00818; --ink:#0b0b0c; --ink2:#151517; --ink3:#232327;
   --paper:#ffffff; --mist:#f3f3f4; --line:#e3e3e6; --line-d:#2c2c31;
-  --mute:#6b6b73; --mute-d:#9a9aa3; --wa:#1fae5b;
+  --mute:#6b6b73; --mute-d:#9a9aa3; --wa:#25D366;
   --fd:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","Inter",Helvetica,Arial,sans-serif;
   --fb:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Inter",Helvetica,Arial,sans-serif;
 }
@@ -35,10 +35,15 @@ a{color:inherit;text-decoration:none}
 .btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red-d)}
 .btn-ghost{border:1px solid rgba(255,255,255,.45);color:#fff}.btn-ghost:hover{border-color:#fff}
 .light-sec .btn-ghost{border-color:var(--ink);color:var(--ink)}
-.btn-wa{background:#fff;color:var(--ink);padding:10px 16px}
+.btn-wa{background:#25D366;color:#fff;padding:10px 16px;text-transform:none;letter-spacing:.01em;font-weight:700}
+.btn-wa .ico{width:20px;height:20px;fill:#fff;flex:none}
+.btn-wa:hover{background:#1ebe5b}
+.btn-wa.sm{padding:7px 12px;font-size:13px;margin-top:6px;border-radius:999px;width:max-content}
+.btn-wa.sm .ico{width:16px;height:16px}
+.sa-card .btn-wa span{display:inline;color:#fff;font-size:inherit}
 .top .btn-wa{margin-left:0}
-.btn-wa.wide,.calc-out .btn-wa{background:var(--wa);color:#fff;width:100%;padding:15px}
-.btn-wa.wide:hover{filter:brightness(1.07)}
+.btn-wa.wide{width:100%;padding:15px}
+
 .link{font-size:13px;font-weight:600;color:#c9c9cf;text-decoration:underline;text-underline-offset:3px}
 
 /* type */
