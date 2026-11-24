@@ -9,8 +9,8 @@
   const wa = text => `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
   const minPrice = m => Math.min(...m.grades.map(g => g.price));
   const byId = id => M.find(m => m.id === id);
-  const CC_FALLBACK = { corolla: "1.8", "corolla-cross": "1.8", camry: "2.5", zenix: "2.0", hiace: "3.0", harrier: "2.5", veloz: "1.5", vios: "1.5", yaris: "1.5", "yaris-cross": "1.5", hilux: "2.4", fortuner: "2.4" };
-  const engineOf = (m, g) => (g.name.match(/(\d\.\d)/) || [, CC_FALLBACK[m.id]])[1];
+  const CC_FALLBACK = { gr86: "2.4", "gr-yaris": "1.6", "gr-corolla": "1.6", alphard: "2.4", vellfire: "2.5", "hiace-slwb": "2.8", corolla: "1.8", "corolla-cross": "1.8", camry: "2.5", zenix: "2.0", hiace: "3.0", harrier: "2.5", veloz: "1.5", vios: "1.5", yaris: "1.5", "yaris-cross": "1.5", hilux: "2.4", fortuner: "2.4" };
+  const engineOf = (m, g) => g.fuel === "EV" ? null : (g.name.match(/(\d\.\d)/) || [, CC_FALLBACK[m.id]])[1];
 
   /* ---------- TEKS BM / EN ---------- */
   const L = EN ? {
@@ -18,8 +18,8 @@
     month: s => s, rebNote: (mo, r) => `${mo} rebate: −${r}*`, rebToggle: (mo, r) => r ? `Deduct ${mo} rebate (${r})` : "No rebate this month for this variant",
     colLbl: c => `Colour: ${c}`, free: "no extra charge", noRebate: "no rebate",
     sendX: (c, cp, rb) => `\nColour: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `See all ${n} models →`, models: n => `${n} MODELS,`,
-    type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van" },
-    fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel" },
+    type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" }, electric: "Electric",
+    fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Electric (EV)" },
     colourWord: " in ", askColour: "Colour: ask Wan Jasni",
     specs: ["Engine", "Fuel", "Body type", "Variants"],
     colNote: (c, p) => `${c} colour adds ${p}.`, otrNote: "Peninsular OTR price, including SST, without insurance.",
@@ -53,8 +53,8 @@
     rebNote: (mo, r) => `Rebate ${mo}: −${r}*`, rebToggle: (mo, r) => r ? `Tolak rebate ${mo} (${r})` : "Tiada rebate bulan ini untuk varian ini",
     colLbl: c => `Warna: ${c}`, free: "tiada caj tambahan", noRebate: "tiada rebate",
     sendX: (c, cp, rb) => `\nWarna: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Lihat semua ${n} model →`, models: n => `${n} MODEL,`,
-    type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van" },
-    fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel" },
+    type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van", Coupe: "Coupe" }, electric: "Elektrik",
+    fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Elektrik (EV)" },
     colourWord: " warna ", askColour: "Warna: tanya Wan Jasni",
     specs: ["Enjin", "Bahan api", "Jenis badan", "Varian"],
     colNote: (c, p) => `Warna ${c} tambah ${p}.`, otrNote: "Harga OTR Semenanjung, termasuk SST, tanpa insurans.",
@@ -125,13 +125,13 @@
     $("mGrades").innerHTML = m.grades.map((x, i) => `<button type="button" class="${i === cur.g ? "on" : ""}" data-i="${i}">${x.name.replace(m.name === "Innova Zenix" ? "Innova Zenix " : m.name + " ", "")}</button>`).join("");
     const img = $("mImg");
     img.style.opacity = 0;
-    const src = BASE + (col ? col.img : m.cut);
+    const src = BASE + (col && col.img ? col.img : m.cut);
     const pre = new Image(); pre.onload = () => { img.src = src; img.style.opacity = 1; }; pre.src = src;
     img.alt = `Toyota ${g.name}${col ? L.colourWord + col.n : ""}`;
     $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") : L.askColour;
     $("mSwatches").innerHTML = g.cols.map((c, i) => `<button type="button" class="${i === cur.c ? "on" : ""}" data-i="${i}" style="background:${c.hex}" title="${c.n}" aria-label="${c.n}"></button>`).join("");
     const fuels = [...new Set(m.grades.map(x => L.fuel[x.fuel] || x.fuel))].join(" / ");
-    $("mSpecs").innerHTML = [[L.specs[0], engineOf(m, g) + " L"], [L.specs[1], L.fuel[g.fuel] || g.fuel], [L.specs[2], TYPE[m.type] || m.type], [L.specs[3], m.grades.length + " (" + fuels + ")"]]
+    $("mSpecs").innerHTML = [[L.specs[0], engineOf(m, g) ? engineOf(m, g) + " L" : L.electric], [L.specs[1], L.fuel[g.fuel] || g.fuel], [L.specs[2], TYPE[m.type] || m.type], [L.specs[3], m.grades.length + " (" + fuels + ")"]]
       .map(([k, v]) => `<dl><dt>${k}</dt><dd>${v}</dd></dl>`).join("");
     $("mPrice").textContent = rm(g.price);
     $("mReb").textContent = g.rebate ? L.rebNote(MONTH, rm(g.rebate)) : "";

@@ -19,11 +19,14 @@ const UA = { headers: { "User-Agent": "Mozilla/5.0 (wanjasni toyota site updater
 const DATA = path.join(ROOT, "data.js"), CACHE = path.join(ROOT, "data", "pdf-cache.json"), COLDIR = path.join(ROOT, "img", "col");
 
 // Model yang TIDAK dipaparkan (peraturan kandungan Wan): GR prestasi, EV, Alphard, Vellfire
-const EXCLUDE_SEG = new Set(["gr86", "gr-corolla", "gr-yaris", "bz4x", "urban-cruiser", "alphard", "vellfire"]);
-const EXCLUDE_GRADE = /\bBEV\b/i;
-const NICE = { vios: "Vios", yaris: "Yaris", "yaris-cross": "Yaris Cross", corolla: "Corolla", "corolla-cross": "Corolla Cross", camry: "Camry", veloz: "Veloz", zenix: "Innova Zenix", fortuner: "Fortuner", hilux: "Hilux", hiace: "Hiace", "hiace-slwb": "Hiace SLWB", harrier: "Harrier" };
+// Wan minta SEMUA model dipaparkan (24 Nov 2026); tambah id di sini jika mahu sembunyikan model tertentu
+const EXCLUDE_SEG = new Set([]);
+const EXCLUDE_GRADE = /^$/;
+const EV_SEG = new Set(["bz4x", "urban-cruiser"]);
+const TYPE_BY_DESC = { coupe: "Coupe", hatchback: "Hatchback", sedan: "Sedan", suv: "SUV", crossover: "SUV", "premium suv": "SUV", mpv: "MPV", pickup: "Pickup", van: "Van" };
+const NICE = { gr86: "GR86", "gr-corolla": "GR Corolla", "gr-yaris": "GR Yaris", bz4x: "bZ4X", "urban-cruiser": "Urban Cruiser", alphard: "Alphard", vellfire: "Vellfire", vios: "Vios", yaris: "Yaris", "yaris-cross": "Yaris Cross", corolla: "Corolla", "corolla-cross": "Corolla Cross", camry: "Camry", veloz: "Veloz", zenix: "Innova Zenix", fortuner: "Fortuner", hilux: "Hilux", hiace: "Hiace", "hiace-slwb": "Hiace SLWB", harrier: "Harrier" };
 const TYPE_BY_TAB = { sedan: "Sedan", suv: "SUV", hatchback: "Hatchback", mpv: "MPV", "pick-up-and-van": "Pickup" };
-const ORDER = ["vios", "yaris", "yaris-cross", "corolla", "corolla-cross", "camry", "veloz", "zenix", "fortuner", "hilux", "hiace", "hiace-slwb", "harrier"];
+const ORDER = ["vios", "yaris", "yaris-cross", "corolla", "corolla-cross", "camry", "veloz", "zenix", "fortuner", "hilux", "hiace", "hiace-slwb", "harrier", "bz4x", "urban-cruiser", "alphard", "vellfire", "gr86", "gr-yaris", "gr-corolla"];
 
 const get = async u => { const r = await fetch(u, UA); if (!r.ok) throw new Error(`HTTP ${r.status} ${u}`); return r; };
 const jsonVar = (html, name) => { const m = html.match(new RegExp("window\\." + name + "\\s*=\\s*(\\{[\\s\\S]*?\\});\\s*(?:\\n|<\\/script>)")); return m ? JSON.parse(m[1]) : null; };
@@ -51,12 +54,14 @@ for (const tab of pen.tabs) for (const it of tab.items || []) for (const c of it
   let name = g.header.trim().replace(/Hybrid Electric/i, "HEV").replace(/^CAMRY\b/, "Camry");
   const m = models.get(id) || { id, names: [], type: null, url: SITE + "/en/models/" + seg + ".html", pages: new Set(), grades: new Map() };
   m.names.push(String(it.header || "").replace(/\b(ALL-NEW|NEW)\b/g, "").replace(/HYBRID ELECTRIC|\bHEV\b|GR SPORT/g, "").replace(/\s+/g, " ").trim());
-  if (!m.type && TYPE_BY_TAB[tab.id]) m.type = /van/i.test(it.desc || "") ? "Van" : TYPE_BY_TAB[tab.id];
+  const byDesc = TYPE_BY_DESC[String(it.desc || "").toLowerCase().trim()];
+  if (!m.type && (byDesc || TYPE_BY_TAB[tab.id])) m.type = byDesc || TYPE_BY_TAB[tab.id];
   if (it.url) m.pages.add(it.url);
+  if (it.img && !m.img && !/bev/i.test(it.url || "")) m.img = it.img;
   const key = name.toLowerCase();
   if (![...m.grades.keys()].some(k => k.toLowerCase() === key)) {
     const cls = (g.class || []).join(" ");
-    const fuel = /hybrid|hev/i.test(cls + " " + name) ? "HEV" : /diesel/i.test(cls) ? "Diesel" : "Petrol";
+    const fuel = /\bBEV\b/i.test(name) || EV_SEG.has(seg) || /battery electric/i.test(cls) ? "EV" : /hybrid|hev/i.test(cls + " " + name) ? "HEV" : /diesel/i.test(cls) ? "Diesel" : "Petrol";
     m.grades.set(name, { name, fuel, price, url: g.url, pdf: ip && ip.pdfLink || "" });
   }
   models.set(id, m);
@@ -84,7 +89,7 @@ for (const l of tiles) {
   if (cash.length) amount = Math.max(...cash);
   rebateTiles.set(normT(l.title), amount);
 }
-const promoKey = (m, g) => normT(m.name + (g.fuel === "HEV" ? " HEV" : "") + (/GR Sport/i.test(g.name) ? " GR SPORT" : "") + (/single cab/i.test(g.name) ? " SINGLE CAB" : ""));
+const promoKey = (m, g) => normT(m.name + (g.fuel === "HEV" ? " HEV" : "") + (g.fuel === "EV" && !EV_SEG.has(m.id) ? " BEV" : "") + (/GR Sport/i.test(g.name) ? " GR SPORT" : "") + (/single cab/i.test(g.name) ? " SINGLE CAB" : ""));
 const usedTiles = new Set();
 for (const m of models.values()) for (const g of m.grades.values()) {
   const k = promoKey(m, g);
@@ -199,7 +204,9 @@ for (const m of models.values()) for (const g of m.grades.values()) {
   // Halaman paling hampir dengan varian dahulu: GR Sport -> laman gr-sport; HEV -> laman hybrid; petrol/diesel -> laman model asas
   const isGR = /GR Sport/i.test(g.name), isHEV = g.fuel === "HEV";
   const fit = u => { const gr = /gr-sport/i.test(u), hy = /hybrid-electric(?!\/corolla-cross-1)|hev/i.test(u.replace(/^.*\/models\/[^/]+-hybrid-electric(\.html|\/)/, "/x$1"));
-    return isGR ? (gr ? 3 : 0) : gr ? -5 : isHEV ? (hy ? 2 : 1) : (hy ? 0 : 2); };
+    const bev = /\bbev\b|-bev/i.test(u), isEV = g.fuel === "EV";
+    if (bev !== isEV) return -9; // halaman BEV hanya untuk varian EV, dan sebaliknya
+    return (isGR ? (gr ? 3 : 0) : gr ? -5 : isHEV ? (hy ? 2 : 1) : (hy ? 0 : 2)) + (u === m.url ? 0.5 : 0); };
   const pages = [...new Set([...m.pages, m.url])].sort((a, b) => fit(b) - fit(a));
   for (const u of [g.url, ...pages]) {
     const d = await coloursOf(u); if (!d || !d.options) continue;
@@ -213,6 +220,8 @@ for (const m of models.values()) for (const g of m.grades.values()) {
     break;
   }
   const pdf = cache[g.pdf];
+  // Laman tiada data warna (cth. GR Yaris): guna senarai warna dalam jadual PDF (tanpa gambar)
+  if (!list && pdf && pdf.rows && pdf.rows.length) list = pdf.rows.map(r => ({ raw: r.name + " (" + r.code + ")", hex: null, add: "", src: "" }));
   if (!list) { g.cols = prevCols(g); continue; } // gagal: kekalkan warna lama
   g.cols = [];
   const ci = columnOf(pdf, g.name);
@@ -226,18 +235,19 @@ for (const m of models.values()) for (const g of m.grades.values()) {
     g.cols.push({ n, hex: c.hex || hexFor(n), p, img: await image(c.src) });
   }
 }
-for (const f of readdirSync(COLDIR)) if (f.endsWith(".webp") && !keepImg.has(f)) unlinkSync(path.join(COLDIR, f));
+
 
 /* ---------- 5. Tulis data.js ---------- */
 const out = {
   source: PRICE_LIST, rebateSource: rebateSrc, rebateMonth,
-  models: [...models.values()].sort((a, b) => (ORDER.indexOf(a.id) + 1 || 99) - (ORDER.indexOf(b.id) + 1 || 99)).map(m => {
+  models: await Promise.all([...models.values()].sort((a, b) => (ORDER.indexOf(a.id) + 1 || 99) - (ORDER.indexOf(b.id) + 1 || 99)).map(async m => {
     const cutFile = path.join(ROOT, "img", "cut", m.id + ".webp");
     const grades = [...m.grades.values()].sort((a, b) => a.price - b.price).map(g => ({ name: g.name, fuel: g.fuel, price: g.price, rebate: g.rebate || 0, cols: g.cols || [] }));
-    const firstImg = (grades.flatMap(g => g.cols).find(c => c.img) || {}).img || "";
+    const firstImg = (grades.flatMap(g => g.cols).find(c => c.img) || {}).img || (await image(m.img)) || "";
     return { id: m.id, name: m.name, type: m.type, url: m.url, cut: existsSync(cutFile) ? "img/cut/" + m.id + ".webp" : firstImg, grades };
-  })
+  }))
 };
+for (const f of readdirSync(COLDIR)) if (f.endsWith(".webp") && !keepImg.has(f)) unlinkSync(path.join(COLDIR, f));
 const same = prevData && JSON.stringify({ ...prevData, updatedAt: 0, checkedAt: 0 }) === JSON.stringify({ ...out, updatedAt: 0, checkedAt: 0 });
 out.updatedAt = same ? prevData.updatedAt : today;
 out.checkedAt = today;
