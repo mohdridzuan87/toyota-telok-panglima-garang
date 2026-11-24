@@ -20,7 +20,7 @@
     sendX: (c, cp, rb) => `\nColour: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `See all ${n} models →`, models: n => `${n} MODELS,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" }, electric: "Electric",
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Electric (EV)" },
-    colourWord: " in ", askColour: "Colour: ask Wan Jasni",
+    colourWord: " in ", askColour: "Colour: ask Wan Jasni", illus: "colour illustration",
     specs: ["Engine", "Fuel", "Body type", "Variants"],
     colNote: (c, p) => `${c} colour adds ${p}.`, otrNote: "Peninsular OTR price, including SST, without insurance.",
     ask: (g, c) => `Hi Wan Jasni, I'm interested in the Toyota ${g}${c ? " in " + c : ""}. Could you check if this colour is in stock?`,
@@ -55,7 +55,7 @@
     sendX: (c, cp, rb) => `\nWarna: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Lihat semua ${n} model →`, models: n => `${n} MODEL,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van", Coupe: "Coupe" }, electric: "Elektrik",
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Elektrik (EV)" },
-    colourWord: " warna ", askColour: "Warna: tanya Wan Jasni",
+    colourWord: " warna ", askColour: "Warna: tanya Wan Jasni", illus: "gambar ilustrasi warna",
     specs: ["Enjin", "Bahan api", "Jenis badan", "Varian"],
     colNote: (c, p) => `Warna ${c} tambah ${p}.`, otrNote: "Harga OTR Semenanjung, termasuk SST, tanpa insurans.",
     ask: (g, c) => `Salam Wan Jasni, saya berminat dengan Toyota ${g}${c ? " warna " + c : ""}. Boleh semak stok warna ini?`,
@@ -108,6 +108,31 @@
   heroSet(heroI);
   heroTimer = setInterval(() => heroSet((heroI + 1) % HERO.length), 4500);
 
+  /* ---------- Warnakan gambar (untuk warna yang Toyota tiada gambar) ---------- */
+  const lum = h => { const n = parseInt(String(h || "#888").slice(1), 16); return ((n >> 16) & 255) * 0.299 + ((n >> 8) & 255) * 0.587 + (n & 255) * 0.114; };
+  const lightestImg = g => g.cols.filter(c => c.img).sort((a, b) => lum(b.hex) - lum(a.hex))[0] || null;
+  const tintCache = new Map();
+  const tint = (src, hex, baseHex) => {
+    const key = src + "|" + hex;
+    // Warna sasaran lebih cerah daripada gambar asal (cth. putih dari kelabu): cerahkan dahulu sebelum diwarnakan
+    const lift = Math.min(2.4, Math.max(1, lum(hex) / Math.max(40, lum(baseHex))));
+    if (!tintCache.has(key)) tintCache.set(key, new Promise((ok, fail) => {
+      const im = new Image(); im.crossOrigin = "anonymous";
+      im.onload = () => {
+        try {
+          const c = document.createElement("canvas"); c.width = im.naturalWidth; c.height = im.naturalHeight;
+          const x = c.getContext("2d");
+          x.filter = `grayscale(1) brightness(${(1.08 * lift).toFixed(2)})`; x.drawImage(im, 0, 0); x.filter = "none";
+          x.globalCompositeOperation = "multiply"; x.fillStyle = hex; x.fillRect(0, 0, c.width, c.height);
+          x.globalCompositeOperation = "destination-in"; x.drawImage(im, 0, 0); // kekalkan latar lutsinar
+          ok(c.toDataURL("image/webp", 0.85));
+        } catch (e) { fail(e); }
+      };
+      im.onerror = fail; im.src = src;
+    }));
+    return tintCache.get(key);
+  };
+
   /* ---------- MODEL ---------- */
   let cur = { m: M[0], g: 0, c: 0 };
   $("modelTabs").innerHTML = M.map(m => `<button type="button" role="tab" data-id="${m.id}"><b>${m.name}</b><span>${L.from} ${rm(minPrice(m))}</span></button>`).join("");
@@ -123,12 +148,17 @@
     $("mType").textContent = TYPE[m.type] || m.type;
     $("mName").textContent = "Toyota " + m.name;
     $("mGrades").innerHTML = m.grades.map((x, i) => `<button type="button" class="${i === cur.g ? "on" : ""}" data-i="${i}">${x.name.replace(m.name === "Innova Zenix" ? "Innova Zenix " : m.name + " ", "")}</button>`).join("");
-    const img = $("mImg");
+    const img = $("mImg"), token = (renderModel.t = (renderModel.t || 0) + 1);
     img.style.opacity = 0;
-    const src = BASE + (col && col.img ? col.img : m.cut);
-    const pre = new Image(); pre.onload = () => { img.src = src; img.style.opacity = 1; }; pre.src = src;
-    img.alt = `Toyota ${g.name}${col ? L.colourWord + col.n : ""}`;
-    $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") : L.askColour;
+    const show = src => { const pre = new Image(); pre.onload = () => { if (token !== renderModel.t) return; img.src = src; img.style.opacity = 1; }; pre.src = src; };
+    // Warna tanpa gambar rasmi: warnakan gambar paling cerah kereta yang sama dengan warna swatch rasmi (ilustrasi)
+    const base = col && !col.img ? lightestImg(g) : null;
+    if (col && col.img) show(BASE + col.img);
+    else if (base) tint(BASE + base.img, col.hex, base.hex).then(show, () => show(BASE + m.cut));
+    else show(BASE + m.cut);
+    const illus = base || (col && col.illus);
+    img.alt = `Toyota ${g.name}${col ? L.colourWord + col.n : ""}${illus ? " (" + L.illus + ")" : ""}`;
+    $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") + (illus ? ` · ${L.illus}` : "") : L.askColour;
     $("mSwatches").innerHTML = g.cols.map((c, i) => `<button type="button" class="${i === cur.c ? "on" : ""}" data-i="${i}" style="background:${c.hex}" title="${c.n}" aria-label="${c.n}"></button>`).join("");
     const fuels = [...new Set(m.grades.map(x => L.fuel[x.fuel] || x.fuel))].join(" / ");
     $("mSpecs").innerHTML = [[L.specs[0], engineOf(m, g) ? engineOf(m, g) + " L" : L.electric], [L.specs[1], L.fuel[g.fuel] || g.fuel], [L.specs[2], TYPE[m.type] || m.type], [L.specs[3], m.grades.length + " (" + fuels + ")"]]

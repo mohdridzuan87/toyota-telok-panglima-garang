@@ -4,7 +4,7 @@
 // Dijalankan oleh GitHub Actions (1hb, 7hb, 15hb, 28hb) atau manual: node scripts/update.mjs
 // Jika sumber utama gagal, data.js lama dikekalkan (skrip keluar dengan ralat, tiada fail ditulis).
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -236,6 +236,55 @@ for (const m of models.values()) for (const g of m.grades.values()) {
   }
 }
 
+
+/* ---------- 4b. Gambar warna yang Toyota Malaysia tiada: ambil dari Toyota Thailand (gambar rasmi Toyota) ---------- */
+const TH = "https://www.toyota.co.th";
+const thPages = new Map();
+async function thColours(id) { // nama warna -> laluan gambar di laman model Toyota Thailand
+  const slug = id.replace(/-/g, "");
+  if (thPages.has(slug)) return thPages.get(slug);
+  const map = {};
+  try {
+    const html = await (await get(TH + "/en/model/" + slug)).text();
+    for (const m of html.matchAll(/"([^"]{3,40})","#[0-9a-fA-F]{6}","(product\/series\/colors\/v\/[^"]+\.webp)"/g)) map[normC(m[1])] = m[2];
+  } catch { }
+  thPages.set(slug, map); return map;
+}
+// Potong ruang lutsinar di sekeliling kereta supaya saiz sepadan dengan gambar lain
+function trimToWebp(buf, out) {
+  const tmp = path.join(tmpdir(), "th-" + Date.now() + ".webp"); writeFileSync(tmp, buf);
+  let crop = "";
+  try { const r = require_ffmpeg_crop(tmp); if (r) crop = r + ","; } catch { }
+  execFileSync("ffmpeg", ["-v", "error", "-y", "-i", tmp, "-vf", crop + "scale=900:-1", "-c:v", "libwebp", "-quality", "80", out]);
+  unlinkSync(tmp);
+}
+function require_ffmpeg_crop(file) {
+  const r = spawnSync("ffmpeg", ["-hide_banner", "-i", file, "-vf", "alphaextract,cropdetect=limit=0.05:round=2:reset=0:skip=0", "-f", "null", "-"], { encoding: "utf8" });
+  const all = [...String(r.stderr || "").matchAll(/crop=(\d+:\d+:\d+:\d+)/g)];
+  return all.length ? "crop=" + all[all.length - 1][1] : "";
+}
+const family = n => { const s = String(n).toLowerCase(); return /white/.test(s) ? "white" : /black/.test(s) ? "black" : /red|scarlet|crimson/.test(s) ? "red" : /blue/.test(s) ? "blue" : /grey|gray|silver|metal/.test(s) ? "grey" : ""; };
+let thImg = 0;
+for (const m of models.values()) {
+  const need = [...m.grades.values()].some(g => (g.cols || []).some(c => !c.img));
+  if (!need) continue;
+  const th = await thColours(m.id);
+  for (const g of m.grades.values()) for (const c of g.cols || []) {
+    if (c.img) continue;
+    // Padanan tepat ikut nama; jika tiada, guna warna sekeluarga (putih/hitam/merah/biru/kelabu) sebagai ilustrasi
+    let p = th[normC(c.n)], illus = false;
+    if (!p) { const f = family(c.n); const k = f && Object.keys(th).find(k => family(k) === f); if (k) { p = th[k]; illus = true; } }
+    if (!p) continue;
+    const url = TH + "/media/" + p;
+    const file = "th-" + createHash("sha1").update(url).digest("hex").slice(0, 10) + ".webp", out = path.join(COLDIR, file);
+    if (!existsSync(out)) {
+      try { const r = await fetch(url, UA); const buf = Buffer.from(await r.arrayBuffer()); if (!r.ok || buf.length < 2000) throw 0; trimToWebp(buf, out); thImg++; }
+      catch { continue; }
+    }
+    keepImg.add(file); c.img = "img/col/" + file; c.src = "th"; if (illus) c.illus = true;
+  }
+}
+if (thImg) console.log("Gambar warna dari Toyota Thailand:", thImg);
 
 /* ---------- 5. Tulis data.js ---------- */
 const out = {
