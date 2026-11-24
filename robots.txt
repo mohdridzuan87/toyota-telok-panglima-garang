@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mohdridzuan87.github.io/toyota-telok-panglima-garang/sitemap.xml
