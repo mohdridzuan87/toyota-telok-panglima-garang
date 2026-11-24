@@ -53,14 +53,14 @@
     const src = col ? col.img : m.cut;
     const pre = new Image(); pre.onload = () => { img.src = src; img.style.opacity = 1; }; pre.src = src;
     img.alt = `Toyota ${g.name}${col ? " warna " + col.n : ""}`;
-    $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") : "Warna: tanya Wan";
+    $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") : "Warna: tanya Wan Jasni";
     $("mSwatches").innerHTML = g.cols.map((c, i) => `<button type="button" class="${i === cur.c ? "on" : ""}" data-i="${i}" style="background:${c.hex}" title="${c.n}" aria-label="${c.n}"></button>`).join("");
     const fuels = [...new Set(m.grades.map(x => x.fuel))].join(" / ");
     $("mSpecs").innerHTML = [["Enjin", engineOf(m, g) + " L"], ["Bahan api", g.fuel], ["Jenis badan", TYPE[m.type] || m.type], ["Varian", m.grades.length + " (" + fuels + ")"]]
       .map(([k, v]) => `<dl><dt>${k}</dt><dd>${v}</dd></dl>`).join("");
     $("mPrice").textContent = rm(g.price);
     $("mColNote").textContent = col && col.p ? `Warna ${col.n} tambah ${rm(col.p)}.` : "Harga OTR Semenanjung, termasuk SST, tanpa insurans.";
-    $("mAsk").href = wa(`Salam Wan, saya berminat dengan Toyota ${g.name}${col ? " warna " + col.n : ""}. Boleh share harga terkini dan rebate bulan ini?`);
+    $("mAsk").href = wa(`Salam Wan Jasni, saya berminat dengan Toyota ${g.name}${col ? " warna " + col.n : ""}. Boleh share harga terkini dan rebate bulan ini?`);
     $("mBrochure").href = m.url;
   }
   $("mGrades").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; cur.g = +b.dataset.i; const f = cur.m.grades[cur.g].cols.findIndex(c => !c.p); cur.c = f < 0 ? 0 : f; renderModel(); });
@@ -112,7 +112,7 @@
     $("rPrice").textContent = rm(price); $("rDep").textContent = rm(dep); $("rLoan").textContent = rm(loan);
     $("rInt").textContent = rm(interest); $("rTotal").textContent = rm(total);
     $("rIns").textContent = "±" + rm(ins); $("rUpfront").textContent = "±" + rm(dep + ins);
-    $("rSend").href = wa(`Salam Wan, saya dah kira ansuran di laman Wan:\n\nModel: Toyota ${g.name}\nHarga OTR: ${rm(price)}\nDeposit: ${depPct}% (${rm(dep)})\nTempoh: ${years} tahun\nKadar: ${rate.toFixed(2)}% setahun\nNCD: ${ncdV}%\nAnggaran ansuran: ${rm(monthly)}/bulan\n\nBoleh Wan semak dengan bank dan share rebate bulan ini?`);
+    $("rSend").href = wa(`Salam Wan Jasni, saya dah kira ansuran di laman Wan Jasni:\n\nModel: Toyota ${g.name}\nHarga OTR: ${rm(price)}\nDeposit: ${depPct}% (${rm(dep)})\nTempoh: ${years} tahun\nKadar: ${rate.toFixed(2)}% setahun\nNCD: ${ncdV}%\nAnggaran ansuran: ${rm(monthly)}/bulan\n\nBoleh Wan Jasni semak dengan bank dan share rebate bulan ini?`);
   }
   calcSet("vios");
 
@@ -155,19 +155,19 @@
     const pool = within.length ? within : list.slice().sort((a, b) => a.mo - b.mo).slice(0, 3);
     pool.sort((a, b) => b.s - a.s || (within.length ? b.mo - a.mo : a.mo - b.mo));
     const best = pool[0];
-    if (!best) { $("pick").innerHTML = `<div class="pick-empty"><p class="kicker light">Cadangan Wan</p><h3>MARI BINCANG</h3><p>Gabungan ini perlukan perbincangan. WhatsApp Wan untuk cadangan terbaik.</p></div>`; return; }
+    if (!best) { $("pick").innerHTML = `<div class="pick-empty"><p class="kicker light">Cadangan Wan Jasni</p><h3>MARI BINCANG</h3><p>Gabungan ini perlukan perbincangan. WhatsApp Wan Jasni untuk cadangan terbaik.</p></div>`; return; }
     const seen = new Set([best.m.id]), alts = [];
     for (const x of pool.slice(1)) { if (!seen.has(x.m.id)) { seen.add(x.m.id); alts.push(x); } if (alts.length === 2) break; }
     const over = !within.length;
     $("pick").innerHTML = `<div class="pick-res rv in">
       <div>
-        <p class="kicker light">Cadangan Wan</p>
+        <p class="kicker light">Cadangan Wan Jasni</p>
         <h3>Toyota ${best.g.name}</h3>
-        <p class="why">${WHY[use]}${over ? " Model ini sedikit melebihi bajet awak; Wan boleh bantu cari susunan deposit yang selesa." : ""}</p>
+        <p class="why">${WHY[use]}${over ? " Model ini sedikit melebihi bajet awak; Wan Jasni boleh bantu cari susunan deposit yang selesa." : ""}</p>
         <div class="mini"><div><b>${rm(best.g.price)}</b><span>Harga OTR tanpa rebate*</span></div><div><b>±${rm(best.mo)}</b><span>Sebulan (deposit 10%, 9 tahun, 2.3%)</span></div></div>
         <div class="hero-cta" style="margin-top:0">
           <button class="btn btn-red" type="button" data-go="${best.m.id}" data-gi="${best.gi}">Lihat model</button>
-          <a class="btn btn-ghost" target="_blank" rel="noopener" href="${wa(`Salam Wan, pemilih model di laman Wan cadangkan Toyota ${best.g.name} untuk saya. Boleh terangkan lebih lanjut?`)}">Tanya Wan</a>
+          <a class="btn btn-ghost" target="_blank" rel="noopener" href="${wa(`Salam Wan Jasni, pemilih model di laman Wan Jasni cadangkan Toyota ${best.g.name} untuk saya. Boleh terangkan lebih lanjut?`)}">Tanya Wan Jasni</a>
         </div>
         ${alts.length ? `<p class="alt">Pilihan lain: ${alts.map(x => `<button type="button" data-go="${x.m.id}" data-gi="${x.gi}">${x.g.name}</button> (±${rm(x.mo)}/bulan)`).join(", ")}</p>` : ""}
       </div>
@@ -188,12 +188,12 @@
 
   /* ---------- PROSES ---------- */
   const STEPS = [
-    ["Pandu uji & pilih varian", "Rasa sendiri bagaimana kereta itu dipandu sebelum buat keputusan. Wan sediakan kereta pandu uji dan bantu bandingkan varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
-    ["Sebut harga & rebate", "Wan sediakan pecahan harga penuh supaya tiada kejutan kemudian.", ["Harga OTR varian dan warna pilihan", "Rebate dan promosi bulan semasa, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori jika mahu"], "Boleh dibuat melalui WhatsApp"],
-    ["Semakan & permohonan loan", "Wan bantu hantar permohonan loan kepada bank supaya awak dapat tawaran yang selesa.", ["Dokumen lazim: IC, slip gaji dan penyata bank terkini", "Pekerja sendiri: dokumen perniagaan dan penyata akaun", "Wan maklumkan status kelulusan kepada awak"], "Bergantung pada bank"],
-    ["Tempahan & pengesahan", "Selepas setuju harga dan loan, tempahan dibuat dan varian serta warna disahkan.", ["Bayar yuran tempahan", "Sahkan varian, warna dan aksesori", "Wan semak stok dan anggaran tarikh kereta sampai"], "Tempoh tunggu ikut model dan warna"],
-    ["Pendaftaran & insurans", "Kereta didaftarkan atas nama awak dan insurans serta road tax disediakan.", ["Pendaftaran JPJ dan nombor plat", "Polisi insurans dan road tax", "Wan kemas kini setiap peringkat melalui WhatsApp"], "Diuruskan oleh pengedar"],
-    ["Penyerahan & service pertama", "Hari ambil kunci. Kereta disemak bersama awak dan setiap ciri diterangkan.", ["Pemeriksaan kereta dan dokumen bersama awak", "Penerangan ciri dan sambungan telefon", "Pemeriksaan percuma pertama pada 1,000 km; Wan ingatkan jadual service"], "Wan kekal sebagai satu nombor untuk dihubungi"]
+    ["Pandu uji & pilih varian", "Rasa sendiri bagaimana kereta itu dipandu sebelum buat keputusan. Wan Jasni sediakan kereta pandu uji dan bantu bandingkan varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan Jasni di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
+    ["Sebut harga & rebate", "Wan Jasni sediakan pecahan harga penuh supaya tiada kejutan kemudian.", ["Harga OTR varian dan warna pilihan", "Rebate dan promosi bulan semasa, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori jika mahu"], "Boleh dibuat melalui WhatsApp"],
+    ["Semakan & permohonan loan", "Wan Jasni bantu hantar permohonan loan kepada bank supaya awak dapat tawaran yang selesa.", ["Dokumen lazim: IC, slip gaji dan penyata bank terkini", "Pekerja sendiri: dokumen perniagaan dan penyata akaun", "Wan Jasni maklumkan status kelulusan kepada awak"], "Bergantung pada bank"],
+    ["Tempahan & pengesahan", "Selepas setuju harga dan loan, tempahan dibuat dan varian serta warna disahkan.", ["Bayar yuran tempahan", "Sahkan varian, warna dan aksesori", "Wan Jasni semak stok dan anggaran tarikh kereta sampai"], "Tempoh tunggu ikut model dan warna"],
+    ["Pendaftaran & insurans", "Kereta didaftarkan atas nama awak dan insurans serta road tax disediakan.", ["Pendaftaran JPJ dan nombor plat", "Polisi insurans dan road tax", "Wan Jasni kemas kini setiap peringkat melalui WhatsApp"], "Diuruskan oleh pengedar"],
+    ["Penyerahan & service pertama", "Hari ambil kunci. Kereta disemak bersama awak dan setiap ciri diterangkan.", ["Pemeriksaan kereta dan dokumen bersama awak", "Penerangan ciri dan sambungan telefon", "Pemeriksaan percuma pertama pada 1,000 km; Wan Jasni ingatkan jadual service"], "Wan Jasni kekal sebagai satu nombor untuk dihubungi"]
   ];
   $("stepList").innerHTML = STEPS.map((s, i) => `<li><button type="button" data-i="${i}"><b>${String(i + 1).padStart(2, "0")}</b><span>${s[0]}</span></button></li>`).join("");
   const step = i => {
@@ -232,7 +232,7 @@
       $("pTime").textContent = `${TIMES[B.t]}, ${y}`;
     }
     $("pName").textContent = name || "Nama awak"; $("pModel").textContent = model; $("pPurpose").textContent = PURP[B.p];
-    $("bSend").href = wa(`Salam Wan, saya nak tempah slot:\n\nNama: ${name || "-"}\nTarikh: ${dateTxt || "-"}\nMasa: ${TIMES[B.t]}\nModel: ${model}\nTujuan: ${PURP[B.p]}\n\nBoleh Wan sahkan?`);
+    $("bSend").href = wa(`Salam Wan Jasni, saya nak tempah slot:\n\nNama: ${name || "-"}\nTarikh: ${dateTxt || "-"}\nMasa: ${TIMES[B.t]}\nModel: ${model}\nTujuan: ${PURP[B.p]}\n\nBoleh Wan Jasni sahkan?`);
   }
   book();
 
