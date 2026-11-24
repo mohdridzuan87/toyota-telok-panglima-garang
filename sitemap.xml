@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mohdridzuan87.github.io/toyota-telok-panglima-garang/</loc><lastmod>2026-11-24</lastmod><changefreq>monthly</changefreq></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://mohdridzuan87.github.io/toyota-telok-panglima-garang/</loc><lastmod>2026-11-24</lastmod><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://mohdridzuan87.github.io/toyota-telok-panglima-garang/"/><xhtml:link rel="alternate" hreflang="en" href="https://mohdridzuan87.github.io/toyota-telok-panglima-garang/en/"/></url>
+  <url><loc>https://mohdridzuan87.github.io/toyota-telok-panglima-garang/en/</loc><lastmod>2026-11-24</lastmod><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://mohdridzuan87.github.io/toyota-telok-panglima-garang/"/><xhtml:link rel="alternate" hreflang="en" href="https://mohdridzuan87.github.io/toyota-telok-panglima-garang/en/"/></url>
 </urlset>

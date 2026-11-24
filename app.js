@@ -1,20 +1,87 @@
 (() => {
   const D = window.TOYOTA, M = D.models;
   const PHONE = "60163313607";
+  const EN = document.documentElement.lang === "en";
+  const BASE = window.SITE_BASE || ""; // "../" pada /en/
   const $ = id => document.getElementById(id);
   const rm = n => "RM" + Math.round(n).toLocaleString("en-MY");
   const num = n => Math.round(n).toLocaleString("en-MY");
   const wa = text => `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
   const minPrice = m => Math.min(...m.grades.map(g => g.price));
   const byId = id => M.find(m => m.id === id);
-  const TYPE = { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van" };
   const CC_FALLBACK = { corolla: "1.8", "corolla-cross": "1.8", camry: "2.5", zenix: "2.0", hiace: "3.0", harrier: "2.5", veloz: "1.5", vios: "1.5", yaris: "1.5", "yaris-cross": "1.5", hilux: "2.4", fortuner: "2.4" };
   const engineOf = (m, g) => (g.name.match(/(\d\.\d)/) || [, CC_FALLBACK[m.id]])[1];
 
+  /* ---------- TEKS BM / EN ---------- */
+  const L = EN ? {
+    locale: "en-MY", from: "from", seeAll: n => `See all ${n} models →`, models: n => `${n} MODELS,`,
+    type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van" },
+    fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel" },
+    colourWord: " in ", askColour: "Colour: ask Wan Jasni",
+    specs: ["Engine", "Fuel", "Body type", "Variants"],
+    colNote: (c, p) => `${c} colour adds ${p}.`, otrNote: "Peninsular OTR price, including SST, without insurance.",
+    ask: (g, c) => `Hi Wan Jasni, I'm interested in the Toyota ${g}${c ? " in " + c : ""}. Could you share the latest price and this month's rebate?`,
+    ncd: [[0, "First car"], [25, "1 year"], [30, "2 years"], [38.33, "3 years"], [45, "4 years"], [55, "5 years +"]],
+    years: y => y + (y === 1 ? " year" : " years"),
+    send: (g, p, d, dp, y, r, n, mo) => `Hi Wan Jasni, I calculated an instalment on your website:\n\nModel: Toyota ${g}\nOTR price: ${p}\nDeposit: ${d}% (${dp})\nTenure: ${y} years\nRate: ${r}% per year\nNCD: ${n}%\nEstimated instalment: ${mo}/month\n\nCould you check it with the bank and share this month's rebate?`,
+    why: {
+      city: "Easy to drive and park in daily traffic, and economical for the commute.",
+      far: "Comfortable on long trips, with enough cabin and boot space for the balik kampung run.",
+      work: "Tough, with four wheel drive and a cargo bed for work and hauling.",
+      save: "A HEV engine is the most fuel efficient choice if you drive a lot every day."
+    },
+    over: " This is slightly above your budget; Wan Jasni can help find a comfortable deposit arrangement.",
+    pickK: "Wan Jasni's pick", talkH: "LET'S TALK", talkP: "This combination needs a chat. WhatsApp Wan Jasni for the best suggestion.",
+    otrNoRebate: "OTR price without rebate*", perMonth: "Per month (10% deposit, 9 years, 2.3%)",
+    view: "View model", askWan: "Ask Wan Jasni", others: "Other options", mo: "/month",
+    pickMsg: g => `Hi Wan Jasni, the model finder on your website suggested the Toyota ${g} for me. Could you tell me more?`,
+    chk: (n, t) => `${n} of ${t}`, chkDone: "Ready to drive home", chkSome: "Checking", chkNone: "Tap each item",
+    steps: [
+      ["See the car & choose a variant", "See the car for yourself at the showroom and compare variants before you decide. Wan Jasni explains the difference between each variant, including petrol and HEV.", ["Compare size, space and safety features", "Ask Wan Jasni your questions in person", "Take photos and a brochure home to discuss"], "Usually 30 to 60 minutes"],
+      ["Quotation & rebate", "Wan Jasni prepares a full price breakdown so there are no surprises later.", ["OTR price for your variant and colour", "This month's rebate and promotions, subject to terms and conditions", "Insurance and accessories estimate if you want them"], "Can be done over WhatsApp"],
+      ["Loan check & application", "Wan Jasni helps submit your loan application to the banks so you get a comfortable offer.", ["Usual documents: IC, recent payslips and bank statements", "Self-employed: business documents and account statements", "Wan Jasni keeps you updated on the approval status"], "Depends on the bank"],
+      ["Booking & confirmation", "Once the price and loan are agreed, the booking is made and your variant and colour are confirmed.", ["Pay the booking fee", "Confirm variant, colour and accessories", "Wan Jasni checks stock and the estimated arrival date"], "Waiting time depends on model and colour"],
+      ["Registration & insurance", "The car is registered in your name, and insurance and road tax are arranged.", ["JPJ registration and number plate", "Insurance policy and road tax", "Wan Jasni updates you at every stage over WhatsApp"], "Handled by the dealer"],
+      ["Handover & first service", "Key day. The car is checked with you and every feature is explained.", ["Car and document check with you", "Feature walkthrough and phone pairing", "First free inspection at 1,000 km; Wan Jasni reminds you of the service schedule"], "Wan Jasni stays your one number to call"]
+    ]
+  } : {
+    locale: "ms-MY", from: "dari", seeAll: n => `Lihat semua ${n} model →`, models: n => `${n} MODEL,`,
+    type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van" },
+    fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel" },
+    colourWord: " warna ", askColour: "Warna: tanya Wan Jasni",
+    specs: ["Enjin", "Bahan api", "Jenis badan", "Varian"],
+    colNote: (c, p) => `Warna ${c} tambah ${p}.`, otrNote: "Harga OTR Semenanjung, termasuk SST, tanpa insurans.",
+    ask: (g, c) => `Salam Wan Jasni, saya berminat dengan Toyota ${g}${c ? " warna " + c : ""}. Boleh share harga terkini dan rebate bulan ini?`,
+    ncd: [[0, "Kereta pertama"], [25, "1 tahun"], [30, "2 tahun"], [38.33, "3 tahun"], [45, "4 tahun"], [55, "5 tahun ke atas"]],
+    years: y => y + " tahun",
+    send: (g, p, d, dp, y, r, n, mo) => `Salam Wan Jasni, saya dah kira ansuran di laman Wan Jasni:\n\nModel: Toyota ${g}\nHarga OTR: ${p}\nDeposit: ${d}% (${dp})\nTempoh: ${y} tahun\nKadar: ${r}% setahun\nNCD: ${n}%\nAnggaran ansuran: ${mo}/bulan\n\nBoleh Wan Jasni semak dengan bank dan share rebate bulan ini?`,
+    why: {
+      city: "Saiz mudah untuk trafik dan parkir harian, dan jimat untuk ulang-alik kerja.",
+      far: "Selesa untuk perjalanan jauh, ruang kabin dan bagasi cukup untuk balik kampung.",
+      work: "Tahan lasak, four wheel drive dan cargo bed untuk kerja serta angkut barang.",
+      save: "Enjin HEV paling jimat minyak, sesuai kalau awak banyak memandu setiap hari."
+    },
+    over: " Model ini sedikit melebihi bajet awak; Wan Jasni boleh bantu cari susunan deposit yang selesa.",
+    pickK: "Cadangan Wan Jasni", talkH: "MARI BINCANG", talkP: "Gabungan ini perlukan perbincangan. WhatsApp Wan Jasni untuk cadangan terbaik.",
+    otrNoRebate: "Harga OTR tanpa rebate*", perMonth: "Sebulan (deposit 10%, 9 tahun, 2.3%)",
+    view: "Lihat model", askWan: "Tanya Wan Jasni", others: "Pilihan lain", mo: "/bulan",
+    pickMsg: g => `Salam Wan Jasni, pemilih model di laman Wan Jasni cadangkan Toyota ${g} untuk saya. Boleh terangkan lebih lanjut?`,
+    chk: (n, t) => `${n} daripada ${t}`, chkDone: "Sedia dipandu pulang", chkSome: "Sedang disemak", chkNone: "Tekan setiap perkara",
+    steps: [
+      ["Lihat kereta & pilih varian", "Lihat sendiri kereta di showroom dan bandingkan varian sebelum buat keputusan. Wan Jasni bantu terangkan beza setiap varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan Jasni di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
+      ["Sebut harga & rebate", "Wan Jasni sediakan pecahan harga penuh supaya tiada kejutan kemudian.", ["Harga OTR varian dan warna pilihan", "Rebate dan promosi bulan semasa, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori jika mahu"], "Boleh dibuat melalui WhatsApp"],
+      ["Semakan & permohonan loan", "Wan Jasni bantu hantar permohonan loan kepada bank supaya awak dapat tawaran yang selesa.", ["Dokumen lazim: IC, slip gaji dan penyata bank terkini", "Pekerja sendiri: dokumen perniagaan dan penyata akaun", "Wan Jasni maklumkan status kelulusan kepada awak"], "Bergantung pada bank"],
+      ["Tempahan & pengesahan", "Selepas setuju harga dan loan, tempahan dibuat dan varian serta warna disahkan.", ["Bayar yuran tempahan", "Sahkan varian, warna dan aksesori", "Wan Jasni semak stok dan anggaran tarikh kereta sampai"], "Tempoh tunggu ikut model dan warna"],
+      ["Pendaftaran & insurans", "Kereta didaftarkan atas nama awak dan insurans serta road tax disediakan.", ["Pendaftaran JPJ dan nombor plat", "Polisi insurans dan road tax", "Wan Jasni kemas kini setiap peringkat melalui WhatsApp"], "Diuruskan oleh pengedar"],
+      ["Penyerahan & service pertama", "Hari ambil kunci. Kereta disemak bersama awak dan setiap ciri diterangkan.", ["Pemeriksaan kereta dan dokumen bersama awak", "Penerangan ciri dan sambungan telefon", "Pemeriksaan percuma pertama pada 1,000 km; Wan Jasni ingatkan jadual service"], "Wan Jasni kekal sebagai satu nombor untuk dihubungi"]
+    ]
+  };
+  const TYPE = L.type;
+
   // data-wa: mesej lalai pada pautan WhatsApp statik
   document.querySelectorAll("[data-wa]").forEach(a => a.href = wa(a.dataset.wa));
-  $("updatedAt").textContent = new Date(D.updatedAt).toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric" });
-  $("modelCount").textContent = M.length + " MODEL,";
+  $("updatedAt").textContent = new Date(D.updatedAt).toLocaleDateString(L.locale, { day: "numeric", month: "long", year: "numeric" });
+  $("modelCount").textContent = L.models(M.length);
 
   // slider fill
   const fill = r => r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min) * 100) + "%");
@@ -25,17 +92,17 @@
   const heroSet = i => {
     heroI = i; const m = byId(HERO[i]), img = $("heroCar");
     img.style.opacity = 0;
-    setTimeout(() => { img.src = m.cut; img.alt = "Toyota " + m.name; img.style.opacity = 1; }, 200);
+    setTimeout(() => { img.src = BASE + m.cut; img.alt = "Toyota " + m.name; img.style.opacity = 1; }, 200);
     [...$("heroStrip").querySelectorAll("button")].forEach((b, j) => b.classList.toggle("on", j === i));
   };
-  $("heroStrip").innerHTML = HERO.map(id => { const m = byId(id); return `<button type="button"><b>${m.name}</b><span>dari ${rm(minPrice(m))}</span></button>`; }).join("") + `<a href="#model">Lihat semua ${M.length} model →</a>`;
+  $("heroStrip").innerHTML = HERO.map(id => { const m = byId(id); return `<button type="button"><b>${m.name}</b><span>${L.from} ${rm(minPrice(m))}</span></button>`; }).join("") + `<a href="#model">${L.seeAll(M.length)}</a>`;
   [...$("heroStrip").querySelectorAll("button")].forEach((b, i) => b.addEventListener("click", () => { clearInterval(heroTimer); heroSet(i); showModel(HERO[i]); }));
   heroSet(heroI);
   heroTimer = setInterval(() => heroSet((heroI + 1) % HERO.length), 4500);
 
   /* ---------- MODEL ---------- */
   let cur = { m: M[0], g: 0, c: 0 };
-  $("modelTabs").innerHTML = M.map(m => `<button type="button" role="tab" data-id="${m.id}"><b>${m.name}</b><span>dari ${rm(minPrice(m))}</span></button>`).join("");
+  $("modelTabs").innerHTML = M.map(m => `<button type="button" role="tab" data-id="${m.id}"><b>${m.name}</b><span>${L.from} ${rm(minPrice(m))}</span></button>`).join("");
   $("modelTabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) showModel(b.dataset.id); });
   function showModel(id, gi = 0) {
     cur = { m: byId(id), g: gi, c: 0 };
@@ -50,17 +117,17 @@
     $("mGrades").innerHTML = m.grades.map((x, i) => `<button type="button" class="${i === cur.g ? "on" : ""}" data-i="${i}">${x.name.replace(m.name === "Innova Zenix" ? "Innova Zenix " : m.name + " ", "")}</button>`).join("");
     const img = $("mImg");
     img.style.opacity = 0;
-    const src = col ? col.img : m.cut;
+    const src = BASE + (col ? col.img : m.cut);
     const pre = new Image(); pre.onload = () => { img.src = src; img.style.opacity = 1; }; pre.src = src;
-    img.alt = `Toyota ${g.name}${col ? " warna " + col.n : ""}`;
-    $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") : "Warna: tanya Wan Jasni";
+    img.alt = `Toyota ${g.name}${col ? L.colourWord + col.n : ""}`;
+    $("mColName").textContent = col ? col.n + (col.p ? ` (+${rm(col.p)})` : "") : L.askColour;
     $("mSwatches").innerHTML = g.cols.map((c, i) => `<button type="button" class="${i === cur.c ? "on" : ""}" data-i="${i}" style="background:${c.hex}" title="${c.n}" aria-label="${c.n}"></button>`).join("");
-    const fuels = [...new Set(m.grades.map(x => x.fuel))].join(" / ");
-    $("mSpecs").innerHTML = [["Enjin", engineOf(m, g) + " L"], ["Bahan api", g.fuel], ["Jenis badan", TYPE[m.type] || m.type], ["Varian", m.grades.length + " (" + fuels + ")"]]
+    const fuels = [...new Set(m.grades.map(x => L.fuel[x.fuel] || x.fuel))].join(" / ");
+    $("mSpecs").innerHTML = [[L.specs[0], engineOf(m, g) + " L"], [L.specs[1], L.fuel[g.fuel] || g.fuel], [L.specs[2], TYPE[m.type] || m.type], [L.specs[3], m.grades.length + " (" + fuels + ")"]]
       .map(([k, v]) => `<dl><dt>${k}</dt><dd>${v}</dd></dl>`).join("");
     $("mPrice").textContent = rm(g.price);
-    $("mColNote").textContent = col && col.p ? `Warna ${col.n} tambah ${rm(col.p)}.` : "Harga OTR Semenanjung, termasuk SST, tanpa insurans.";
-    $("mAsk").href = wa(`Salam Wan Jasni, saya berminat dengan Toyota ${g.name}${col ? " warna " + col.n : ""}. Boleh share harga terkini dan rebate bulan ini?`);
+    $("mColNote").textContent = col && col.p ? L.colNote(col.n, rm(col.p)) : L.otrNote;
+    $("mAsk").href = wa(L.ask(g.name, col && col.n));
     $("mBrochure").href = m.url;
   }
   $("mGrades").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; cur.g = +b.dataset.i; const f = cur.m.grades[cur.g].cols.findIndex(c => !c.p); cur.c = f < 0 ? 0 : f; renderModel(); });
@@ -72,13 +139,13 @@
   // Anggaran insurans komprehensif, tarif Semenanjung (sama seperti Toyota Loan Calculator Wan):
   // asas ikut cc untuk RM1,000 pertama + RM26 setiap RM1,000 seterusnya, tolak NCD, +SST 8% + duti setem RM10, +20%
   const CCN = { "1.5": 1496, "1.8": 1798, "2.0": 1987, "2.4": 2393, "2.5": 2487, "2.7": 2694, "2.8": 2755, "3.0": 2982 };
-  const BASE = [[1400, 273.8], [1650, 305.5], [2200, 339.1], [3050, 372.6], [4100, 404.3], [4250, 436], [4400, 469.6], [Infinity, 501.3]];
+  const BASEPREM = [[1400, 273.8], [1650, 305.5], [2200, 339.1], [3050, 372.6], [4100, 404.3], [4250, 436], [4400, 469.6], [Infinity, 501.3]];
   const insurance = (cc, price, ncd) => {
-    const base = BASE.find(b => cc <= b[0])[1];
+    const base = BASEPREM.find(b => cc <= b[0])[1];
     const gross = base + 26 * Math.max(0, Math.ceil(price / 1000) - 1);
     return (gross * (1 - ncd / 100) * 1.08 + 10) * 1.2;
   };
-  const NCDS = [[0, "Kereta pertama"], [25, "1 tahun"], [30, "2 tahun"], [38.33, "3 tahun"], [45, "4 tahun"], [55, "5 tahun ke atas"]];
+  const NCDS = L.ncd;
   const C = { m: M[0], g: 0, ncd: 0 };
   const calcModels = M.filter(m => m.id !== "hiace");
   $("cModels").innerHTML = calcModels.map(m => `<button type="button" data-id="${m.id}">${m.name}</button>`).join("");
@@ -104,7 +171,7 @@
     const ins = insurance(cc, price, ncdV);
     ["cDep", "cYears", "cRate"].forEach(id => fill($(id)));
     $("cDepOut").textContent = `${depPct}% (${rm(dep)})`;
-    $("cYearsOut").textContent = years + " tahun";
+    $("cYearsOut").textContent = L.years(years);
     $("cRateOut").textContent = rate.toFixed(2) + "%";
     $("cNcdOut").textContent = ncdV + "%";
     [...$("cNcd").children].forEach((b, i) => b.classList.toggle("on", i === C.ncd));
@@ -112,7 +179,7 @@
     $("rPrice").textContent = rm(price); $("rDep").textContent = rm(dep); $("rLoan").textContent = rm(loan);
     $("rInt").textContent = rm(interest); $("rTotal").textContent = rm(total);
     $("rIns").textContent = "±" + rm(ins); $("rUpfront").textContent = "±" + rm(dep + ins);
-    $("rSend").href = wa(`Salam Wan Jasni, saya dah kira ansuran di laman Wan Jasni:\n\nModel: Toyota ${g.name}\nHarga OTR: ${rm(price)}\nDeposit: ${depPct}% (${rm(dep)})\nTempoh: ${years} tahun\nKadar: ${rate.toFixed(2)}% setahun\nNCD: ${ncdV}%\nAnggaran ansuran: ${rm(monthly)}/bulan\n\nBoleh Wan Jasni semak dengan bank dan share rebate bulan ini?`);
+    $("rSend").href = wa(L.send(g.name, rm(price), depPct, rm(dep), years, rate.toFixed(2), ncdV, rm(monthly)));
   }
   calcSet("vios");
 
@@ -126,12 +193,6 @@
     hilux: { pax: [2, 5], use: ["work"] }
   };
   const est = p => { const loan = p * 0.9; return (loan + loan * 0.023 * 9) / 108; };
-  const WHY = {
-    city: "Saiz mudah untuk trafik dan parkir harian, dan jimat untuk ulang-alik kerja.",
-    far: "Selesa untuk perjalanan jauh, ruang kabin dan bagasi cukup untuk balik kampung.",
-    work: "Tahan lasak, four wheel drive dan cargo bed untuk kerja serta angkut barang.",
-    save: "Enjin HEV paling jimat minyak, sesuai kalau awak banyak memandu setiap hari."
-  };
   const A = {};
   $("quiz").addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
@@ -155,23 +216,23 @@
     const pool = within.length ? within : list.slice().sort((a, b) => a.mo - b.mo).slice(0, 3);
     pool.sort((a, b) => b.s - a.s || (within.length ? b.mo - a.mo : a.mo - b.mo));
     const best = pool[0];
-    if (!best) { $("pick").innerHTML = `<div class="pick-empty"><p class="kicker light">Cadangan Wan Jasni</p><h3>MARI BINCANG</h3><p>Gabungan ini perlukan perbincangan. WhatsApp Wan Jasni untuk cadangan terbaik.</p></div>`; return; }
+    if (!best) { $("pick").innerHTML = `<div class="pick-empty"><p class="kicker light">${L.pickK}</p><h3>${L.talkH}</h3><p>${L.talkP}</p></div>`; return; }
     const seen = new Set([best.m.id]), alts = [];
     for (const x of pool.slice(1)) { if (!seen.has(x.m.id)) { seen.add(x.m.id); alts.push(x); } if (alts.length === 2) break; }
     const over = !within.length;
-    $("pick").innerHTML = `<div class="pick-res rv in">
+    $("pick").innerHTML = `<div class="pick-res">
       <div>
-        <p class="kicker light">Cadangan Wan Jasni</p>
+        <p class="kicker light">${L.pickK}</p>
         <h3>Toyota ${best.g.name}</h3>
-        <p class="why">${WHY[use]}${over ? " Model ini sedikit melebihi bajet awak; Wan Jasni boleh bantu cari susunan deposit yang selesa." : ""}</p>
-        <div class="mini"><div><b>${rm(best.g.price)}</b><span>Harga OTR tanpa rebate*</span></div><div><b>±${rm(best.mo)}</b><span>Sebulan (deposit 10%, 9 tahun, 2.3%)</span></div></div>
+        <p class="why">${L.why[use]}${over ? L.over : ""}</p>
+        <div class="mini"><div><b>${rm(best.g.price)}</b><span>${L.otrNoRebate}</span></div><div><b>±${rm(best.mo)}</b><span>${L.perMonth}</span></div></div>
         <div class="hero-cta" style="margin-top:0">
-          <button class="btn btn-red" type="button" data-go="${best.m.id}" data-gi="${best.gi}">Lihat model</button>
-          <a class="btn btn-ghost" target="_blank" rel="noopener" href="${wa(`Salam Wan Jasni, pemilih model di laman Wan Jasni cadangkan Toyota ${best.g.name} untuk saya. Boleh terangkan lebih lanjut?`)}">Tanya Wan Jasni</a>
+          <button class="btn btn-red" type="button" data-go="${best.m.id}" data-gi="${best.gi}">${L.view}</button>
+          <a class="btn btn-ghost" target="_blank" rel="noopener" href="${wa(L.pickMsg(best.g.name))}">${L.askWan}</a>
         </div>
-        ${alts.length ? `<p class="alt">Pilihan lain: ${alts.map(x => `<button type="button" data-go="${x.m.id}" data-gi="${x.gi}">${x.g.name}</button> (±${rm(x.mo)}/bulan)`).join(", ")}</p>` : ""}
+        ${alts.length ? `<p class="alt">${L.others}: ${alts.map(x => `<button type="button" data-go="${x.m.id}" data-gi="${x.gi}">${x.g.name}</button> (±${rm(x.mo)}${L.mo})`).join(", ")}</p>` : ""}
       </div>
-      <img src="${best.m.cut}" alt="Toyota ${best.m.name}" width="450" height="190">
+      <img src="${BASE + best.m.cut}" alt="Toyota ${best.m.name}" width="450" height="190">
     </div>`;
   }
   $("pick").addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (!b) return; showModel(b.dataset.go, +b.dataset.gi); $("model").scrollIntoView({ behavior: "smooth" }); });
@@ -180,21 +241,14 @@
   const chk = [...$("checklist").querySelectorAll("button")];
   const chkUpd = () => {
     const n = chk.filter(b => b.getAttribute("aria-pressed") === "true").length;
-    $("chkCount").textContent = `${n} daripada ${chk.length}`;
+    $("chkCount").textContent = L.chk(n, chk.length);
     $("chkBar").style.width = (n / chk.length * 100) + "%";
-    $("chkLabel").textContent = n === chk.length ? "Sedia dipandu pulang" : n ? "Sedang disemak" : "Tekan setiap perkara";
+    $("chkLabel").textContent = n === chk.length ? L.chkDone : n ? L.chkSome : L.chkNone;
   };
   chk.forEach(b => b.addEventListener("click", () => { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); chkUpd(); }));
 
   /* ---------- PROSES ---------- */
-  const STEPS = [
-    ["Lihat kereta & pilih varian", "Lihat sendiri kereta di showroom dan bandingkan varian sebelum buat keputusan. Wan Jasni bantu terangkan beza setiap varian, termasuk petrol dan HEV.", ["Bandingkan saiz, ruang dan ciri keselamatan", "Tanya soalan terus kepada Wan Jasni di showroom", "Ambil gambar dan brochure untuk dibincang di rumah"], "Lazimnya 30 hingga 60 minit"],
-    ["Sebut harga & rebate", "Wan Jasni sediakan pecahan harga penuh supaya tiada kejutan kemudian.", ["Harga OTR varian dan warna pilihan", "Rebate dan promosi bulan semasa, tertakluk pada terma dan syarat", "Anggaran insurans dan aksesori jika mahu"], "Boleh dibuat melalui WhatsApp"],
-    ["Semakan & permohonan loan", "Wan Jasni bantu hantar permohonan loan kepada bank supaya awak dapat tawaran yang selesa.", ["Dokumen lazim: IC, slip gaji dan penyata bank terkini", "Pekerja sendiri: dokumen perniagaan dan penyata akaun", "Wan Jasni maklumkan status kelulusan kepada awak"], "Bergantung pada bank"],
-    ["Tempahan & pengesahan", "Selepas setuju harga dan loan, tempahan dibuat dan varian serta warna disahkan.", ["Bayar yuran tempahan", "Sahkan varian, warna dan aksesori", "Wan Jasni semak stok dan anggaran tarikh kereta sampai"], "Tempoh tunggu ikut model dan warna"],
-    ["Pendaftaran & insurans", "Kereta didaftarkan atas nama awak dan insurans serta road tax disediakan.", ["Pendaftaran JPJ dan nombor plat", "Polisi insurans dan road tax", "Wan Jasni kemas kini setiap peringkat melalui WhatsApp"], "Diuruskan oleh pengedar"],
-    ["Penyerahan & service pertama", "Hari ambil kunci. Kereta disemak bersama awak dan setiap ciri diterangkan.", ["Pemeriksaan kereta dan dokumen bersama awak", "Penerangan ciri dan sambungan telefon", "Pemeriksaan percuma pertama pada 1,000 km; Wan Jasni ingatkan jadual service"], "Wan Jasni kekal sebagai satu nombor untuk dihubungi"]
-  ];
+  const STEPS = L.steps;
   $("stepList").innerHTML = STEPS.map((s, i) => `<li><button type="button" data-i="${i}"><b>${String(i + 1).padStart(2, "0")}</b><span>${s[0]}</span></button></li>`).join("");
   const step = i => {
     const s = STEPS[i];
@@ -203,5 +257,4 @@
   };
   $("stepList").addEventListener("click", e => { const b = e.target.closest("button"); if (b) step(+b.dataset.i); });
   step(0);
-
 })();
