@@ -176,6 +176,15 @@
   $("mCalc").addEventListener("click", () => { calcSet(cur.m.id, cur.g, cur.c); $("kalkulator").scrollIntoView({ behavior: "smooth" }); });
   showModel(M[0].id);
 
+  /* ---------- JALUR MODEL BERGERAK (ala logo pelanggan stripe.com); senarai ikut data auto-kemas kini ---------- */
+  const mq = $("marquee");
+  if (mq) {
+    const item = (m, dup) => `<button type="button" class="mq-item" data-id="${m.id}"${dup ? ' aria-hidden="true" tabindex="-1"' : ""}><img src="${BASE + m.cut}" alt="${dup ? "" : "Toyota " + m.name}" loading="lazy"><span>${m.name}</span></button>`;
+    mq.innerHTML = M.map(m => item(m, false)).join("") + M.map(m => item(m, true)).join("");
+    mq.style.setProperty("--mq-dur", Math.max(40, M.length * 3.2) + "s");
+    mq.addEventListener("click", e => { const b = e.target.closest(".mq-item"); if (!b) return; showModel(b.dataset.id); $("model").scrollIntoView({ behavior: "smooth" }); });
+  }
+
   /* ---------- KALKULATOR ---------- */
   // Anggaran insurans komprehensif, tarif Semenanjung (sama seperti Toyota Loan Calculator Wan):
   // asas ikut cc untuk RM1,000 pertama + RM26 setiap RM1,000 seterusnya, tolak NCD, +SST 8% + duti setem RM10, +20%

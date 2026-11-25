@@ -47,7 +47,7 @@
     ScrollTrigger.config({ ignoreMobileResize: true });
     const all = [...document.querySelectorAll("main > section, footer.foot")];
     all.forEach((s, i) => { s.classList.add("panel"); s.style.zIndex = String(i + 1); });
-    const panels = all.filter(s => !s.classList.contains("trust")); // jalur trust terlalu nipis untuk dipin; ia meluncur bersama
+    const panels = all.filter(s => !s.classList.contains("trust") && !s.classList.contains("marquee")); // jalur trust terlalu nipis untuk dipin; ia meluncur bersama
     // Tinggi sebenar kandungan (bukan tinggi tetap yang GSAP letak semasa dipin)
     const contentH = p => Math.max(p.scrollHeight, [...p.children].reduce((a, c) => a + c.offsetHeight, 0));
     // Bila kandungan halaman berubah tinggi (buka jawapan FAQ, keputusan kuiz, langkah lain), kira semula pin:
