@@ -384,4 +384,16 @@ html.theme-stripe .btn-tt{border-color:#000;border-radius:999px}
 
 /* seksyen meluncur mendatar (slide.js): potong limpahan sisi pada <main> supaya halaman tak boleh diskrol ke tepi.
    overflow-x:clip tak cipta bekas skrol, jadi seksyen melekat (sticky) masih berfungsi */
-html.theme-stripe main,html.theme-apple main,html.theme-racing main{overflow-x:clip}
+main{overflow-x:clip}
+
+/* senarai harga statik di halaman utama (dijana oleh scripts/seo.mjs) */
+.price-index{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:34px;padding:0}
+.price-index a{display:flex;flex-direction:column;gap:2px;height:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);transition:transform .2s,border-color .2s}
+.price-index a:hover{transform:translateY(-2px);border-color:var(--red)}
+.price-index b{font-size:14.5px}
+.price-index span{font-size:13px;color:var(--mute)}
+.price-all{margin-top:20px;font-weight:700}
+.price-all a{color:var(--red)}
+.foot-prices{margin:0 0 14px;font-size:14px;font-weight:600}
+.foot-prices a{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:620px){.price-index{grid-template-columns:1fr 1fr}.price-index a{padding:12px}}

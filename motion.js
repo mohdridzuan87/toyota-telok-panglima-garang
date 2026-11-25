@@ -73,7 +73,7 @@
 
     /* Halaman meluncur MENDATAR ikut skrol (Wan, 25 Nov 2026): berselang kiri->kanan, kanan->kiri.
        Setiap halaman (kecuali hero & jalur model) masuk dari sisi sambil naik menutup halaman sebelumnya. */
-    all.filter(s => !s.classList.contains("hero") && !s.classList.contains("marquee")).forEach((s, i) => {
+    all.filter(s => !s.classList.contains("hero") && !s.classList.contains("marquee") && !s.classList.contains("foot")).forEach((s, i) => {
       gsap.fromTo(s, { xPercent: i % 2 ? 100 : -100 }, { xPercent: 0, ease: "power2.out",
         scrollTrigger: { trigger: s, start: "top bottom", end: "top 20%", scrub: 0.4, invalidateOnRefresh: true } });
     });

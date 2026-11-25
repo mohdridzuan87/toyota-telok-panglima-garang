@@ -286,6 +286,21 @@ Insurans: masuk dalam loan (±${i})`,
   }
   calcSet((byId("vios") || calcModels[0] || M[0]).id);
 
+  /* ---------- PAUTAN DALAM dari halaman harga: /?model=vios#kalkulator atau #model ---------- */
+  const wanted = byId(new URLSearchParams(location.search).get("model") || "");
+  if (wanted) {
+    showModel(wanted.id);
+    if (calcModels.includes(wanted)) calcSet(wanted.id);
+    // skrip tema boleh menambah seksyen selepas ini; skrol semula ke sasaran bila laman siap dimuat
+    const target = location.hash && document.getElementById(location.hash.slice(1));
+    const jump = () => {
+      // gaya asal: GSAP membalut seksyen yang dipin dalam .pin-spacer (kedudukannya tetap betul)
+      const box = target.parentElement.classList.contains("pin-spacer") ? target.parentElement : target;
+      scrollTo({ top: box.getBoundingClientRect().top + scrollY - 72, behavior: "instant" });
+    };
+    if (target) addEventListener("load", () => { setTimeout(jump, 250); setTimeout(jump, 900); });
+  }
+
   /* ---------- PEMILIH MODEL ---------- */
   const TAGS = {
     vios: { pax: [2, 5], use: ["city"] }, yaris: { pax: [2, 5], use: ["city"] },

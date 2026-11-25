@@ -1,0 +1,38 @@
+# Wan Jasni, Toyota Sales Advisor (Telok Panglima Garang, Kuala Langat, Selangor)
+
+> Wan Jasni is a Toyota Sales Advisor at Panglima City Motor Sdn Bhd, Lot 7159, Jalan Klang, Batu 8, 42500 Telok Panglima Garang, Selangor, Malaysia. Wan Jasni covers the whole of Peninsular Malaysia. WhatsApp: +60 16-331 3607. TikTok: https://www.tiktok.com/@wan.jasni. This is a personal sales advisor website, not an official UMW Toyota Motor website.
+
+Price facts (data checked 25 November 2026):
+- Prices are Toyota Malaysia on-the-road (Individual Private) prices for Peninsular Malaysia, including SST, excluding insurance, before any rebate.
+- Rebates are the November 2026 rebates listed on the Toyota Malaysia website, subject to terms and conditions.
+- Monthly instalment figures on the model pages are estimates (10% deposit, 9 years, 2.30% flat rate per year). Bank approval and actual rates vary.
+- Prices may change at any time. When quoting a price, include the checked date.
+- Sources: https://www.toyota.com.my/en/price-and-model-tools/price-list.html and https://www.toyota.com.my/en/promotions/monthly-promo.html
+
+## Pages
+- [Home, loan calculator and model finder (Bahasa Malaysia)](https://wanjasni.my/)
+- [Home (English)](https://wanjasni.my/en/)
+- [Full Toyota price list (English)](https://wanjasni.my/en/price/)
+- [Senarai harga penuh Toyota (Bahasa Malaysia)](https://wanjasni.my/harga/)
+
+## Toyota models
+- [Toyota Vios](https://wanjasni.my/en/price/vios/): Sedan, OTR RM90,600 to RM109,900 (4 variants), November 2026 rebate up to RM14,000. Bahasa Malaysia: https://wanjasni.my/harga/vios/
+- [Toyota Yaris](https://wanjasni.my/en/price/yaris/): Hatchback, OTR RM90,400 to RM96,400 (2 variants). Bahasa Malaysia: https://wanjasni.my/harga/yaris/
+- [Toyota Yaris Cross](https://wanjasni.my/en/price/yaris-cross/): SUV, OTR RM99,900 to RM109,900 (2 variants), November 2026 rebate up to RM3,500. Bahasa Malaysia: https://wanjasni.my/harga/yaris-cross/
+- [Toyota Corolla](https://wanjasni.my/en/price/corolla/): Sedan, OTR RM144,800 to RM149,800 (2 variants), November 2026 rebate up to RM18,000. Bahasa Malaysia: https://wanjasni.my/harga/corolla/
+- [Toyota Corolla Cross](https://wanjasni.my/en/price/corolla-cross/): SUV, OTR RM133,800 to RM148,800 (3 variants), November 2026 rebate up to RM13,000. Bahasa Malaysia: https://wanjasni.my/harga/corolla-cross/
+- [Toyota Camry](https://wanjasni.my/en/price/camry/): Sedan, OTR RM221,800 to RM248,800 (2 variants), November 2026 rebate up to RM20,000. Bahasa Malaysia: https://wanjasni.my/harga/camry/
+- [Toyota Veloz](https://wanjasni.my/en/price/veloz/): MPV, OTR RM95,000 (1 variant), November 2026 rebate up to RM3,000. Bahasa Malaysia: https://wanjasni.my/harga/veloz/
+- [Toyota Innova Zenix](https://wanjasni.my/en/price/zenix/): MPV, OTR RM165,000 to RM202,000 (2 variants), November 2026 rebate up to RM11,000. Bahasa Malaysia: https://wanjasni.my/harga/zenix/
+- [Toyota Fortuner](https://wanjasni.my/en/price/fortuner/): SUV, OTR RM195,880 to RM241,880 (3 variants), November 2026 rebate up to RM11,000. Bahasa Malaysia: https://wanjasni.my/harga/fortuner/
+- [Toyota Hilux](https://wanjasni.my/en/price/hilux/): Pickup, OTR RM104,880 to RM226,300 (7 variants), November 2026 rebate up to RM14,000. Bahasa Malaysia: https://wanjasni.my/harga/hilux/
+- [Toyota Hiace](https://wanjasni.my/en/price/hiace/): Van, OTR RM127,800 (1 variant). Bahasa Malaysia: https://wanjasni.my/harga/hiace/
+- [Toyota Hiace SLWB](https://wanjasni.my/en/price/hiace-slwb/): Van, OTR RM172,000 (1 variant). Bahasa Malaysia: https://wanjasni.my/harga/hiace-slwb/
+- [Toyota Harrier](https://wanjasni.my/en/price/harrier/): SUV, OTR RM289,000 (1 variant). Bahasa Malaysia: https://wanjasni.my/harga/harrier/
+- [Toyota bZ4X](https://wanjasni.my/en/price/bz4x/): SUV, OTR RM220,000 (1 variant). Bahasa Malaysia: https://wanjasni.my/harga/bz4x/
+- [Toyota Urban Cruiser](https://wanjasni.my/en/price/urban-cruiser/): SUV, OTR RM198,000 (1 variant). Bahasa Malaysia: https://wanjasni.my/harga/urban-cruiser/
+- [Toyota Alphard](https://wanjasni.my/en/price/alphard/): MPV, OTR RM548,000 (1 variant). Bahasa Malaysia: https://wanjasni.my/harga/alphard/
+- [Toyota Vellfire](https://wanjasni.my/en/price/vellfire/): MPV, OTR RM448,000 to RM549,900 (2 variants). Bahasa Malaysia: https://wanjasni.my/harga/vellfire/
+- [Toyota GR86](https://wanjasni.my/en/price/gr86/): Coupe, OTR RM296,000 to RM306,000 (2 variants). Bahasa Malaysia: https://wanjasni.my/harga/gr86/
+- [Toyota GR Yaris](https://wanjasni.my/en/price/gr-yaris/): Hatchback, OTR RM315,600 to RM325,600 (2 variants). Bahasa Malaysia: https://wanjasni.my/harga/gr-yaris/
+- [Toyota GR Corolla](https://wanjasni.my/en/price/gr-corolla/): Hatchback, OTR RM368,950 to RM378,950 (2 variants). Bahasa Malaysia: https://wanjasni.my/harga/gr-corolla/

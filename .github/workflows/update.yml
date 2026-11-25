@@ -27,7 +27,7 @@ jobs:
       - name: Commit jika berubah
         id: commit
         run: |
-          git add -A data.js data img/col sitemap.xml index.html en/index.html
+          git add -A data.js data img/col img/cut sitemap.xml llms.txt harga en index.html
           if git diff --cached --quiet; then echo "Tiada perubahan"; echo "pushed=no" >> "$GITHUB_OUTPUT"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

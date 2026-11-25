@@ -345,7 +345,9 @@ const editFile = (rel, fn) => { const f = path.join(ROOT, rel); if (!existsSync(
 const nModels = out.models.length;
 editFile("index.html", s => s.replace(/(<b id="modelCount">)\d+ MODEL,(<\/b>)/, `$1${nModels} MODEL,$2`));
 editFile("en/index.html", s => s.replace(/(<b id="modelCount">)\d+ MODELS?,(<\/b>)/, `$1${nModels} MODELS,$2`));
-editFile("sitemap.xml", s => s.replace(/<lastmod>[^<]*<\/lastmod>/g, `<lastmod>${ordered.updatedAt}</lastmod>`));
+// Halaman harga statik, senarai harga halaman utama, llms.txt & sitemap (harga terus dalam HTML)
+const { buildSeo } = await import("./seo.mjs");
+buildSeo(ROOT, ordered);
 
 const paid = out.models.flatMap(m => m.grades.flatMap(g => g.cols.filter(c => c.p).map(c => `${g.name}: ${c.n} +RM${c.p}`)));
 const unusedTiles = [...rebateTiles.keys()].filter(k => !usedTiles.has(k));
