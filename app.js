@@ -45,7 +45,7 @@
       ["Loan check & application", "Wan Jasni helps submit your loan application to the banks so you get a comfortable offer.", ["Usual documents: IC, recent payslips and bank statements", "Self-employed: business documents and account statements", "Wan Jasni keeps you updated on the approval status"], "Depends on the bank"],
       ["Booking & confirmation", "Once the price and loan are agreed, the booking is made and your variant and colour are confirmed.", ["Pay the booking fee", "Confirm variant, colour and accessories", "Wan Jasni checks stock and the estimated arrival date"], "Waiting time depends on model and colour"],
       ["Registration & insurance", "The car is registered in your name, and insurance and road tax are arranged.", ["JPJ registration and number plate", "Insurance policy and road tax", "Wan Jasni updates you at every stage over WhatsApp"], "Handled by the dealer"],
-      ["Handover & first service", "Key day. The car is checked with you and every feature is explained.", ["Car and document check with you", "Feature walkthrough and phone pairing", "First free inspection at 1,000 km; Wan Jasni reminds you of the service schedule"], "Wan Jasni stays your one number to call"]
+      ["Handover & first service", "Delivery day. The car is checked with you and every feature is explained.", ["Car and document check with you", "Feature walkthrough and phone pairing", "First free inspection at 1,000 km; Wan Jasni reminds you of the service schedule"], "Wan Jasni stays your one number to call"]
     ]
   } : {
     locale: "ms-MY", from: "dari",
