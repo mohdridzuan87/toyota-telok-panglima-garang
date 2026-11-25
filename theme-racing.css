@@ -1,0 +1,200 @@
+/* TEMA RACING (ilham gaya laman pelumba F1: kertas graf kelabu, huruf pelumba tinggi-sempit, kad bertab,
+   jalur petikan gelap bergerak ikut skrol). Aktif hanya bila <html class="theme-racing">.
+   Fon League Gothic + Manrope dimuat oleh skrip pemilih gaya dalam <head> (hanya untuk tema ini).
+   Butang WhatsApp kekal hijau & TikTok hitam (tema jenama masing-masing). */
+html.theme-racing{--r-ink:#000016; --r-paper:#f1f1f1; --r-card:#e5e5e7; --r-line:rgba(0,0,22,.14); --r-grid:rgba(0,0,22,.055); --r-red:#e3001b; --r-sky:#9fcbff;
+  --r-disp:"League Gothic","Oswald","Arial Narrow",Impact,sans-serif; --r-body:"Manrope",-apple-system,BlinkMacSystemFont,"Inter",Helvetica,Arial,sans-serif}
+html.theme-racing body{background:var(--r-paper);color:var(--r-ink);font-family:var(--r-body);letter-spacing:0;
+  background-image:linear-gradient(var(--r-grid) 1px,transparent 1px),linear-gradient(90deg,var(--r-grid) 1px,transparent 1px);background-size:88px 88px;background-attachment:fixed}
+html.theme-racing .wave,html.theme-racing .hero-bg{display:none}
+
+/* bar atas: telus di atas kertas, logo dalam tab putih */
+html.theme-racing .top{background:rgba(241,241,241,.82);color:var(--r-ink);border-bottom:1px solid var(--r-line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+html.theme-racing .brand{background:#fff;padding:6px 14px 6px 8px;border-radius:0 0 14px 0;margin:-12px 0 -12px -20px;padding-top:14px;padding-bottom:14px}
+html.theme-racing .brand-mark{color:var(--r-ink);font-family:var(--r-disp);font-weight:400;font-size:26px;letter-spacing:.06em;line-height:1}
+html.theme-racing .brand-sep{background:var(--r-line)}
+html.theme-racing .brand-loc{color:var(--r-ink);font-family:var(--r-body);font-weight:700;font-size:11px;letter-spacing:.14em}
+html.theme-racing .nav{color:var(--r-ink);font-family:var(--r-body);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+html.theme-racing .nav a:hover{color:var(--r-red)}
+html.theme-racing .lang{border-color:var(--r-ink);border-radius:8px}
+html.theme-racing .lang a{color:var(--r-ink);font-family:var(--r-body)}
+html.theme-racing .lang a[aria-current]{background:var(--r-ink);color:#fff}
+html.theme-racing .btn-tt{border-radius:10px}
+@media (max-width:620px){html.theme-racing .brand{margin:-10px 0 -10px -16px;padding:12px 12px 12px 8px}}
+
+/* huruf: tajuk pelumba tinggi-sempit HURUF BESAR, warna penuh (tiada gradien) */
+html.theme-racing h2,html.theme-racing .hero h1,html.theme-racing .stage-head h3,html.theme-racing .pick-empty h3,html.theme-racing .pick-res h3,html.theme-racing .check-card h3,html.theme-racing .step-detail h3{font-family:var(--r-disp)!important;font-weight:400!important;text-transform:uppercase;letter-spacing:.005em}
+html.theme-racing h2{color:var(--r-ink)!important;font-size:clamp(48px,7.6vw,112px);line-height:.88;max-width:1000px}
+html.theme-racing .dark h2,html.theme-racing .light-sec h2{color:var(--r-ink)!important}
+html.theme-racing h2 b,html.theme-racing .sec h2 b,html.theme-racing .dark h2 b{font-weight:400;background:none!important;-webkit-text-fill-color:currentColor!important;color:var(--r-red)!important}
+html.theme-racing .sec h2 b .w>span{background:none;-webkit-text-fill-color:currentColor;color:inherit}
+html.theme-racing .price,html.theme-racing .big #rMonthly,html.theme-racing .stage-head h3,html.theme-racing .pick-empty h3,html.theme-racing .pick-res h3,html.theme-racing .check-card h3,html.theme-racing .step-detail .num,html.theme-racing .step-detail h3{background:none!important;-webkit-text-fill-color:currentColor!important}
+html.theme-racing .sub,html.theme-racing .sub.light{color:#3c3c4e;font-size:16px;line-height:1.6;max-width:620px;font-weight:500}
+html.theme-racing .eyebrow,html.theme-racing .eyebrow.light{color:var(--r-ink);font-family:var(--r-body);font-size:11px;font-weight:800;letter-spacing:.18em}
+html.theme-racing .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--r-red)}
+html.theme-racing .kicker,html.theme-racing .kicker.light,html.theme-racing .lbl,html.theme-racing .flbl,html.theme-racing .q-tag,html.theme-racing .specs dt,html.theme-racing .progress{color:#5a5a6c;font-family:var(--r-body);font-weight:800;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+html.theme-racing .hint,html.theme-racing .note{color:#5a5a6c}
+
+/* butang: segi empat gelap bucu bulat, huruf besar; hantu = garis */
+html.theme-racing .btn{border-radius:10px;font-family:var(--r-body);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:13px 20px}
+html.theme-racing .btn-red{background:var(--r-ink);color:#fff}
+html.theme-racing .btn-red:hover{background:var(--r-red)}
+html.theme-racing .btn-red::after{content:"→";font-size:15px;letter-spacing:0;transition:transform .2s}
+html.theme-racing .btn-red:hover::after{transform:translateX(3px)}
+html.theme-racing .btn-ghost,html.theme-racing .light-sec .btn-ghost,html.theme-racing .stage .btn-ghost{border:1.5px solid var(--r-ink);color:var(--r-ink)!important;background:transparent}
+html.theme-racing .btn-ghost:hover{background:var(--r-ink);color:#fff!important}
+html.theme-racing .btn-wa{font-family:var(--r-body);text-transform:none;letter-spacing:0;font-size:14px}
+html.theme-racing .btn-waze,html.theme-racing .btn-gmaps{font-family:var(--r-body);letter-spacing:0;text-transform:none;font-size:14px}
+
+/* hero: bingkai gelap bucu bulat di atas kertas, "TOYOTA" gergasi, kereta meluncur laju */
+html.theme-racing .hero{background:transparent;color:#fff;padding:12px 12px 0;overflow:visible}
+html.theme-racing .hero-grid{position:relative;overflow:hidden;border-radius:22px;padding:56px 40px 40px;min-height:min(86vh,760px);align-content:center;
+  background:radial-gradient(60% 70% at 70% 60%,rgba(227,0,27,.38),transparent 70%),radial-gradient(40% 50% at 15% 20%,rgba(159,203,255,.14),transparent 70%),linear-gradient(160deg,#10101f 0%,#000016 70%);isolation:isolate}
+/* garis laju bergerak */
+html.theme-racing .hero-grid::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0 140px,rgba(255,255,255,.07) 140px 141px),repeating-linear-gradient(0deg,transparent 0 33px,rgba(255,255,255,.035) 33px 34px);animation:r-lines 1.6s linear infinite}
+@keyframes r-lines{to{background-position:-282px 0,0 0}}
+html.theme-racing .hero-copy{position:relative;z-index:2}
+html.theme-racing .hero h1{font-size:clamp(96px,17vw,250px);line-height:.8;color:#fff!important;background:none!important;-webkit-text-fill-color:#fff!important}
+html.theme-racing .hero h1 span:not(.r-ch){display:block;font-family:var(--r-disp);font-size:.26em;letter-spacing:.06em;color:var(--r-sky)!important;-webkit-text-fill-color:var(--r-sky)!important;margin-top:10px}
+html.theme-racing .hero .eyebrow{color:#fff}
+html.theme-racing .lead{color:#c9c9d6;font-size:16px;line-height:1.6;font-weight:500}
+html.theme-racing .hero .btn-red{background:#fff;color:var(--r-ink)}
+html.theme-racing .hero .btn-red:hover{background:var(--r-red);color:#fff}
+html.theme-racing .hero .btn-ghost{border-color:rgba(255,255,255,.6);color:#fff!important}
+html.theme-racing .hero .btn-ghost:hover{background:#fff;color:var(--r-ink)!important}
+html.theme-racing .sa-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;backdrop-filter:blur(8px)}
+html.theme-racing .sa-card strong{font-family:var(--r-disp);font-weight:400;font-size:24px;letter-spacing:.03em;text-transform:uppercase}
+html.theme-racing .hero-car{position:relative;z-index:1}
+html.theme-racing .hero-car::before{display:none}
+html.theme-racing .hero-car::after{background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.85),transparent 70%)}
+html.theme-racing .hero-car img{max-width:640px;filter:drop-shadow(0 26px 22px rgba(0,0,0,.7))}
+/* kereta masuk: kabur gerakan -> tajam */
+@keyframes r-zoom{0%{transform:translateX(-70vw) skewX(-8deg);filter:blur(14px) drop-shadow(0 26px 22px rgba(0,0,0,.7));opacity:0}55%{filter:blur(4px) drop-shadow(0 26px 22px rgba(0,0,0,.7));opacity:1}100%{transform:none;filter:blur(0) drop-shadow(0 26px 22px rgba(0,0,0,.7))}}
+html.theme-racing .hero-car img.r-in{animation:r-zoom 1.15s cubic-bezier(.16,.84,.3,1) both}
+/* huruf "TOYOTA" meregang naik satu-satu */
+html.theme-racing .hero h1 .r-ch{display:inline-block;font-size:1em;margin:0;letter-spacing:inherit;color:#fff!important;-webkit-text-fill-color:#fff!important;transform-origin:50% 100%;animation:r-stretch .9s cubic-bezier(.2,.9,.25,1) both}
+@keyframes r-stretch{0%{transform:scaleY(.05);opacity:0}60%{transform:scaleY(1.12);opacity:1}100%{transform:scaleY(1)}}
+html.theme-racing .strip{border-top:1px solid var(--r-line);margin-top:22px}
+html.theme-racing .strip button{color:#6a6a7c}
+html.theme-racing .strip button.on,html.theme-racing .strip button:hover{color:var(--r-ink);border-top-color:var(--r-red)}
+html.theme-racing .strip b{font-family:var(--r-disp);font-weight:400;font-size:24px;letter-spacing:.03em}
+html.theme-racing .strip a{color:var(--r-red);font-family:var(--r-body)}
+@media (max-width:620px){
+  html.theme-racing .hero{padding:8px 8px 0}
+  html.theme-racing .hero-grid{padding:40px 20px 28px;border-radius:18px;min-height:0}
+}
+
+/* jalur model bergerak di atas kertas graf */
+html.theme-racing .marquee{background:transparent;border-top:0;border-bottom:1px solid var(--r-line);padding:26px 0}
+html.theme-racing .mq-item{background:#fff;border-radius:12px}
+html.theme-racing .mq-item span{font-family:var(--r-disp);font-weight:400;font-size:19px;letter-spacing:.04em;text-transform:uppercase;color:var(--r-ink)}
+
+/* seksyen: semua atas kertas graf */
+html.theme-racing .sec,html.theme-racing .dark,html.theme-racing .light-sec{background:transparent;color:var(--r-ink)}
+html.theme-racing .sec{padding:100px 0}
+@media (max-width:620px){html.theme-racing .sec{padding:68px 0}}
+
+/* jalur kepercayaan: kad bertab, susun berselang tinggi */
+html.theme-racing .trust{background:transparent;border:0;padding:28px 0 40px}
+html.theme-racing .trust-grid{gap:16px;align-items:start}
+html.theme-racing .trust-item,html.theme-racing .trust-item+.trust-item{position:relative;background:var(--r-card);border:0;border-radius:0 12px 12px 12px;padding:24px 18px 22px;margin-top:22px}
+html.theme-racing .trust-item:nth-child(even){margin-top:56px}
+html.theme-racing .trust-item::before{content:"";position:absolute;left:0;top:-18px;width:58%;height:19px;background:var(--r-card);border-radius:10px 14px 0 0;clip-path:polygon(0 0,86% 0,100% 100%,0 100%)}
+html.theme-racing .trust-item::after{content:"";position:absolute;left:14px;top:-10px;width:6px;height:6px;border-radius:50%;background:var(--r-ink)}
+html.theme-racing .trust-item svg{stroke:var(--r-red)}
+html.theme-racing .trust-item strong{font-family:var(--r-disp);font-weight:400;font-size:24px;letter-spacing:.02em;line-height:1;color:var(--r-ink);text-transform:uppercase}
+html.theme-racing .trust-item span{color:#4a4a5c}
+@media (max-width:980px){html.theme-racing .trust-item:nth-child(even){margin-top:22px}}
+
+/* kad bertab (pentas model, kalkulator, senarai semak) */
+html.theme-racing .stage,html.theme-racing .calc,html.theme-racing .check-card{position:relative;border:0!important;border-radius:0 18px 18px 18px!important;background:var(--r-card);box-shadow:none;margin-top:44px;overflow:visible}
+html.theme-racing .stage::before,html.theme-racing .calc::before,html.theme-racing .check-card::before{content:"";position:absolute;left:0;top:-22px;width:min(42%,300px);height:23px;background:var(--r-card);border-radius:12px 16px 0 0;clip-path:polygon(0 0,88% 0,100% 100%,0 100%)}
+html.theme-racing .stage::after,html.theme-racing .calc::after,html.theme-racing .check-card::after{content:"";position:absolute;left:18px;top:-12px;width:7px;height:7px;border-radius:50%;background:var(--r-red)}
+html.theme-racing .calc{overflow:hidden;clip-path:inset(-24px 0 0 0 round 0 18px 18px 18px)}
+html.theme-racing .calc-in{background:var(--r-card)}
+html.theme-racing .stage-car{mix-blend-mode:multiply}
+html.theme-racing .stage-head h3{color:var(--r-ink);font-size:clamp(40px,5vw,64px);line-height:.9}
+html.theme-racing .price{font-family:var(--r-disp);font-weight:400;font-size:clamp(52px,6vw,78px);line-height:.9;color:var(--r-ink);letter-spacing:.01em}
+html.theme-racing .reb-note{color:var(--r-red);font-family:var(--r-body)}
+html.theme-racing .specs{border-bottom-color:var(--r-line)}
+html.theme-racing .specs dd{font-family:var(--r-disp);font-weight:400;font-size:30px;letter-spacing:.02em}
+html.theme-racing .tabs button{color:#6a6a7c}
+html.theme-racing .tabs button b{font-family:var(--r-disp);font-weight:400;font-size:24px;letter-spacing:.03em}
+html.theme-racing .tabs button.on,html.theme-racing .tabs button:hover{color:var(--r-ink);border-color:var(--r-red)}
+html.theme-racing .swatches button.on{outline-color:var(--r-ink)}
+/* pilihan */
+html.theme-racing .chips button,html.theme-racing .opts button{border:1.5px solid var(--r-line);border-radius:8px;background:#fff;color:var(--r-ink);font-family:var(--r-body);font-weight:700}
+html.theme-racing .chips button:hover,html.theme-racing .opts button:hover{border-color:var(--r-ink)}
+html.theme-racing .chips button.on,html.theme-racing .opts button.on{background:var(--r-ink);color:#fff;border-color:var(--r-ink)}
+html.theme-racing .chips.cols button.on em{color:#ff8a94}
+html.theme-racing .seg,html.theme-racing .ncd{border-color:var(--r-line);border-radius:8px;background:#fff}
+html.theme-racing .seg button,html.theme-racing .ncd button{border-color:var(--r-line)}
+html.theme-racing .ncd button{font-family:var(--r-disp);font-weight:400;font-size:22px}
+html.theme-racing .seg button.on,html.theme-racing .ncd button.on{background:var(--r-ink);color:#fff}
+html.theme-racing .reb-toggle{border:1.5px solid var(--r-line);border-radius:8px;background:#fff}
+html.theme-racing .reb-toggle input,html.theme-racing input[type=range]{accent-color:var(--r-red)}
+html.theme-racing .money{border-bottom-color:var(--r-ink)}
+html.theme-racing .money input{font-family:var(--r-disp);font-weight:400;font-size:40px;letter-spacing:.02em}
+html.theme-racing output{font-family:var(--r-disp);font-weight:400;font-size:24px;letter-spacing:.02em}
+html.theme-racing .step-btn{border-radius:8px;border-color:var(--r-line)}
+html.theme-racing .step-btn:hover{border-color:var(--r-red);color:var(--r-red)}
+
+/* panel gelap: ansuran, cadangan, langkah */
+html.theme-racing .calc-out{background:var(--r-ink);background-image:radial-gradient(70% 60% at 100% 0,rgba(227,0,27,.35),transparent 70%)}
+html.theme-racing .big{font-family:var(--r-disp);font-weight:400}
+html.theme-racing .big #rMonthly{font-size:clamp(84px,9vw,124px);line-height:.85;color:#fff}
+html.theme-racing .pick,html.theme-racing .step-detail{border:0!important;border-radius:18px!important;background:var(--r-ink);background-image:radial-gradient(60% 80% at 90% 30%,rgba(227,0,27,.34),transparent 70%)}
+html.theme-racing .pick-res h3,html.theme-racing .pick-empty h3,html.theme-racing .step-detail h3{color:#fff;font-size:clamp(36px,4.4vw,56px);line-height:.92}
+html.theme-racing .pick-res .mini b{font-family:var(--r-disp);font-weight:400;font-size:34px}
+html.theme-racing .step-detail .num{font-family:var(--r-disp);font-weight:400;font-size:clamp(90px,10vw,140px);line-height:.8;color:var(--r-red)}
+html.theme-racing .quiz,html.theme-racing .q{border-color:var(--r-line)}
+html.theme-racing .q p{color:var(--r-ink);font-weight:700}
+html.theme-racing .step-list{border-top-color:var(--r-line)}
+html.theme-racing .step-list button{color:#6a6a7c;border-bottom-color:var(--r-line)}
+html.theme-racing .step-list button span{font-family:var(--r-disp);font-weight:400;font-size:26px;letter-spacing:.03em}
+html.theme-racing .step-list button b{border-color:var(--r-line);font-family:var(--r-disp);font-weight:400;font-size:18px;border-radius:8px}
+html.theme-racing .step-list button.on{color:var(--r-ink)}
+html.theme-racing .step-list button.on b{background:var(--r-red);border-color:var(--r-red)}
+html.theme-racing .checklist li{border-top-color:var(--r-line)}
+html.theme-racing .checklist i{border-radius:5px;border-color:#9a9aac}
+html.theme-racing .checklist button[aria-pressed=true] i{background:var(--r-red);border-color:var(--r-red)}
+html.theme-racing .bar{background:var(--r-line)}
+
+/* soalan lazim */
+html.theme-racing .faq,html.theme-racing .faq details{border-color:var(--r-line)}
+html.theme-racing .faq summary{font-weight:800;font-size:17px;color:var(--r-ink)}
+html.theme-racing .faq summary::after{color:var(--r-red)}
+html.theme-racing .faq details p{color:#3c3c4e}
+
+/* lokasi & kaki */
+html.theme-racing .addr,html.theme-racing .addr strong{color:var(--r-ink)}
+html.theme-racing .map{border:0!important;border-radius:18px!important;overflow:hidden}
+html.theme-racing .foot{background:var(--r-ink);color:#b9b9c9;border-radius:22px 22px 0 0;margin:0 12px}
+html.theme-racing .foot .brand-mark{color:#fff;font-family:var(--r-disp);font-weight:400;font-size:28px;letter-spacing:.06em}
+html.theme-racing .foot-top{border-bottom-color:rgba(255,255,255,.12)}
+html.theme-racing .foot .fine{color:#7d7d92}
+@media (max-width:620px){html.theme-racing .foot{margin:0 8px}}
+
+/* JALUR PETIKAN (dibina theme-racing.js): gambar kereta merah kabur laju + petikan gergasi bergerak mendatar ikut skrol */
+html.theme-racing .r-band{position:relative;height:240vh}
+html.theme-racing .r-band-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--r-ink);display:flex;align-items:center;margin:0 12px;border-radius:22px}
+html.theme-racing .r-band-bg{position:absolute;inset:-10% -20%;display:flex;align-items:center;justify-content:center;will-change:transform}
+html.theme-racing .r-band-bg img{width:min(120vw,1500px);max-width:none;filter:blur(7px) saturate(1.15) brightness(.62);transform:scaleX(1.25);opacity:.9}
+html.theme-racing .r-band-pin::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(0,0,22,.55),rgba(0,0,22,.15) 45%,rgba(0,0,22,.55)),repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.025) 3px 4px)}
+html.theme-racing .r-band-txt{position:relative;z-index:2;white-space:nowrap;font-family:var(--r-disp);font-size:clamp(130px,24vw,330px);line-height:.86;color:#f1f1f1;text-transform:uppercase;will-change:transform;padding-left:100vw}
+html.theme-racing .r-band-txt b{color:var(--r-red);font-weight:400}
+html.theme-racing .r-band-swoosh{position:absolute;right:-6%;bottom:-40px;z-index:2;width:46%;height:120px;background:var(--r-red);transform:skewX(-28deg) rotate(-6deg);border-radius:10px}
+@media (max-width:620px){html.theme-racing .r-band-pin{margin:0 8px;border-radius:18px}}
+
+/* kemunculan lembut (theme-racing.js) */
+html.theme-racing .r-rise{opacity:0;transform:translateY(40px)}
+html.theme-racing .r-rise.in{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){
+  html.theme-racing .hero-grid::before,html.theme-racing .hero h1 .r-ch,html.theme-racing .hero-car img.r-in{animation:none}
+  html.theme-racing .r-band{height:auto}
+  html.theme-racing .r-band-pin{position:relative;height:60vh}
+  html.theme-racing .r-band-txt{padding-left:24px;white-space:normal;font-size:clamp(70px,12vw,160px)}
+}
+/* skrin tegak (telefon): gambar kereta jalur petikan lebih besar */
+@media (max-aspect-ratio:1/1){html.theme-racing .r-band-bg img{width:auto;height:62vh;transform:scaleX(1.3)}}

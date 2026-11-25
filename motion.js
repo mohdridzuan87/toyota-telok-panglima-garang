@@ -3,7 +3,7 @@
 (() => {
   const { gsap, ScrollTrigger } = window;
   if (!gsap || !ScrollTrigger) return;
-  if (document.documentElement.matches(".theme-stripe,.theme-apple")) return; // tema cerah (Stripe/Apple) guna kemunculan lembut sendiri
+  if (document.documentElement.matches(".theme-stripe,.theme-apple,.theme-racing")) return; // tema Stripe/Apple/Racing guna kemunculan lembut sendiri
   gsap.registerPlugin(ScrollTrigger);
   gsap.ticker.lagSmoothing(0); // ikut masa sebenar: animasi tetap siap tepat masa walaupun peranti perlahan
   document.documentElement.classList.add("gsap");
