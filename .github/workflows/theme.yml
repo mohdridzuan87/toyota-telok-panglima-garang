@@ -1,7 +1,7 @@
-name: Tukar gaya laman (asal / stripe)
+name: Tukar gaya laman (asal / stripe / apple)
 
 # Dua cara:
-# 1. Manual: Actions -> "Tukar gaya laman" -> Run workflow -> pilih asal / stripe.
+# 1. Manual: Actions -> "Tukar gaya laman" -> Run workflow -> pilih asal / stripe / apple.
 # 2. Automatik: semakan setiap hari 12:05 pagi (waktu Malaysia). Bila gaya sekarang dah 15 hari,
 #    tukar ke gaya seterusnya dalam senarai GILIRAN (ikut urutan, kemudian kembali ke awal). Tukar manual = kiraan 15 hari bermula semula.
 
@@ -28,8 +28,8 @@ concurrency:
 
 env:
   HARI_GILIRAN: 15
-  # Gaya yang ikut giliran automatik, ikut urutan. Gaya lain (cth. apple) hanya boleh dipilih manual.
-  GILIRAN: "asal stripe"
+  # Gaya yang ikut giliran automatik, ikut urutan (asal -> stripe -> apple -> asal ...).
+  GILIRAN: "asal stripe apple"
 
 jobs:
   tukar:
