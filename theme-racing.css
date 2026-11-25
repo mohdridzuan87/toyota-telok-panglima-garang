@@ -55,8 +55,9 @@ html.theme-racing .hero-grid::before{content:"";position:absolute;inset:0;z-inde
   background:repeating-linear-gradient(90deg,transparent 0 140px,rgba(255,255,255,.07) 140px 141px),repeating-linear-gradient(0deg,transparent 0 33px,rgba(255,255,255,.035) 33px 34px);animation:r-lines 1.6s linear infinite}
 @keyframes r-lines{to{background-position:-282px 0,0 0}}
 html.theme-racing .hero-copy{position:relative;z-index:2}
-html.theme-racing .hero h1{font-size:clamp(96px,17vw,250px);line-height:.8;color:#fff!important;background:none!important;-webkit-text-fill-color:#fff!important}
-html.theme-racing .hero h1 span:not(.r-ch){display:block;font-family:var(--r-disp);font-size:.26em;letter-spacing:.06em;color:var(--r-sky)!important;-webkit-text-fill-color:var(--r-sky)!important;margin-top:10px}
+html.theme-racing .hero h1{font-size:clamp(88px,15vw,200px);line-height:.8;color:#fff!important;background:none!important;-webkit-text-fill-color:#fff!important}
+html.theme-racing .hero h1 .r-word{display:inline-block;white-space:nowrap;font:inherit;margin:0;letter-spacing:inherit}
+html.theme-racing .hero h1 span:not(.r-ch):not(.r-word){display:block;font-family:var(--r-disp);font-size:.26em;letter-spacing:.06em;color:var(--r-sky)!important;-webkit-text-fill-color:var(--r-sky)!important;margin-top:10px}
 html.theme-racing .hero .eyebrow{color:#fff}
 html.theme-racing .lead{color:#c9c9d6;font-size:16px;line-height:1.6;font-weight:500}
 html.theme-racing .hero .btn-red{background:#fff;color:var(--r-ink)}

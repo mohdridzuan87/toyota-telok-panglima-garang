@@ -13,7 +13,8 @@
   if (h1 && !reduce) {
     const t = h1.firstChild;
     if (t && t.nodeType === 3) {
-      const frag = document.createDocumentFragment();
+      // bungkus huruf dalam satu span "r-word" (nowrap) supaya perkataan tak patah antara huruf di skrin lebar
+      const frag = document.createElement("span"); frag.className = "r-word";
       [...t.textContent].forEach((ch, i) => { const s = document.createElement("span"); s.className = "r-ch"; s.textContent = ch; s.style.animationDelay = (0.08 + i * 0.07) + "s"; frag.appendChild(s); });
       h1.setAttribute("aria-label", h1.innerText.replace(/\s+/g, " ").trim());
       t.replaceWith(frag);
