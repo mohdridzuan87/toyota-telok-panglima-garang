@@ -103,22 +103,31 @@ if (!tiles.length && prevData) { // promo gagal: kekalkan rebate lama
 }
 
 /* ---------- 3. Harga warna dari PDF senarai harga ---------- */
-const cache = existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, "utf8")) : {};
+// PARSER_V: naikkan bila parsePdfText berubah supaya semua PDF dibaca semula (cache lama dibuang)
+const PARSER_V = 2;
+let cache = existsSync(CACHE) ? JSON.parse(readFileSync(CACHE, "utf8")) : {};
+if (cache.__v !== PARSER_V) cache = { __v: PARSER_V };
 const normC = s => String(s || "").toLowerCase().replace(/\(2-?\s?tone\)|\b2-?\s?tone\b|with black roof/g, " 2tone ").replace(/\([^)]*\)/g, " ")
   .replace(/\bii\b/g, "2").replace(/\bgray\b/g, "grey").replace(/\bmc\b/g, " ").replace(/\b(mica|metallic|solid)\b/g, " ").replace(/[^a-z0-9 ]/g, " ")
   .split(/\s+/).filter(Boolean).sort().join(" ");
 function parsePdfText(txt) {
   const lines = txt.split(/\r?\n/), rows = [];
-  let on = false, cols = [];
+  let on = false, cols = [], pendCode = null;
   for (const ln of lines) {
-    if (/Colou?rs?\s+Availability/i.test(ln) || /^\s*Colou?rs\s*$/i.test(ln)) {
+    if (/Colou?rs?\s+Availability/i.test(ln) || /^\s*Colou?rs\s*$/i.test(ln) || /^\s*Description\s{2,}Code\b/i.test(ln)) {
       on = true;
       // Lajur varian dalam pengepala jadual (selepas "Code"), tanpa "Price" dan teks hubungan
       const after = ln.split(/\bCode\b/)[1];
       if (after) cols = after.split(/\s{2,}/).map(s => s.trim()).filter(s => s && !/^price$/i.test(s) && !/information|contact|toyota|website|freephone/i.test(s));
     }
     if (!on) continue;
-    const r = ln.match(/^\s*\d+\)\s+(.+?)\s{2,}(?:v\s+)?([A-Z0-9]{3})\b(.*)$/);
+    // Kod warna kadang-kadang di baris SENDIRI di atas nama (cth. Yaris "089" lalu "1) Platinum White Pearl")
+    const lone = ln.match(/^\s*([A-Z0-9]{3})\s*$/);
+    if (lone) { pendCode = lone[1]; continue; }
+    // Baris boleh bermula dengan perkataan "Colours" (cth. "Colours  2) Silver Metallic  1D4 ...")
+    let r = ln.match(/^\s*(?:Colou?rs?\s+)?\d+\)\s+(.+?)\s{2,}(?:v\s+)?([A-Z0-9]{3})\b(.*)$/);
+    if (!r && pendCode) { const r2 = ln.match(/^\s*(?:Colou?rs?\s+)?\d+\)\s+(.+?)(?:\s{2,}(.*))?$/); if (r2) r = [r2[0], r2[1], pendCode, r2[2] || ""]; }
+    if (/\S/.test(ln)) pendCode = null;
     if (r) {
       const p = r[3].match(/RM\s?([\d,]+)/);
       const marks = [...r[3].matchAll(/\bAvailable\b|N\/A/g)].map(x => x[0] === "Available");
@@ -163,7 +172,7 @@ for (const link of pdfLinks) {
     console.log("PDF dibaca:", link, cache[link].rows.length, "warna, lajur:", cache[link].cols.join(" | "));
   } catch (e) { console.warn("PDF gagal:", link, e.message); }
 }
-for (const k of Object.keys(cache)) if (!pdfLinks.has(k)) delete cache[k];
+for (const k of Object.keys(cache)) if (k !== "__v" && !pdfLinks.has(k)) delete cache[k];
 
 /* ---------- 4. Warna + gambar ikut varian ---------- */
 const pageCache = new Map();

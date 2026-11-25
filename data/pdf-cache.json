@@ -1,4 +1,132 @@
 {
+ "__v": 2,
+ "/content/dam/malaysia/price-list-maintenance-packages/gr-86/august-2026/1.0-pm(ip)-gr86-26.pdf": {
+  "cols": [
+   "2.4 M/T",
+   "2.4 A/T"
+  ],
+  "rows": [
+   {
+    "name": "Ignition Red",
+    "code": "DCK",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Crystal White Pearl",
+    "code": "K1X",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Crystal Black Silica",
+    "code": "D4S",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Magnetite Gray Metallic",
+    "code": "P8Y",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/gr-corolla/jan-2026/1.0-pm(ip)-gr-corolla-price-list.pdf": {
+  "cols": [
+   "GR Corolla 1.6T"
+  ],
+  "rows": [
+   {
+    "name": "Precious Metal",
+    "code": "1L5",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Super White 2",
+    "code": "040",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Emotional Red 2",
+    "code": "3U5",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Black",
+    "code": "202",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/gr-yaris/march-2026/1.0-pm(ip)-gr-yaris-price-list.pdf": {
+  "cols": [
+   "1.6L M/T",
+   "1.6L A/T"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl Mica",
+    "code": "089",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Emotional Red 2",
+    "code": "3U5",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Precious Black",
+    "code": "219",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   },
+   {
+    "name": "Precious Metal",
+    "code": "1L5",
+    "price": 0,
+    "avail": [
+     true,
+     true
+    ]
+   }
+  ]
+ },
  "/content/dam/malaysia/price-list-maintenance-packages/corolla-cross/july-2026/v2/1.0-pm(ip)-corolla-cross-price-list.pdf": {
   "cols": [
    "1.8V A/T",
@@ -144,6 +272,37 @@
     "avail": [
      false,
      false,
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/hilux-bev/march-2026/v2/1.0-pm-(ipte-cpte)-hilux-bev-price-list.pdf": {
+  "cols": [
+   "Hilux D/Cab BEV 4x4"
+  ],
+  "rows": [
+   {
+    "name": "Super White 2",
+    "code": "040",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Platinum White Pearl                        ",
+    "code": "089",
+    "price": 800,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Ash",
+    "code": "1M2",
+    "price": 0,
+    "avail": [
      true
     ]
    }
@@ -331,6 +490,92 @@
    }
   ]
  },
+ "/content/dam/malaysia/price-list-maintenance-packages/bz4x/march-2026/1.0-pm-bz4x-price-list.pdf": {
+  "cols": [
+   "bZ4X"
+  ],
+  "rows": [
+   {
+    "name": "Platinum White Pearl MC.",
+    "code": "089",
+    "price": 800,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Precious Metal",
+    "code": "1L5",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Emotional Red 2",
+    "code": "3U5",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "DK. Blue MC.",
+    "code": "8X8",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Attitude Black MC.",
+    "code": "218",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   }
+  ]
+ },
+ "/content/dam/malaysia/price-list-maintenance-packages/urban-cruiser/march-2026/1.0-pm-urban-cruiser-price-list.pdf": {
+  "cols": [
+   "Urban Cruiser"
+  ],
+  "rows": [
+   {
+    "name": "Pearl Arctic White",
+    "code": "ZHJ",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Land Breeze Green",
+    "code": "WA1",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Grandeur Grey",
+    "code": "WBF",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   },
+   {
+    "name": "Pearl Bluish Black",
+    "code": "WB3",
+    "price": 0,
+    "avail": [
+     true
+    ]
+   }
+  ]
+ },
  "/content/dam/malaysia/price-list-maintenance-packages/harrier-hev/november-2026/1.0-pm-ipte-cpte-harrier.pdf": {
   "cols": [
    "2.5 HEV"
@@ -449,6 +694,10 @@
    }
   ]
  },
+ "/content/dam/malaysia/price-list-maintenance-packages/vellfire/august-2026/1.0-pm-toyota-vellfire-price-list.pdf": {
+  "cols": [],
+  "rows": []
+ },
  "/content/dam/malaysia/price-list-maintenance-packages/fortuner/july-2026/v4/1.0-pm-(ipte)-fortuner-price-list.pdf": {
   "cols": [
    "2.4 A/T 4x4",
@@ -518,31 +767,55 @@
   ]
  },
  "/content/dam/malaysia/price-list-maintenance-packages/yaris/november-2026/1.0-pm(ipte)-yaris-price-list.pdf": {
-  "cols": [],
+  "cols": [
+   "1.5E AT",
+   "1.5G AT"
+  ],
   "rows": [
+   {
+    "name": "Platinum White Pearl ",
+    "code": "089",
+    "price": 400,
+    "avail": [
+     true,
+     true
+    ]
+   },
    {
     "name": "Silver Metallic",
     "code": "1D4",
     "price": 0,
-    "avail": []
+    "avail": [
+     true,
+     true
+    ]
    },
    {
     "name": "Red Mica Metallic",
     "code": "3R3",
     "price": 0,
-    "avail": []
+    "avail": [
+     true,
+     true
+    ]
    },
    {
     "name": "(2-tone) Red Mica Metallic ",
     "code": "2QL",
     "price": 1500,
-    "avail": []
+    "avail": [
+     true,
+     true
+    ]
    },
    {
     "name": "(2-tone) Platinum White Pearl ",
     "code": "2PS",
     "price": 1800,
-    "avail": []
+    "avail": [
+     true,
+     true
+    ]
    }
   ]
  },
@@ -592,269 +865,6 @@
     ]
    }
   ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/all-new-hiace/september-2026/v2/1.0-pm-(ipte)(cpte)-hiace-slwb.pdf": {
-  "cols": [
-   "HIACE SLWB 2.8D AT WINDOW VAN"
-  ],
-  "rows": [
-   {
-    "name": "Solid White",
-    "code": "058",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/gr-86/august-2026/1.0-pm(ip)-gr86-26.pdf": {
-  "cols": [
-   "2.4 M/T",
-   "2.4 A/T"
-  ],
-  "rows": [
-   {
-    "name": "Ignition Red",
-    "code": "DCK",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   },
-   {
-    "name": "Crystal White Pearl",
-    "code": "K1X",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   },
-   {
-    "name": "Crystal Black Silica",
-    "code": "D4S",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   },
-   {
-    "name": "Magnetite Gray Metallic",
-    "code": "P8Y",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/gr-corolla/jan-2026/1.0-pm(ip)-gr-corolla-price-list.pdf": {
-  "cols": [
-   "GR Corolla 1.6T"
-  ],
-  "rows": [
-   {
-    "name": "Precious Metal",
-    "code": "1L5",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Super White 2",
-    "code": "040",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Emotional Red 2",
-    "code": "3U5",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Black",
-    "code": "202",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/gr-yaris/march-2026/1.0-pm(ip)-gr-yaris-price-list.pdf": {
-  "cols": [
-   "1.6L M/T",
-   "1.6L A/T"
-  ],
-  "rows": [
-   {
-    "name": "Platinum White Pearl Mica",
-    "code": "089",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   },
-   {
-    "name": "Emotional Red 2",
-    "code": "3U5",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   },
-   {
-    "name": "Precious Black",
-    "code": "219",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   },
-   {
-    "name": "Precious Metal",
-    "code": "1L5",
-    "price": 0,
-    "avail": [
-     true,
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/hilux-bev/march-2026/v2/1.0-pm-(ipte-cpte)-hilux-bev-price-list.pdf": {
-  "cols": [
-   "Hilux D/Cab BEV 4x4"
-  ],
-  "rows": [
-   {
-    "name": "Super White 2",
-    "code": "040",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Platinum White Pearl                        ",
-    "code": "089",
-    "price": 800,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Ash",
-    "code": "1M2",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/bz4x/march-2026/1.0-pm-bz4x-price-list.pdf": {
-  "cols": [
-   "bZ4X"
-  ],
-  "rows": [
-   {
-    "name": "Platinum White Pearl MC.",
-    "code": "089",
-    "price": 800,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Precious Metal",
-    "code": "1L5",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Emotional Red 2",
-    "code": "3U5",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "DK. Blue MC.",
-    "code": "8X8",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Attitude Black MC.",
-    "code": "218",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/urban-cruiser/march-2026/1.0-pm-urban-cruiser-price-list.pdf": {
-  "cols": [
-   "Urban Cruiser"
-  ],
-  "rows": [
-   {
-    "name": "Pearl Arctic White",
-    "code": "ZHJ",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Land Breeze Green",
-    "code": "WA1",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Grandeur Grey",
-    "code": "WBF",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   },
-   {
-    "name": "Pearl Bluish Black",
-    "code": "WB3",
-    "price": 0,
-    "avail": [
-     true
-    ]
-   }
-  ]
- },
- "/content/dam/malaysia/price-list-maintenance-packages/vellfire/august-2026/1.0-pm-toyota-vellfire-price-list.pdf": {
-  "cols": [],
-  "rows": []
  },
  "/content/dam/malaysia/price-list-maintenance-packages/alphard/august-2026/1.0-pm-toyota-alphard-price-list.pdf": {
   "cols": [],
