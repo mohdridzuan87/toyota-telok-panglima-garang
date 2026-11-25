@@ -78,7 +78,7 @@ Insurans: masuk dalam loan (±${i})`,
     pickK: "Pilihan Wan Jasni", talkH: "JOM BINCANG", talkP: "Yang ni kena bincang sikit. WhatsApp Wan Jasni, nanti Wan Jasni bagi cadangan terbaik.",
     otrNoRebate: "Harga OTR tanpa rebate*", perMonth: "Sebulan selepas rebate (deposit 10%, 9 tahun, 2.3%)",
     view: "Lihat model", askWan: "Tanya Wan Jasni", others: "Pilihan lain", mo: "/bulan",
-    pickMsg: g => `Salam Wan Jasni, pemilih model di laman Wan Jasni cadangkan Toyota ${g} untuk saya. Boleh terangkan lebih lanjut?`,
+    pickMsg: g => `Salam Wan Jasni, pemilihan model di laman Wan Jasni cadangkan Toyota ${g} untuk saya. Boleh terangkan lebih lanjut?`,
     chk: (n, t) => `${n}/${t}`, chkDone: "Siap, jom bawa balik!", chkSome: "Hampir siap", chkNone: "Tekan setiap satu",
     steps: [
       ["Tengok kereta & pilih varian", "Datang showroom, tengok sendiri kereta dan banding varian. Wan Jasni terangkan beza setiap satu, termasuk petrol dengan HEV.",["Banding saiz, ruang dan ciri keselamatan", "Tanya apa-apa terus kat Wan Jasni", "Ambil gambar dan brochure, bincang dengan family kat rumah"], "Biasanya 30 hingga 60 minit"],
