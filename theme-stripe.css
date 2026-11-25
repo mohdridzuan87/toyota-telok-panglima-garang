@@ -1,0 +1,105 @@
+/* TEMA STRIPE (dijana dari preview-stripe/stripe.css oleh tools/scope-css.cjs) — aktif hanya bila <html class="theme-stripe"> */
+html.theme-stripe{--navy:#0a2540; --slate:#425466; --soft:#f6f9fc; --line2:#e3e8ee;
+  --accent:#eb0a1e; --accent2:#ff6a1a;
+  --shadow:0 50px 100px -20px rgba(50,50,93,.25),0 30px 60px -30px rgba(0,0,0,.3);
+  --shadow-sm:0 13px 27px -5px rgba(50,50,93,.25),0 8px 16px -8px rgba(0,0,0,.3);
+  --guides:linear-gradient(90deg,transparent calc(25% - 1px),rgba(10,37,64,.06) calc(25% - 1px),rgba(10,37,64,.06) 25%,transparent 25%,transparent calc(50% - 1px),rgba(10,37,64,.06) calc(50% - 1px),rgba(10,37,64,.06) 50%,transparent 50%,transparent calc(75% - 1px),rgba(10,37,64,.06) calc(75% - 1px),rgba(10,37,64,.06) 75%,transparent 75%);}
+html.theme-stripe body{background:#fff;color:var(--navy);letter-spacing:-.005em}
+html.theme-stripe .top{background:rgba(255,255,255,.72);border-bottom:1px solid rgba(10,37,64,.06);color:var(--navy);backdrop-filter:saturate(180%) blur(14px)}
+html.theme-stripe .brand-mark{color:var(--navy)}
+html.theme-stripe .brand-sep{background:#c9d2dc}
+html.theme-stripe .brand-loc,html.theme-stripe .nav{color:var(--slate)}
+html.theme-stripe .nav a:hover{color:var(--navy)}
+html.theme-stripe .lang{border-color:var(--line2)}
+html.theme-stripe .lang a{color:var(--slate)}
+html.theme-stripe .lang a[aria-current]{background:var(--navy);color:#fff}
+html.theme-stripe h2,html.theme-stripe .hero h1,html.theme-stripe h3,html.theme-stripe .btn,html.theme-stripe .eyebrow,html.theme-stripe .kicker,html.theme-stripe .lbl,html.theme-stripe .flbl,html.theme-stripe .q-tag,html.theme-stripe .strip b,html.theme-stripe .tabs button b,html.theme-stripe .trust-item strong,html.theme-stripe .progress,html.theme-stripe .step-list button span,html.theme-stripe .specs dt{text-transform:none!important}
+html.theme-stripe h2{color:var(--navy)!important;font-weight:650;font-size:clamp(32px,4.6vw,54px);letter-spacing:-.025em;line-height:1.08}
+html.theme-stripe h2 b,html.theme-stripe .dark h2 b{font-weight:700}
+html.theme-stripe .dark h2,html.theme-stripe .dark h2 b{color:var(--navy)}
+html.theme-stripe .sub,html.theme-stripe .sub.light{color:var(--slate);font-size:17px;line-height:1.6}
+html.theme-stripe .eyebrow,html.theme-stripe .eyebrow.light{color:var(--accent);letter-spacing:0;font-size:15px;font-weight:700}
+html.theme-stripe .eyebrow::before{display:none}
+html.theme-stripe .kicker,html.theme-stripe .kicker.light{color:var(--slate);letter-spacing:0;font-size:13px}
+html.theme-stripe .lbl,html.theme-stripe .flbl{letter-spacing:0;font-size:13px;color:var(--slate)}
+html.theme-stripe .btn{border-radius:999px;letter-spacing:0;font-size:15px;font-weight:600;padding:11px 20px}
+html.theme-stripe .btn-red{background:var(--navy);color:#fff}
+html.theme-stripe .btn-red:hover{background:#1b3a5c}
+html.theme-stripe .btn-red::after,html.theme-stripe .btn-ghost::after{content:"›";font-size:20px;line-height:0;margin-left:2px;transition:transform .2s}
+html.theme-stripe .btn-red:hover::after,html.theme-stripe .btn-ghost:hover::after{transform:translateX(3px)}
+html.theme-stripe .btn-ghost{border:0;color:var(--accent)!important;padding-left:8px}
+html.theme-stripe .light-sec .btn-ghost,html.theme-stripe .stage .btn-ghost{border:0}
+html.theme-stripe .hero{background:#fff;color:var(--navy);padding-top:0}
+html.theme-stripe .wave{position:absolute;left:0;right:0;top:-300px;height:620px;transform:skewY(-12deg);transform-origin:0 0;overflow:hidden;z-index:0}
+html.theme-stripe .wave-in{position:absolute;inset:-30%;
+  background:
+    radial-gradient(38% 45% at 20% 35%,#ff3b47 0,transparent 62%),
+    radial-gradient(35% 45% at 55% 25%,#ff8a1f 0,transparent 60%),
+    radial-gradient(30% 40% at 85% 40%,#ffc25c 0,transparent 62%),
+    radial-gradient(26% 34% at 74% 62%,rgba(47,123,255,.55) 0,transparent 60%),
+    radial-gradient(40% 50% at 30% 80%,#ff5a36 0,transparent 62%),
+    linear-gradient(120deg,#ff4d3d,#ffb347);
+  filter:saturate(1.1);animation:wave 18s ease-in-out infinite alternate}
+@keyframes wave{0%{transform:translate(0,0) rotate(0) scale(1)}50%{transform:translate(-6%,4%) rotate(8deg) scale(1.08)}100%{transform:translate(5%,-3%) rotate(-6deg) scale(1.04)}}
+@media (prefers-reduced-motion:reduce){html.theme-stripe .wave-in{animation:none}
+}
+html.theme-stripe .hero-grid{position:relative;z-index:1;padding-top:360px}
+@media (max-width:620px){html.theme-stripe .hero-grid{padding-top:330px}
+}
+html.theme-stripe .hero h1{font-weight:700;letter-spacing:-.035em;font-size:clamp(46px,7vw,84px)}
+html.theme-stripe .hero h1,html.theme-stripe .hero h1 span{-webkit-text-fill-color:var(--navy)!important;color:var(--navy)!important;background:none!important}
+html.theme-stripe .hero h1 span{font-weight:500;color:var(--slate)!important;-webkit-text-fill-color:var(--slate)!important;font-size:.5em;letter-spacing:-.02em}
+html.theme-stripe .eyebrow.light{color:var(--accent);text-shadow:none}
+html.theme-stripe .lead{color:var(--slate);font-size:18px}
+html.theme-stripe .hero .btn-ghost{color:var(--accent)!important}
+html.theme-stripe .sa-card{background:#fff;border:0;box-shadow:var(--shadow-sm);color:var(--navy)}
+html.theme-stripe .sa-card strong{color:var(--navy)}
+html.theme-stripe .sa-card span{color:var(--slate)}
+html.theme-stripe .hero-car img{filter:drop-shadow(0 40px 40px rgba(50,50,93,.28))}
+html.theme-stripe .hero-car::before,html.theme-stripe .hero-car::after{display:none}
+html.theme-stripe .strip{border-top:1px solid var(--line2);position:relative;z-index:1}
+html.theme-stripe .strip button{color:var(--slate)}
+html.theme-stripe .strip button.on,html.theme-stripe .strip button:hover{color:var(--navy);border-top-color:var(--accent)}
+html.theme-stripe .strip a{color:var(--accent)}
+html.theme-stripe .sec,html.theme-stripe .dark,html.theme-stripe .light-sec{background-color:var(--soft);color:var(--navy);background-image:var(--guides)}
+html.theme-stripe .dark{background-color:#fff}
+html.theme-stripe .trust{background:#fff;border-color:var(--line2)}
+html.theme-stripe .trust-item{background:#fff}
+html.theme-stripe .trust-item svg{stroke:var(--accent)}
+html.theme-stripe .trust-item strong{color:var(--navy);letter-spacing:0;font-size:15px}
+html.theme-stripe .trust-item span{color:var(--slate)}
+html.theme-stripe .stage,html.theme-stripe .calc,html.theme-stripe .check-card,html.theme-stripe .map{border:0!important;box-shadow:var(--shadow);border-radius:16px!important}
+html.theme-stripe .stage{background:#fff}
+html.theme-stripe .tabs button{color:var(--slate)}
+html.theme-stripe .tabs button.on,html.theme-stripe .tabs button:hover{color:var(--navy);border-color:var(--accent)}
+html.theme-stripe .seg{border-color:var(--line2)}
+html.theme-stripe .seg button.on,html.theme-stripe .chips button.on,html.theme-stripe .ncd button.on{background:var(--navy);border-color:var(--navy)}
+html.theme-stripe .chips button{border-color:var(--line2);border-radius:999px}
+html.theme-stripe .calc{background:#fff}
+html.theme-stripe .calc-out{background:var(--navy)}
+html.theme-stripe .big #rMonthly{--g:linear-gradient(90deg,#ff6b5a,#ffc25c)!important}
+html.theme-stripe .quiz{border-top-color:var(--line2)}
+html.theme-stripe .q{border-bottom-color:var(--line2)}
+html.theme-stripe .q-tag{color:var(--slate);letter-spacing:0}
+html.theme-stripe .q p{color:var(--navy)}
+html.theme-stripe .opts button{border-color:var(--line2);color:var(--navy);background:#fff;border-radius:999px}
+html.theme-stripe .opts button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+html.theme-stripe .pick{background:radial-gradient(70% 90% at 85% 30%,rgba(255,106,26,.35),transparent 70%),var(--navy);border:0;box-shadow:var(--shadow)}
+html.theme-stripe .step-list{border-top-color:var(--line2)}
+html.theme-stripe .step-list button{color:var(--slate);border-bottom-color:var(--line2)}
+html.theme-stripe .step-list button.on{color:var(--navy)}
+html.theme-stripe .step-list button b{border-color:var(--line2)}
+html.theme-stripe .step-detail{background:var(--navy);border:0;box-shadow:var(--shadow)}
+html.theme-stripe .faq{border-top-color:var(--line2)}
+html.theme-stripe .faq details{border-bottom-color:var(--line2)}
+html.theme-stripe .faq summary{color:var(--navy)}
+html.theme-stripe .faq details p{color:var(--slate)}
+html.theme-stripe .addr,html.theme-stripe .addr strong{color:var(--navy)}
+html.theme-stripe .foot{background:#fff;color:var(--slate);border-top:1px solid var(--line2)}
+html.theme-stripe .foot .brand-mark{color:var(--navy)}
+html.theme-stripe .foot-top{border-bottom-color:var(--line2)}
+html.theme-stripe .foot .fine{color:#8792a2}
+html.theme-stripe .rise{opacity:0;transform:translateY(24px)}
+html.theme-stripe .rise.in{opacity:1;transform:none;transition:opacity .8s ease,transform .8s ease}
+html.theme-stripe .brand-emblem{width:34px;height:auto}
+

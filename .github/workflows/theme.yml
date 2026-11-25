@@ -1,0 +1,39 @@
+name: Tukar gaya laman (asal / stripe)
+
+on:
+  workflow_dispatch:
+    inputs:
+      gaya:
+        description: "Pilih gaya laman untuk semua pelawat"
+        type: choice
+        options:
+          - asal
+          - stripe
+        default: asal
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  tukar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Tetapkan gaya
+        run: |
+          sed -i "s/^window.SITE_THEME = \".*\";/window.SITE_THEME = \"${{ inputs.gaya }}\";/" site-config.js
+          v=$(date +%s)
+          sed -i -E "s/site-config\.js\?v=[0-9]+/site-config.js?v=$v/" index.html en/index.html
+          cat site-config.js
+      - name: Simpan & terbitkan
+        run: |
+          git add site-config.js index.html en/index.html
+          if git diff --cached --quiet; then echo "Gaya sudah ${{ inputs.gaya }}"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Gaya laman: ${{ inputs.gaya }}"
+          git push

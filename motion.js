@@ -3,6 +3,7 @@
 (() => {
   const { gsap, ScrollTrigger } = window;
   if (!gsap || !ScrollTrigger) return;
+  if (document.documentElement.classList.contains("theme-stripe")) return; // tema Stripe guna kemunculan lembut sendiri
   gsap.registerPlugin(ScrollTrigger);
   gsap.ticker.lagSmoothing(0); // ikut masa sebenar: animasi tetap siap tepat masa walaupun peranti perlahan
   document.documentElement.classList.add("gsap");
