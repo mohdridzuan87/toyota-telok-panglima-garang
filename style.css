@@ -317,6 +317,13 @@ html.theme-stripe .hero-bg{display:none}
 .mq-item span{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){.marquee-track{animation:none}.marquee{overflow-x:auto}}
 
+/* butang TikTok (tema TikTok) */
+.btn-tt{display:inline-flex;align-items:center;gap:7px;flex:none;padding:7px 12px 7px 9px;border-radius:10px;background:#000;color:#fff;font-size:13px;font-weight:700;border:1px solid #2a2a2e;transition:transform .2s,border-color .2s}
+.btn-tt:hover{transform:translateY(-1px);border-color:#FE2C55}
+.btn-tt .ico{width:18px;height:18px;flex:none}
+html.theme-stripe .btn-tt{border-color:#000}
+@media (max-width:480px){.top .brand-mark{display:none}.lang a{padding:7px 9px}}
+
 /* responsive */
 @media (max-width:980px){
   .nav{display:none}
@@ -337,6 +344,8 @@ html.theme-stripe .hero-bg{display:none}
   .top{padding:10px 16px;gap:12px}
   .brand-sep,.brand-loc{display:none}
   .top .btn-wa span{display:none}
+  .top{gap:10px}
+  .btn-tt{padding:7px 9px;font-size:12px;gap:5px}
   .top .btn-wa{padding:10px 12px}
   .trust-grid{grid-template-columns:1fr}
   .trust-item,.trust-item+.trust-item{padding:18px 0;border-left:0;border-top:1px solid var(--line)}
