@@ -296,6 +296,11 @@ html.gsap body{background:var(--ink)}
 .stage,.calc,.check-card,.step-detail,.pick,.map,.sa-card{border-radius:18px;overflow:hidden}
 .cal{border-radius:10px}
 
+/* logo rasmi Toyota (emblem merah) */
+.brand-emblem{width:34px;height:auto;flex:none;display:block}
+.foot .brand-emblem{display:inline-block;width:30px;vertical-align:middle;margin-right:8px}
+@media (max-width:620px){.brand-emblem{width:30px}}
+
 /* responsive */
 @media (max-width:980px){
   .nav{display:none}
