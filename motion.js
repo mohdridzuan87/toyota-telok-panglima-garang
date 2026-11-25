@@ -71,6 +71,13 @@
         scrollTrigger: { trigger: cover, start: "top bottom", endTrigger: next, end: "top top", scrub: true, invalidateOnRefresh: true } });
     });
 
+    /* Halaman meluncur MENDATAR ikut skrol (Wan, 25 Nov 2026): berselang kiri->kanan, kanan->kiri.
+       Setiap halaman (kecuali hero & jalur model) masuk dari sisi sambil naik menutup halaman sebelumnya. */
+    all.filter(s => !s.classList.contains("hero") && !s.classList.contains("marquee")).forEach((s, i) => {
+      gsap.fromTo(s, { xPercent: i % 2 ? 100 : -100 }, { xPercent: 0, ease: "power2.out",
+        scrollTrigger: { trigger: s, start: "top bottom", end: "top 20%", scrub: 0.4, invalidateOnRefresh: true } });
+    });
+
     /* Hero: semasa halaman seterusnya menutup, teks naik & pudar, kereta membesar */
     const heroTl = gsap.timeline({
       scrollTrigger: { trigger: all[1], start: "top bottom", endTrigger: panels[1], end: "top top", scrub: 0.6, invalidateOnRefresh: true }

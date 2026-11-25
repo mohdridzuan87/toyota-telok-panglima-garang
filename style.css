@@ -380,3 +380,8 @@ html.theme-stripe .btn-tt{border-color:#000;border-radius:999px}
   .pick-empty,.pick-res{padding:24px 18px}
   .float-wa{width:52px;height:52px;right:14px;bottom:14px}
 }
+
+
+/* seksyen meluncur mendatar (slide.js): potong limpahan sisi pada <main> supaya halaman tak boleh diskrol ke tepi.
+   overflow-x:clip tak cipta bekas skrol, jadi seksyen melekat (sticky) masih berfungsi */
+html.theme-stripe main,html.theme-apple main,html.theme-racing main{overflow-x:clip}
