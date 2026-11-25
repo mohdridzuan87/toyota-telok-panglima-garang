@@ -54,6 +54,34 @@
     bands.push({ s, txt: s.querySelector(".r-band-txt"), bg: s.querySelector(".r-band-bg") });
   });
 
+  /* 3b) BARISAN MODEL: seksyen melekat, kad bertab bergerak MENDATAR ikut skrol menegak (ala garis masa laman pelumba) */
+  let track = null;
+  if (D && D.models && D.models.length) {
+    const rm = n => "RM" + Math.round(n).toLocaleString("en-MY");
+    const T = EN ? { eye: "The line-up", h: "Every Toyota, <b>one road.</b>", from: "From", go: "View" } : { eye: "Barisan Toyota", h: "Semua Toyota, <b>satu jalan.</b>", from: "Dari", go: "Lihat" };
+    const s = document.createElement("section");
+    s.className = "r-track";
+    s.innerHTML = `<div class="r-track-pin"><div class="wrap r-track-head"><p class="eyebrow">${T.eye}</p><h2>${T.h}</h2></div>
+      <div class="r-track-row">${D.models.map((m, i) => { const p = Math.min(...m.grades.map(g => g.price));
+        return `<button type="button" class="r-card" data-id="${m.id}"><span class="r-tab">${m.type}</span><span class="r-num">${String(i + 1).padStart(2, "0")}</span>
+          <img src="${BASE + m.cut}" alt="Toyota ${m.name}" loading="lazy"><strong>${m.name}</strong><em>${T.from} ${rm(p)}*</em><span class="r-go">${T.go} →</span></button>`; }).join("")}</div>
+      <div class="r-track-bar"><i></i></div></div>`;
+    const at = document.querySelector(".trust");
+    if (at) {
+      at.parentNode.insertBefore(s, at.nextSibling);
+      const row = s.querySelector(".r-track-row"), bar = s.querySelector(".r-track-bar i");
+      const size = () => { s.style.height = (row.scrollWidth - innerWidth + innerHeight + 40) + "px"; };
+      size(); addEventListener("resize", size); addEventListener("load", size);
+      s.addEventListener("click", e => {
+        const c = e.target.closest(".r-card"); if (!c) return;
+        const tab = document.querySelector(`#modelTabs button[data-id="${c.dataset.id}"]`); if (tab) tab.click();
+        const tgt = document.getElementById("model");
+        if (window.__lenis) window.__lenis.scrollTo(tgt.getBoundingClientRect().top + scrollY - 70); else tgt.scrollIntoView({ behavior: "smooth" });
+      });
+      track = { s, row, bar };
+    }
+  }
+
   /* 4) kemunculan lembut */
   const els = [...document.querySelectorAll(".sec .wrap > *, .trust-item")];
   els.forEach(el => { if (el.getBoundingClientRect().top > innerHeight) el.classList.add("r-rise"); });
@@ -69,10 +97,35 @@
       b.txt.style.transform = `translate3d(${(-p * b.txt.scrollWidth).toFixed(1)}px,0,0)`;
       if (b.bg) b.bg.style.transform = `translate3d(${(p * 12 - 6).toFixed(2)}%,0,0)`;
     }
+    if (track && !reduce) {
+      const r = track.s.getBoundingClientRect(), len = r.height - innerHeight;
+      if (r.bottom > 0 && r.top < innerHeight && len > 0) {
+        const p = Math.min(1, Math.max(0, -r.top / len));
+        track.row.style.transform = `translate3d(${(-p * (track.row.scrollWidth - innerWidth + 40)).toFixed(1)}px,0,0)`;
+        track.bar.style.transform = `scaleX(${p.toFixed(3)})`;
+      }
+    }
     for (const el of els) if (el.classList.contains("r-rise") && !el.classList.contains("in") && el.getBoundingClientRect().top < innerHeight * 0.92) el.classList.add("in");
   };
   addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(frame); }, { passive: true });
   addEventListener("resize", frame);
   setInterval(frame, 500);
   frame();
+
+  /* 5) SKROL LICIN ala laman pelumba (Lenis 1.1.13 dari jsDelivr) — tetikus/trackpad sahaja; telefon kekal skrol asli */
+  if (!reduce) {
+    const sc = document.createElement("script");
+    sc.src = "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"; sc.async = true;
+    sc.onload = () => {
+      if (!window.Lenis) return;
+      const lenis = new window.Lenis({ duration: 1.25, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+      window.__lenis = lenis; root.classList.add("r-smooth");
+      lenis.on("scroll", () => { if (!raf) raf = requestAnimationFrame(frame); });
+      const loop = t => { lenis.raf(t); requestAnimationFrame(loop); }; requestAnimationFrame(loop);
+      // pautan dalam laman (#kalkulator dll.) pun meluncur licin
+      document.addEventListener("click", e => { const a = e.target.closest('a[href^="#"]'); if (!a || a.getAttribute("href").length < 2) return;
+        const t = document.querySelector(a.getAttribute("href")); if (!t) return; e.preventDefault(); lenis.scrollTo(t, { offset: -70 }); });
+    };
+    document.head.appendChild(sc);
+  }
 })();
