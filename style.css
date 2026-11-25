@@ -325,6 +325,10 @@ html.theme-stripe .hero-bg{display:none}
 html.theme-stripe .btn-tt{border-color:#000;border-radius:999px}
 @media (max-width:420px){.top .brand-mark{display:none}}
 
+/* pecahan insurans (asas / windscreen / special perils) */
+.calc-out dl .minor dt,.calc-out dl .minor dd{font-size:.86em;opacity:.72}
+.calc-out dl .minor dt{padding-left:12px}
+
 /* responsive */
 @media (max-width:980px){
   .nav{display:none}

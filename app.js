@@ -16,6 +16,7 @@
   const L = EN ? {
     locale: "en-MY", from: "from",
     month: s => s, rebNote: (mo, r) => `${mo} rebate: −${r}*`, rebToggle: (mo, r) => r ? `Deduct ${mo} rebate (${r})` : "No rebate this month for this variant",
+    wsLbl: c => `Windscreen (cover ${c})`,
     colLbl: c => `Colour: ${c}`, free: "no extra charge", noRebate: "no rebate",
     sendX: (c, cp, rb) => `\nColour: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Full list of ${n} models →`, models: n => `EVERY TOYOTA MODEL,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" }, electric: "Electric",
@@ -51,6 +52,7 @@
     locale: "ms-MY", from: "dari",
     month: s => s.replace("January", "Januari").replace("February", "Februari").replace("March", "Mac").replace("May", "Mei").replace("June", "Jun").replace("July", "Julai").replace("August", "Ogos").replace("October", "Oktober").replace("December", "Disember"),
     rebNote: (mo, r) => `Rebate ${mo}: −${r}*`, rebToggle: (mo, r) => r ? `Tolak rebate ${mo} (${r})` : "Varian ni takde rebate bulan ni",
+    wsLbl: c => `Windscreen (cover ${c})`,
     colLbl: c => `Warna: ${c}`, free: "tiada caj tambahan", noRebate: "tiada rebate",
     sendX: (c, cp, rb) => `\nWarna: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Senarai penuh ${n} model →`, models: n => `SEMUA MODEL TOYOTA,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van", Coupe: "Coupe" }, electric: "Elektrik",
@@ -195,6 +197,12 @@
     const gross = base + 26 * Math.max(0, Math.ceil(price / 1000) - 1);
     return (gross * (1 - ncd / 100) * 1.08 + 10) * 1.2;
   };
+  // Windscreen: nilai cover cadangan ikut model (windscreen2u.com "Windscreen Price List Malaysia 2026", dikemas kini 30 Sep 2026);
+  // premium = 15% nilai cover. Model yang tiada dalam jadual guna anggaran ikut harga (ditanda *).
+  const WS_COVER = { vios: 2000, yaris: 1500, "corolla-cross": 3000, camry: 3000, veloz: 2000, fortuner: 2000, hilux: 2000, harrier: 4000, alphard: 3500, vellfire: 3500 };
+  const wsCover = (id, price) => WS_COVER[id] || (price < 120000 ? 2000 : price < 250000 ? 3000 : 3500);
+  // Special perils (banjir, ribut, tanah runtuh): anggaran 0.5% nilai kereta (pasaran 0.3%-0.5%). Kedua-dua tambah SST 8%.
+  const addons = (id, price) => { const cover = wsCover(id, price); return { cover, ws: cover * 0.15 * 1.08, sp: price * 0.005 * 1.08 }; };
   const NCDS = L.ncd;
   const C = { m: M[0], g: 0, c: 0, ncd: 0 };
   const calcModels = M.filter(m => m.type !== "Van");
@@ -232,7 +240,7 @@
     const dep = net * depPct / 100, loan = net - dep, interest = loan * rate / 100 * years, total = loan + interest;
     const monthly = years ? total / (years * 12) : 0;
     const cc = CCN[engineOf(C.m, g)] || 1496, ncdV = NCDS[C.ncd][0];
-    const ins = insurance(cc, price + colP, ncdV);
+    const base = insurance(cc, price + colP, ncdV), ad = addons(C.m.id, price + colP), ins = base + ad.ws + ad.sp;
     $("rColRow").hidden = !colP; $("rColLbl").textContent = L.colLbl(col ? col.n : ""); $("rCol").textContent = "+" + rm(colP);
     $("rRebRow").hidden = !rebUsed; $("rRebLbl").textContent = "Rebate " + MONTH; $("rReb").textContent = "−" + rm(rebUsed);
     $("rNet").textContent = rm(net);
@@ -245,7 +253,8 @@
     $("rMonthly").textContent = num(monthly);
     $("rPrice").textContent = rm(price); $("rDep").textContent = rm(dep); $("rLoan").textContent = rm(loan);
     $("rInt").textContent = rm(interest); $("rTotal").textContent = rm(total);
-    $("rIns").textContent = "±" + rm(ins); $("rUpfront").textContent = "±" + rm(dep + ins);
+    $("rIns").textContent = "±" + rm(ins); $("rInsBase").textContent = "±" + rm(base);
+    $("rWsLbl").textContent = L.wsLbl(rm(ad.cover)); $("rWs").textContent = "±" + rm(ad.ws); $("rSp").textContent = "±" + rm(ad.sp); $("rUpfront").textContent = "±" + rm(dep + ins);
     const extra = L.sendX(col ? col.n : "-", colP ? rm(colP) : "", rebUsed ? `−${rm(rebUsed)} (${MONTH})` : L.noRebate);
     $("rSend").href = wa(L.send(g.name, rm(price), depPct, rm(dep), years, rate.toFixed(2), ncdV, rm(monthly)).replace(/(\n[^\n]*OTR[^\n]*)/, "$1" + extra));
   }
