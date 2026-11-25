@@ -232,7 +232,10 @@ for (const m of models.values()) for (const g of m.grades.values()) {
     let p = row ? row.price : null;
     if (p == null) { const old = prevCols(g).find(x => x.n === n); p = old ? old.p : rmNum(c.add); }
     if (!p && rmNum(c.add)) p = rmNum(c.add);
-    g.cols.push({ n, hex: c.hex || hexFor(n), p, img: await image(c.src) });
+    // Toyota kadang guna gambar model LAIN (cth. laman Hiace SLWB guna gambar Hiace panel van): abaikan gambar itu
+    const folder = (String(c.src || "").match(/\/models\/([^/]+)\//) || [])[1];
+    const wrongModel = folder && folder !== m.id && models.has(folder);
+    g.cols.push({ n, hex: c.hex || hexFor(n), p, img: wrongModel ? "" : await image(c.src) });
   }
 }
 
@@ -286,11 +289,34 @@ for (const m of models.values()) {
 }
 if (thImg) console.log("Gambar warna dari Toyota Thailand:", thImg);
 
+/* ---------- 4c. Gambar model (potongan lutsinar) dari "explore thumbnail" laman model Toyota Malaysia ---------- */
+async function exploreCut(m, out) {
+  try {
+    const seg = (m.url.match(/\/models\/([^/.]+)/) || [])[1] || m.id;
+    const html = await (await get(m.url)).text();
+    const all = [...new Set(html.match(/\/content\/dam\/malaysia\/models\/[^"' )]*explore-thumbnail[^"' )]*\.png/gi) || [])];
+    const words = m.id.split("-").filter(w => w.length > 1);
+    // Pilih gambar yang namanya padan dengan model ini (cth. "hiace-slwb"), bukan model lain
+    const pick = all.find(u => u.toLowerCase().includes(m.id)) || all.find(u => u.toLowerCase().includes(seg)) ||
+      all.find(u => words.every(w => u.toLowerCase().includes(w)));
+    if (!pick) return;
+    const r = await fetch(SITE + pick, UA); const buf = Buffer.from(await r.arrayBuffer());
+    if (!r.ok || buf.length < 2000) return;
+    const tmp = path.join(tmpdir(), "x-" + Date.now() + ".png"); writeFileSync(tmp, buf);
+    // Potong ruang lutsinar supaya semua kereta duduk sebaris (jalur model bergerak & pentas)
+    const crop = require_ffmpeg_crop(tmp);
+    execFileSync("ffmpeg", ["-v", "error", "-y", "-i", tmp, ...(crop ? ["-vf", crop] : []), "-c:v", "libwebp", "-quality", "88", out]);
+    unlinkSync(tmp);
+    console.log("Gambar model (explore thumbnail):", m.id, "<-", pick);
+  } catch (e) { console.warn("explore thumbnail gagal:", m.id, e.message); }
+}
+
 /* ---------- 5. Tulis data.js ---------- */
 const out = {
   source: PRICE_LIST, rebateSource: rebateSrc, rebateMonth,
   models: await Promise.all([...models.values()].sort((a, b) => (ORDER.indexOf(a.id) + 1 || 99) - (ORDER.indexOf(b.id) + 1 || 99)).map(async m => {
     const cutFile = path.join(ROOT, "img", "cut", m.id + ".webp");
+    if (!existsSync(cutFile)) await exploreCut(m, cutFile); // gambar potongan rasmi Toyota (explore thumbnail) jika ada
     const grades = [...m.grades.values()].sort((a, b) => a.price - b.price).map(g => ({ name: g.name, fuel: g.fuel, price: g.price, rebate: g.rebate || 0, cols: g.cols || [] }));
     const firstImg = (grades.flatMap(g => g.cols).find(c => c.img) || {}).img || (await image(m.img)) || "";
     return { id: m.id, name: m.name, type: m.type, url: m.url, cut: existsSync(cutFile) ? "img/cut/" + m.id + ".webp" : firstImg, grades };
