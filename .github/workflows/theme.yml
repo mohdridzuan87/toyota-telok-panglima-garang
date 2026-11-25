@@ -59,6 +59,8 @@ jobs:
         if: steps.pilih.outputs.gaya != ''
         run: |
           sed -i "s/^window.SITE_THEME = \".*\";/window.SITE_THEME = \"${{ steps.pilih.outputs.gaya }}\";/" site-config.js
+          # gaya sama seperti sekarang: jangan ubah apa-apa (elak commit kosong)
+          if git diff --quiet -- site-config.js; then echo "Gaya sudah ${{ steps.pilih.outputs.gaya }}"; exit 0; fi
           v=$(date +%s)
           sed -i -E "s/site-config\.js\?v=[0-9]+/site-config.js?v=$v/" index.html en/index.html
           cat site-config.js
