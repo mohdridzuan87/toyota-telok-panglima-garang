@@ -1,5 +1,10 @@
 name: Tukar gaya laman (asal / stripe)
 
+# Dua cara:
+# 1. Manual: Actions -> "Tukar gaya laman" -> Run workflow -> pilih asal / stripe.
+# 2. Automatik: semakan setiap hari 12:05 pagi (waktu Malaysia). Bila gaya sekarang dah 15 hari,
+#    tukar ke gaya satu lagi (asal <-> stripe). Tukar manual = kiraan 15 hari bermula semula.
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,6 +15,8 @@ on:
           - asal
           - stripe
         default: asal
+  schedule:
+    - cron: "5 16 * * *"   # 16:05 UTC = 12:05 pagi waktu Malaysia
 
 permissions:
   contents: write
@@ -18,22 +25,51 @@ concurrency:
   group: update-data
   cancel-in-progress: false
 
+env:
+  HARI_GILIRAN: 15
+
 jobs:
   tukar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Tetapkan gaya
+        with:
+          fetch-depth: 0   # perlu sejarah penuh untuk tahu bila gaya terakhir ditukar
+      - name: Tentukan gaya
+        id: pilih
         run: |
-          sed -i "s/^window.SITE_THEME = \".*\";/window.SITE_THEME = \"${{ inputs.gaya }}\";/" site-config.js
+          cur=$(sed -n 's/^window.SITE_THEME = "\(.*\)";/\1/p' site-config.js)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "gaya=${{ inputs.gaya }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          last=$(git log -1 --format=%ct -- site-config.js)
+          # kira hari kalendar waktu Malaysia (UTC+8), supaya tukar tepat hari ke-15 pukul 12:05 pagi
+          days=$(( ($(date +%s) + 28800) / 86400 - (last + 28800) / 86400 ))
+          echo "Gaya sekarang: $cur, sudah $days hari"
+          if [ "$days" -lt "$HARI_GILIRAN" ]; then
+            echo "Belum cukup $HARI_GILIRAN hari, tiada perubahan."
+            echo "gaya=" >> "$GITHUB_OUTPUT"
+          elif [ "$cur" = "stripe" ]; then
+            echo "gaya=asal" >> "$GITHUB_OUTPUT"
+          else
+            echo "gaya=stripe" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Tetapkan gaya
+        if: steps.pilih.outputs.gaya != ''
+        run: |
+          sed -i "s/^window.SITE_THEME = \".*\";/window.SITE_THEME = \"${{ steps.pilih.outputs.gaya }}\";/" site-config.js
           v=$(date +%s)
           sed -i -E "s/site-config\.js\?v=[0-9]+/site-config.js?v=$v/" index.html en/index.html
           cat site-config.js
       - name: Simpan & terbitkan
+        if: steps.pilih.outputs.gaya != ''
         run: |
           git add site-config.js index.html en/index.html
-          if git diff --cached --quiet; then echo "Gaya sudah ${{ inputs.gaya }}"; exit 0; fi
+          if git diff --cached --quiet; then echo "Gaya sudah ${{ steps.pilih.outputs.gaya }}"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Gaya laman: ${{ inputs.gaya }}"
+          if [ "${{ github.event_name }}" = "schedule" ]; then how="automatik 15 hari"; else how="manual"; fi
+          git commit -m "Gaya laman: ${{ steps.pilih.outputs.gaya }} ($how)"
+          git pull --rebase -q
           git push
