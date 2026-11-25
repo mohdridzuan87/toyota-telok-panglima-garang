@@ -240,7 +240,10 @@
     const dep = net * depPct / 100, loan = net - dep, interest = loan * rate / 100 * years, total = loan + interest;
     const monthly = years ? total / (years * 12) : 0;
     const cc = CCN[engineOf(C.m, g)] || 1496, ncdV = NCDS[C.ncd][0];
-    const base = insurance(cc, price + colP, ncdV), ad = addons(C.m.id, price + colP), ins = base + ad.ws + ad.sp;
+    // Laras Wan Jasni (25 Nov 2026): anggaran insurans dikurangkan 20%, setiap bahagian dibundarkan ke RM100 terdekat
+    const r100 = v => Math.round(v * 0.8 / 100) * 100;
+    const ad0 = addons(C.m.id, price + colP), base = r100(insurance(cc, price + colP, ncdV));
+    const ad = { cover: ad0.cover, ws: r100(ad0.ws), sp: r100(ad0.sp) }, ins = base + ad.ws + ad.sp;
     $("rColRow").hidden = !colP; $("rColLbl").textContent = L.colLbl(col ? col.n : ""); $("rCol").textContent = "+" + rm(colP);
     $("rRebRow").hidden = !rebUsed; $("rRebLbl").textContent = "Rebate " + MONTH; $("rReb").textContent = "−" + rm(rebUsed);
     $("rNet").textContent = rm(net);
