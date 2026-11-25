@@ -286,6 +286,16 @@ html.gsap body{background:var(--ink)}
 .sec h2 b.split{background-image:none}
 .sec h2 b .w>span{background-image:var(--g);background-repeat:no-repeat;background-size:var(--gw,100%) 100%;background-position:var(--gx,0) 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 
+/* bucu bulat semua butang & kotak (Wan: petak tajam tak cantik, rounded corner lebih cantik) */
+.btn{border-radius:12px}
+.btn-wa.sm{border-radius:999px}
+.lang{border-radius:10px;overflow:hidden}
+.chips button,.opts button,.reb-toggle{border-radius:10px}
+.seg,.ncd{border-radius:10px;overflow:hidden}
+.step-list button b{border-radius:8px}
+.stage,.calc,.check-card,.step-detail,.pick,.map,.sa-card{border-radius:18px;overflow:hidden}
+.cal{border-radius:10px}
+
 /* responsive */
 @media (max-width:980px){
   .nav{display:none}
