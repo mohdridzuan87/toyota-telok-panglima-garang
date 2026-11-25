@@ -230,6 +230,15 @@ Insurans: masuk dalam loan (±${i})`,
   $("cColours").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; C.c = +b.dataset.i; calc(); });
   $("cReb").addEventListener("change", calc);
   $("cInsLoan").addEventListener("change", calc);
+  // Butang − / + kadar faedah: satu tekan = 0.01%; tekan lama = berulang laju
+  document.querySelectorAll(".step-btn").forEach(b => {
+    const r = $("cRate"); let t1, t2;
+    const go = () => { b.dataset.step > 0 ? r.stepUp() : r.stepDown(); r.dispatchEvent(new Event("input")); };
+    const stop = () => { clearTimeout(t1); clearInterval(t2); };
+    b.addEventListener("pointerdown", e => { e.preventDefault(); go(); t1 = setTimeout(() => { t2 = setInterval(go, 70); }, 420); });
+    ["pointerup", "pointerleave", "pointercancel"].forEach(ev => b.addEventListener(ev, stop));
+    b.addEventListener("click", e => { if (e.detail === 0) go(); }); // papan kekunci (Enter/Space)
+  });
   $("cNcd").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; C.ncd = +b.dataset.i; calc(); });
   $("cPrice").addEventListener("input", e => { const v = e.target.value.replace(/[^\d]/g, ""); e.target.value = v ? num(+v) : ""; calc(); });
   ["cDep", "cYears", "cRate"].forEach(id => $(id).addEventListener("input", calc));
