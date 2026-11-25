@@ -105,10 +105,16 @@ Insurans: masuk dalam loan (±${i})`,
   const HERO = ["vios", "yaris-cross", "corolla-cross", "hilux"].filter(byId);
   for (const m of M) { if (HERO.length >= 4) break; if (!HERO.includes(m.id)) HERO.push(m.id); }
   let heroI = Math.min(2, HERO.length - 1), heroTimer;
+  // Tema Apple: guna gambar warna rasmi Toyota (sudut depan 3/4, 900 px, lebih tajam) bukan potongan sisi 450 px
+  const heroSrc = m => {
+    if (document.documentElement.classList.contains("theme-apple"))
+      for (const g of m.grades || []) for (const c of g.cols || []) if (c.img && !c.illus && !c.src) return BASE + c.img;
+    return BASE + m.cut;
+  };
   const heroSet = i => {
     heroI = i; const m = byId(HERO[i]), img = $("heroCar");
     img.style.opacity = 0;
-    setTimeout(() => { img.src = BASE + m.cut; img.alt = "Toyota " + m.name; img.style.opacity = 1; }, 200);
+    setTimeout(() => { img.src = heroSrc(m); img.alt = "Toyota " + m.name; img.style.opacity = 1; }, 200);
     [...$("heroStrip").querySelectorAll("button")].forEach((b, j) => b.classList.toggle("on", j === i));
   };
   $("heroStrip").innerHTML = HERO.map(id => { const m = byId(id); return `<button type="button"><b>${m.name}</b><span>${L.from} ${rm(minPrice(m))}</span></button>`; }).join("") + `<a href="#model">${L.seeAll(M.length)}</a>`;
