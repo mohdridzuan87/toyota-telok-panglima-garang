@@ -29,8 +29,8 @@ concurrency:
 
 env:
   HARI_GILIRAN: 15
-  # Gaya yang ikut giliran automatik, ikut urutan (asal -> stripe -> apple -> asal ...).
-  GILIRAN: "asal stripe apple"
+  # Gaya yang ikut giliran automatik, ikut urutan (asal -> stripe -> apple -> racing -> asal ...).
+  GILIRAN: "asal stripe apple racing"
 
 jobs:
   tukar:
