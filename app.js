@@ -40,6 +40,7 @@ Insurance: included in the loan (±${i})`,
     pickK: "Wan Jasni's pick", talkH: "LET'S TALK", talkP: "This combination needs a chat. WhatsApp Wan Jasni for the best suggestion.",
     otrNoRebate: "OTR price without rebate*", perMonth: "Per month after rebate (10% deposit, 9 years, 2.3%)",
     view: "View model", askWan: "Ask Wan Jasni", others: "Other options", mo: "/month",
+    jdBack: "Back", jdStep: n => `Question ${n} of 3`, jdFinding: "Finding your match…", jdMatch: "IT'S A MATCH!", jdRetry: "Try again",
     pickMsg: g => `Hi Wan Jasni, the model finder on your website suggested the Toyota ${g} for me. Could you tell me more?`,
     chk: (n, t) => `${n}/${t}`, chkDone: "Ready to drive home", chkSome: "Almost there", chkNone: "Tap each item",
     steps: [
@@ -78,6 +79,7 @@ Insurans: masuk dalam loan (±${i})`,
     pickK: "Pilihan Wan Jasni", talkH: "JOM BINCANG", talkP: "Yang ni kena bincang sikit. WhatsApp Wan Jasni, nanti Wan Jasni bagi cadangan terbaik.",
     otrNoRebate: "Harga OTR tanpa rebate*", perMonth: "Sebulan selepas rebate (deposit 10%, 9 tahun, 2.3%)",
     view: "Lihat model", askWan: "Tanya Wan Jasni", others: "Pilihan lain", mo: "/bulan",
+    jdBack: "Balik", jdStep: n => `Soalan ${n} daripada 3`, jdFinding: "Tengah cari jodoh awak…", jdMatch: "JODOH DAH JUMPA!", jdRetry: "Cuba lagi",
     pickMsg: g => `Salam Wan Jasni, pemilihan model di laman Wan Jasni cadangkan Toyota ${g} untuk saya. Boleh terangkan lebih lanjut?`,
     chk: (n, t) => `${n}/${t}`, chkDone: "Siap, jom bawa balik!", chkSome: "Hampir siap", chkNone: "Tekan setiap satu",
     steps: [
@@ -312,12 +314,61 @@ Insurans: masuk dalam loan (±${i})`,
   };
   const est = p => { const loan = p * 0.9; return (loan + loan * 0.023 * 9) / 108; };
   const A = {};
-  $("quiz").addEventListener("click", e => {
-    const b = e.target.closest("button"); if (!b) return;
+  /* "Cari Jodoh": satu soalan satu skrin -> saat mencari -> keputusan. Tanpa JS, ketiga-tiga soalan kekal dipaparkan. */
+  const quiz = $("quiz"), pick = $("pick"), QS = [...quiz.querySelectorAll(".q")];
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ICON = {
+    "pax-2": '<circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M17.5 14c2.1.3 3.5 2 3.5 4.3"/>',
+    "pax-5": '<circle cx="7" cy="6.5" r="2.6"/><circle cx="17" cy="6.5" r="2.6"/><circle cx="12" cy="13" r="2"/><path d="M2.5 17c0-3 2-5 4.5-5 1.2 0 2.2.4 3 1.1M21.5 17c0-3-2-5-4.5-5-1.2 0-2.2.4-3 1.1M8.5 20.5c0-2.2 1.5-3.8 3.5-3.8s3.5 1.6 3.5 3.8"/>',
+    "pax-7": '<circle cx="12" cy="7" r="2.8"/><circle cx="5" cy="9" r="2.2"/><circle cx="19" cy="9" r="2.2"/><path d="M7 19c0-3.2 2.2-5.4 5-5.4s5 2.2 5 5.4M1.8 17.5c0-2.4 1.4-4 3.2-4 .9 0 1.6.3 2.2.9M22.2 17.5c0-2.4-1.4-4-3.2-4-.9 0-1.6.3-2.2.9"/>',
+    "use-city": '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5.5C9 4.7 9.7 4 10.5 4h3c.8 0 1.5.7 1.5 1.5V8M3 13h18"/>',
+    "use-far": '<path d="M8 4 4 20M16 4l4 16M12 5v2.5M12 10.8v2.5M12 16.6v2.5"/>',
+    "use-work": '<path d="M12 3 20 7v10l-8 4-8-4V7z"/><path d="M4 7l8 4 8-4M12 11v10"/>',
+    "use-save": '<path d="M12 3.5c3.5 4.2 6 7.4 6 10.5a6 6 0 0 1-12 0c0-3.1 2.5-6.3 6-10.5z"/><path d="M9.5 14.5a2.7 2.7 0 0 0 2.5 2.6"/>'
+  };
+  // Ikon bajet: 4 bar, makin tinggi bajet makin banyak bar menyala
+  const bars = n => [0, 1, 2, 3].map(i => `<path d="M${5 + i * 4.7} 20v-${4 + i * 3.6}"${i < n ? "" : ' opacity=".22"'}/>`).join("");
+  ["1200", "1800", "2600", "99999"].forEach((v, i) => ICON["budget-" + v] = bars(i + 1));
+  QS.forEach(q => q.querySelectorAll(".opts button").forEach(b => {
+    b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[q.dataset.q + "-" + b.dataset.v] || ""}</svg><span>${b.textContent}</span>`;
+    b.setAttribute("aria-pressed", "false");
+  }));
+  quiz.insertAdjacentHTML("afterbegin", `<div class="jd-bar"><button type="button" class="jd-back">← ${L.jdBack}</button><span class="jd-count" aria-live="polite"></span><div class="jd-prog" aria-hidden="true"><i></i><i></i><i></i></div></div>`);
+  quiz.classList.add("jodoh");
+  pick.classList.add("jd-off");
+  pick.setAttribute("aria-live", "polite");
+  let at = 0, busy = 0;
+  const go = n => {
+    at = n;
+    QS.forEach((q, i) => q.classList.toggle("now", i === n));
+    quiz.querySelector(".jd-count").textContent = L.jdStep(n + 1);
+    quiz.querySelectorAll(".jd-prog i").forEach((el, i) => el.classList.toggle("on", i <= n));
+    quiz.querySelector(".jd-back").style.visibility = n ? "visible" : "hidden";
+  };
+  const find = () => {
+    quiz.classList.add("jd-off"); pick.classList.remove("jd-off");
+    pick.innerHTML = `<div class="jd-load"><div class="jd-pulse"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.500-4.600-7.500-10.200A4.100 4.100 0 0 1 12 7.300a4.100 4.100 0 0 1 7.500 2.500C19.500 15.400 12 20 12 20z"/></svg></div><p>${L.jdFinding}</p></div>`;
+    setTimeout(() => { recommend(); busy = 0; }, calm ? 0 : 1300);
+  };
+  quiz.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b || busy) return;
+    if (b.classList.contains("jd-back")) { go(at - 1); return; }
     const q = b.closest(".q"); A[q.dataset.q] = b.dataset.v;
-    q.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
-    if (A.pax && A.use && A.budget) recommend();
+    q.querySelectorAll("button").forEach(x => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", String(x === b)); });
+    busy = 1;
+    const keyboard = e.detail === 0;
+    setTimeout(() => {
+      if (at === QS.length - 1) { find(); return; }
+      go(at + 1); busy = 0;
+      if (keyboard) QS[at].querySelector("button").focus({ preventScroll: true });
+    }, calm ? 0 : 260);
   });
+  const retry = () => {
+    for (const k in A) delete A[k];
+    quiz.querySelectorAll(".opts button").forEach(x => { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
+    pick.classList.add("jd-off"); quiz.classList.remove("jd-off"); go(0);
+  };
+  go(0);
   function recommend() {
     const pax = +A.pax, use = A.use, budget = +A.budget, list = [];
     for (const [id, t] of Object.entries(TAGS)) {
@@ -334,12 +385,13 @@ Insurans: masuk dalam loan (±${i})`,
     const pool = within.length ? within : list.slice().sort((a, b) => a.mo - b.mo).slice(0, 3);
     pool.sort((a, b) => b.s - a.s || (within.length ? b.mo - a.mo : a.mo - b.mo));
     const best = pool[0];
-    if (!best) { $("pick").innerHTML = `<div class="pick-empty"><p class="kicker light">${L.pickK}</p><h3>${L.talkH}</h3><p>${L.talkP}</p></div>`; return; }
+    if (!best) { $("pick").innerHTML = `<div class="pick-empty"><p class="kicker light">${L.pickK}</p><h3>${L.talkH}</h3><p>${L.talkP}</p><button type="button" class="jd-retry" data-retry>↻ ${L.jdRetry}</button></div>`; return; }
     const seen = new Set([best.m.id]), alts = [];
     for (const x of pool.slice(1)) { if (!seen.has(x.m.id)) { seen.add(x.m.id); alts.push(x); } if (alts.length === 2) break; }
     const over = !within.length;
-    $("pick").innerHTML = `<div class="pick-res">
+    $("pick").innerHTML = `<div class="pick-res jd-res">
       <div>
+        <p class="jd-match">${L.jdMatch}</p>
         <p class="kicker light">${L.pickK}</p>
         <h3>Toyota ${best.g.name}</h3>
         <p class="why">${L.why[use]}${over ? L.over : ""}</p>
@@ -349,11 +401,12 @@ Insurans: masuk dalam loan (±${i})`,
           <a class="btn btn-wa" target="_blank" rel="noopener" href="${wa(L.pickMsg(best.g.name))}"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.1-1.2-.2-.2-.5-.3Z"/></svg><span>${L.askWan}</span></a>
         </div>
         ${alts.length ? `<p class="alt">${L.others}: ${alts.map(x => `<button type="button" data-go="${x.m.id}" data-gi="${x.gi}">${x.g.name}</button> (±${rm(x.mo)}${L.mo})`).join(", ")}</p>` : ""}
+        <button type="button" class="jd-retry" data-retry>↻ ${L.jdRetry}</button>
       </div>
       <img src="${BASE + best.m.cut}" alt="Toyota ${best.m.name}" width="450" height="190">
     </div>`;
   }
-  $("pick").addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (!b) return; showModel(b.dataset.go, +b.dataset.gi); $("model").scrollIntoView({ behavior: "smooth" }); });
+  $("pick").addEventListener("click", e => { if (e.target.closest("[data-retry]")) { retry(); return; } const b = e.target.closest("[data-go]"); if (!b) return; showModel(b.dataset.go, +b.dataset.gi); $("model").scrollIntoView({ behavior: "smooth" }); });
 
   /* ---------- SENARAI SEMAK ---------- */
   const chk = [...$("checklist").querySelectorAll("button")];

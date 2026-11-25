@@ -397,3 +397,54 @@ main{overflow-x:clip}
 .foot-prices{margin:0 0 14px;font-size:14px;font-weight:600}
 .foot-prices a{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:620px){.price-index{grid-template-columns:1fr 1fr}.price-index a{padding:12px}}
+
+/* Cari Jodoh (pemilihan model): satu soalan satu skrin. Warna ikut tema melalui --jd-* */
+.jd-off{display:none!important}
+.quiz.jodoh{--jd-card:#17171a;--jd-line:#34343a;--jd-text:#fff;--jd-mute:#9a9aa3;--jd-grad:linear-gradient(90deg,#eb0a1e,#ff6a1a,#ffb020);border:0;margin-top:36px}
+html.theme-stripe .quiz.jodoh{--jd-card:#fff;--jd-line:var(--line2);--jd-text:var(--navy);--jd-mute:var(--slate)}
+html.theme-apple .quiz.jodoh{--jd-card:#fff;--jd-line:var(--a-line);--jd-text:var(--a-ink);--jd-mute:var(--a-grey)}
+.jd-bar{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px 16px;margin-bottom:26px;color:var(--jd-mute)}
+.jd-back{justify-self:start;font-size:14px;font-weight:700;color:var(--jd-mute);padding:4px 0}
+.jd-back:hover{color:var(--jd-text)}
+.jd-count{font-size:13px;font-weight:700}
+.jd-prog{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.jd-prog i{height:6px;border-radius:99px;background:var(--jd-line);overflow:hidden;position:relative}
+.jd-prog i::after{content:"";position:absolute;inset:0;background:var(--jd-grad);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.jd-prog i.on::after{transform:scaleX(1)}
+.quiz.jodoh .q{display:none;border:0;padding:0;text-align:center;min-height:300px}
+.quiz.jodoh .q.now{display:block}
+.quiz.jodoh .q-tag{display:block;color:var(--jd-mute);margin-bottom:6px}
+.quiz.jodoh .q p{font-size:clamp(21px,3vw,30px);line-height:1.2;color:var(--jd-text)}
+.quiz.jodoh .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:24px}
+.quiz.jodoh .opts button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:150px;padding:20px 12px;background:var(--jd-card);border:1.5px solid var(--jd-line);border-radius:18px;color:var(--jd-text);font-size:15px;font-weight:700;line-height:1.3;box-shadow:none;transition:transform .18s,border-color .18s,box-shadow .18s}
+.quiz.jodoh .opts button svg{width:46px;height:46px;fill:none;stroke:#ff5a1f;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.quiz.jodoh .opts button[data-v="1200"] svg,.quiz.jodoh .q[data-q="budget"] .opts button svg{stroke-width:2.6}
+.quiz.jodoh .opts button:hover{border-color:#ff6a1a;transform:translateY(-4px)}
+.quiz.jodoh .opts button.on{background:var(--jd-card);color:var(--jd-text);border-color:#ff5a1f;box-shadow:0 0 0 2px #ff5a1f,0 14px 34px rgba(255,90,31,.28)}
+.quiz.jodoh .q.now .opts button{animation:jd-in .5s cubic-bezier(.2,.7,.2,1) backwards}
+.quiz.jodoh .q.now .opts button:nth-child(2){animation-delay:.07s}
+.quiz.jodoh .q.now .opts button:nth-child(3){animation-delay:.14s}
+.quiz.jodoh .q.now .opts button:nth-child(4){animation-delay:.21s}
+.quiz.jodoh .q.now p{animation:jd-in .45s ease backwards}
+@keyframes jd-in{from{opacity:0;translate:60px 0}to{opacity:1;translate:0 0}}
+.jd-load{min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:24px;color:#fff;font-size:18px;font-weight:700}
+.jd-pulse{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#eb0a1e,#ff7a1a);animation:jd-pulse .65s ease-in-out infinite alternate}
+.jd-pulse svg{width:48px;height:48px;fill:#fff}
+@keyframes jd-pulse{from{transform:scale(.9);box-shadow:0 0 0 0 rgba(255,90,31,.55)}to{transform:scale(1.08);box-shadow:0 0 0 22px rgba(255,90,31,0)}}
+.jd-match{display:inline-block;margin-bottom:14px;padding:8px 18px;border-radius:99px;background:linear-gradient(90deg,#eb0a1e,#ff6a1a);color:#fff!important;font-size:15px;font-weight:900;letter-spacing:.06em;animation:jd-pop .6s cubic-bezier(.2,1.6,.4,1) backwards}
+@keyframes jd-pop{from{opacity:0;scale:.4}to{opacity:1;scale:1}}
+.jd-res > div > *:not(.jd-match){animation:jd-up .55s ease .3s backwards}
+.jd-res > img{animation:jd-drive .9s cubic-bezier(.16,.84,.3,1) .15s backwards}
+@keyframes jd-up{from{opacity:0;translate:0 18px}to{opacity:1;translate:0 0}}
+@keyframes jd-drive{from{opacity:0;translate:70% 0}to{opacity:1;translate:0 0}}
+.jd-retry{display:block;margin-top:18px;padding:6px 0;font-size:14px;font-weight:700;color:#fff;opacity:.75}
+.jd-retry:hover{opacity:1}
+@media (max-width:640px){
+  .quiz.jodoh .q{min-height:360px}
+  .quiz.jodoh .opts{grid-template-columns:1fr 1fr;gap:10px}
+  .quiz.jodoh .opts button{min-height:128px;font-size:14px}
+  .quiz.jodoh .opts button:last-child:nth-child(odd){grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){.quiz.jodoh *,.jd-res *,.jd-match,.jd-pulse{animation:none!important;transition:none!important}}
+/* Kad keputusan sentiasa gelap: teks putih dalam semua tema (tema Apple/Stripe tukar warna teks seksyen kepada gelap) */
+html.theme-apple .pick,html.theme-stripe .pick{color:#f5f5f7}
