@@ -17,6 +17,8 @@
     locale: "en-MY", from: "from",
     month: s => s, rebNote: (mo, r) => `${mo} rebate: −${r}*`, rebToggle: (mo, r) => r ? `Deduct ${mo} rebate (${r})` : "No rebate this month for this variant",
     wsLbl: c => `Windscreen (cover ${c})`,
+    upDep: "Upfront (deposit only)", upBoth: "Upfront (deposit + insurance)", insLoanX: i => `
+Insurance: included in the loan (±${i})`,
     colLbl: c => `Colour: ${c}`, free: "no extra charge", noRebate: "no rebate",
     sendX: (c, cp, rb) => `\nColour: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Full list of ${n} models →`, models: n => `EVERY TOYOTA MODEL,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" }, electric: "Electric",
@@ -53,6 +55,8 @@
     month: s => s.replace("January", "Januari").replace("February", "Februari").replace("March", "Mac").replace("May", "Mei").replace("June", "Jun").replace("July", "Julai").replace("August", "Ogos").replace("October", "Oktober").replace("December", "Disember"),
     rebNote: (mo, r) => `Rebate ${mo}: −${r}*`, rebToggle: (mo, r) => r ? `Tolak rebate ${mo} (${r})` : "Varian ni takde rebate bulan ni",
     wsLbl: c => `Windscreen (cover ${c})`,
+    upDep: "Duit perlu ada masa beli (deposit sahaja)", upBoth: "Duit perlu ada masa beli (deposit + insurans)", insLoanX: i => `
+Insurans: masuk dalam loan (±${i})`,
     colLbl: c => `Warna: ${c}`, free: "tiada caj tambahan", noRebate: "tiada rebate",
     sendX: (c, cp, rb) => `\nWarna: ${c}${cp ? " (+" + cp + ")" : ""}\nRebate: ${rb}`, seeAll: n => `Senarai penuh ${n} model →`, models: n => `SEMUA MODEL TOYOTA,`,
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pikap", Van: "Van", Coupe: "Coupe" }, electric: "Elektrik",
@@ -225,6 +229,7 @@
   $("cGrades").addEventListener("click", e => { const b = e.target.closest("button"); if (b) calcSet(C.m.id, +b.dataset.i); });
   $("cColours").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; C.c = +b.dataset.i; calc(); });
   $("cReb").addEventListener("change", calc);
+  $("cInsLoan").addEventListener("change", calc);
   $("cNcd").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; C.ncd = +b.dataset.i; calc(); });
   $("cPrice").addEventListener("input", e => { const v = e.target.value.replace(/[^\d]/g, ""); e.target.value = v ? num(+v) : ""; calc(); });
   ["cDep", "cYears", "cRate"].forEach(id => $(id).addEventListener("input", calc));
@@ -237,13 +242,15 @@
     const rebUsed = reb && $("cReb").checked ? reb : 0;
     const net = Math.max(0, price + colP - rebUsed);
     const depPct = +$("cDep").value, years = +$("cYears").value, rate = +$("cRate").value;
-    const dep = net * depPct / 100, loan = net - dep, interest = loan * rate / 100 * years, total = loan + interest;
-    const monthly = years ? total / (years * 12) : 0;
     const cc = CCN[engineOf(C.m, g)] || 1496, ncdV = NCDS[C.ncd][0];
     // Laras Wan Jasni (25 Nov 2026): anggaran insurans dikurangkan 15%, setiap bahagian dibundarkan ke RM100 terdekat
     const r100 = v => Math.round(v * 0.85 / 100) * 100;
     const ad0 = addons(C.m.id, price + colP), base = r100(insurance(cc, price + colP, ncdV));
     const ad = { cover: ad0.cover, ws: r100(ad0.ws), sp: r100(ad0.sp) }, ins = base + ad.ws + ad.sp;
+    // Pilihan: insurans tahun pertama dimasukkan dalam loan (deposit tetap dikira dari harga kereta)
+    const insLoan = $("cInsLoan").checked ? ins : 0;
+    const dep = net * depPct / 100, loan = net - dep + insLoan, interest = loan * rate / 100 * years, total = loan + interest;
+    const monthly = years ? total / (years * 12) : 0;
     $("rColRow").hidden = !colP; $("rColLbl").textContent = L.colLbl(col ? col.n : ""); $("rCol").textContent = "+" + rm(colP);
     $("rRebRow").hidden = !rebUsed; $("rRebLbl").textContent = "Rebate " + MONTH; $("rReb").textContent = "−" + rm(rebUsed);
     $("rNet").textContent = rm(net);
@@ -257,8 +264,9 @@
     $("rPrice").textContent = rm(price); $("rDep").textContent = rm(dep); $("rLoan").textContent = rm(loan);
     $("rInt").textContent = rm(interest); $("rTotal").textContent = rm(total);
     $("rIns").textContent = "±" + rm(ins); $("rInsBase").textContent = "±" + rm(base);
-    $("rWsLbl").textContent = L.wsLbl(rm(ad.cover)); $("rWs").textContent = "±" + rm(ad.ws); $("rSp").textContent = "±" + rm(ad.sp); $("rUpfront").textContent = "±" + rm(dep + ins);
-    const extra = L.sendX(col ? col.n : "-", colP ? rm(colP) : "", rebUsed ? `−${rm(rebUsed)} (${MONTH})` : L.noRebate);
+    $("rWsLbl").textContent = L.wsLbl(rm(ad.cover)); $("rWs").textContent = "±" + rm(ad.ws); $("rSp").textContent = "±" + rm(ad.sp); $("rUpfront").textContent = (insLoan ? "" : "±") + rm(dep + ins - insLoan);
+    $("rInsLoanRow").hidden = !insLoan; $("rInsLoan").textContent = "+" + rm(insLoan); $("rUpLbl").textContent = insLoan ? L.upDep : L.upBoth;
+    const extra = L.sendX(col ? col.n : "-", colP ? rm(colP) : "", rebUsed ? `−${rm(rebUsed)} (${MONTH})` : L.noRebate) + (insLoan ? L.insLoanX(rm(insLoan)) : "");
     $("rSend").href = wa(L.send(g.name, rm(price), depPct, rm(dep), years, rate.toFixed(2), ncdV, rm(monthly)).replace(/(\n[^\n]*OTR[^\n]*)/, "$1" + extra));
   }
   calcSet((byId("vios") || calcModels[0] || M[0]).id);
