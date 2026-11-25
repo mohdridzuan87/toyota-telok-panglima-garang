@@ -99,7 +99,15 @@
     alignGrad();
     addEventListener("resize", alignGrad);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignGrad);
-    const blocks = ".sec .eyebrow,.sec .sub,.trust-item,.tabs,.quiz .q,.pick,.check-card,.step-list li,.step-detail,.faq details,.addr,.map,.calc-in > *,.foot-top,.stage";
+    /* Ayat pengenalan menyala perkataan demi perkataan ikut skrol (ala halaman produk apple.com).
+       Paling malap 0.28 supaya tetap boleh dibaca; keadaan sentiasa ikut kedudukan skrol. */
+    document.querySelectorAll(".sec .sub").forEach(p => {
+      const words = splitWords(p);
+      if (!words.length) return;
+      gsap.fromTo(words, { opacity: 0.28 }, { opacity: 1, ease: "none", stagger: 0.12,
+        scrollTrigger: { trigger: p, start: "top 88%", end: "bottom 45%", scrub: 0.4, invalidateOnRefresh: true } });
+    });
+    const blocks = ".sec .eyebrow,.trust-item,.tabs,.quiz .q,.pick,.check-card,.step-list li,.step-detail,.faq details,.addr,.map,.calc-in > *,.foot-top,.stage";
     document.querySelectorAll(blocks).forEach(el => {
       if (below(el)) { gsap.set(el, { opacity: 0, y: 44 }); pending.push({ el, play: i => gsap.to(el, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out", delay: i * 0.07, overwrite: true }) }); }
     });
@@ -118,7 +126,9 @@
     const sync = setInterval(() => ScrollTrigger.update(), 500); // jaga scrub selari walaupun peristiwa skrol terlepas
 
     /* Pentas model: kad naik, kereta meluncur dari kanan (ikut skrol) */
-    gsap.fromTo(".stage-car", { xPercent: 16, scale: 0.88 }, { xPercent: 0, scale: 1, ease: "none", scrollTrigger: { trigger: ".stage", start: "top 85%", end: "top 25%", scrub: 0.6 } });
+    // Kereta "didedahkan": bermula kecil & rendah, membesar ke saiz penuh ikut skrol (ala apple.com)
+    gsap.fromTo(".stage-car", { scale: 0.62, yPercent: 14, xPercent: 6 }, { scale: 1, yPercent: 0, xPercent: 0, ease: "none",
+      scrollTrigger: { trigger: ".stage", start: "top 92%", end: "top 15%", scrub: 0.6, invalidateOnRefresh: true } });
 
     /* Panel ansuran gelap: zum masuk */
     gsap.fromTo(".calc-out", { scale: 0.92 }, { scale: 1, ease: "none", scrollTrigger: { trigger: ".calc", start: "top 85%", end: "top 40%", scrub: 0.5 } });
