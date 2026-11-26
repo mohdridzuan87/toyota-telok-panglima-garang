@@ -256,6 +256,28 @@ ${colourBlocks ? `<section>
     jsonld: [crumbs([[T.navHome, T.home], [T.navList, urlOf(lang)], ["Toyota " + n, urlOf(lang, m.id)]]), carLd, faqLd], date: ctx.date[lang], waMsg: T.waMsg(n), v: ctx.v });
 }
 
+// Jenis kuasa jadual Maxcheck: BEV (elektrik penuh), HEV (hybrid), selebihnya petrol & diesel
+const BEV_IDS = new Set(["bz4x-hev", "urban-cruiser", "hilux-bev"]); // slug bZ4X Toyota ada "-hev" tetapi ia BEV
+const powerOf = (m, group) => BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
+function powerSections(MXD, L) {
+  const all = MXD.groups.flatMap(gr => gr.models.map(m => ({ m, group: gr.name, p: powerOf(m, gr.name) })));
+  const btn = x => `<button type="button" data-id="${x.m.id}">${esc(x.m.name)}</button>`;
+  const HEAD = {
+    hev: ["HEV", L("Hybrid Electric", "Hybrid Electric")],
+    ice: [L("Petrol &amp; Diesel", "Petrol &amp; Diesel"), L("Conventional engine", "Enjin biasa")],
+    bev: ["BEV", L("Full electric", "Elektrik penuh")]
+  };
+  const NAMES = { "SEDAN": "Sedan", "SUV": "SUV", "MPV": "MPV", "PICKUP & VAN": "Pickup &amp; Van", "HATCHBACK": "Hatchback", "GR LINEUP": "GR lineup", "OTHERS": L("Others", "Lain-lain") };
+  return ["hev", "ice", "bev"].map(p => {
+    const list = all.filter(x => x.p === p);
+    if (!list.length) return "";
+    const inner = p === "ice"
+      ? `<div class="mx-list">${MXD.groups.map(gr => { const mine = list.filter(x => x.group === gr.name); return mine.length ? `<div class="mx-group"><h3>${NAMES[gr.name] || esc(gr.name)}</h3><div class="mx-models">${mine.map(btn).join("")}</div></div>` : ""; }).join("")}</div>`
+      : `<div class="mx-models">${list.map(btn).join("")}</div>`;
+    return `<div class="mx-power mx-${p}"><div class="mx-power-h"><h2>${HEAD[p][0]}</h2><span>${HEAD[p][1]}</span></div>${inner}</div>`;
+  }).join("");
+}
+
 // SATU halaman /maxcheck/ (arahan Wan): English secara lalai, butang BM | EN tukar bahasa di halaman sama (?lang=bm)
 function maxcheckPage(MXD, ctx, root) {
   const E = TXT.en, M = TXT.ms, url = HOME + "/maxcheck/";
@@ -317,7 +339,7 @@ ${ld(crumbs([["Home", "/en/"], ["Maxcheck", "/maxcheck/"]]))}
     <h1>${L("Toyota Maxcheck service schedule", "Jadual service Maxcheck Toyota")}</h1>
     <p class="p-lead">${L(`Choose your model to see its Maxcheck periodic service schedule straight away, no download needed. Based on Maxcheck on the Toyota Malaysia website (checked ${dEn}), subject to change by Toyota without notice.`, `Tekan model kereta awak, terus keluar jadual service berkala Maxcheck, tak perlu download. Rujukan Maxcheck di laman Toyota Malaysia (semakan ${dBm}), tertakluk pada perubahan oleh Toyota tanpa notis.`)}</p>
   </div>
-  <div class="mx-list" id="mxList">${MXD.groups.map(g => `<div class="mx-group"><h3>${esc(g.name === "OTHERS" ? "Others" : g.name)}</h3><div class="mx-models">${g.models.map(m => `<button type="button" data-id="${m.id}">${esc(m.name)}</button>`).join("")}</div></div>`).join("")}</div>
+  <div class="mx-powers" id="mxList">${powerSections(MXD, L)}</div>
   <div class="mx-view" id="mxView" hidden></div>
   <noscript><p class="p-note">Enable JavaScript to view the schedules, or open the Maxcheck page on the Toyota Malaysia website.</p></noscript>
   <p class="mx-src"><a href="${esc(MXD.source)}" target="_blank" rel="noopener">${L("Source: Maxcheck on the Toyota Malaysia website ›", "Sumber: Maxcheck di laman Toyota Malaysia ›")}</a></p>

@@ -27,10 +27,6 @@
   const all = M.groups.flatMap(g => g.models);
   const list = sec.querySelector("#mxList"), view = sec.querySelector("#mxView");
 
-  const renderList = () => {
-    list.innerHTML = M.groups.map(g => `<div class="mx-group"><h3>${esc(T.cats[g.name] || g.name)}</h3><div class="mx-models">${g.models.map(m => `<button type="button" data-id="${m.id}" aria-expanded="false">${esc(m.name)}</button>`).join("")}</div></div>`).join("");
-  };
-  renderList();
   const chk = sec.querySelector("#mxChecked"); if (chk) chk.textContent = T.date(M.checkedAt);
 
   let cur = null, page = 0, zoom = matchMedia("(max-width:760px)").matches;
@@ -95,8 +91,8 @@
     e.preventDefault();
     EN = a.dataset.lang === "en"; T = texts();
     root.classList.toggle("bm", !EN); root.lang = EN ? "en" : "ms"; document.title = EN ? titles.en : titles.bm;
-    renderList(); markLang();
-    if (cur && !view.hidden) { render(); list.querySelector(`button[data-id="${cur.id}"]`)?.classList.add("on"); }
+    markLang();
+    if (cur && !view.hidden) render();
     history.replaceState(null, "", urlFor());
   }));
   markLang();
