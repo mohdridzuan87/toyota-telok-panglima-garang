@@ -100,3 +100,10 @@ main section.p-cta{background:var(--soft);border-radius:22px;padding:28px 20px;t
   .p-actions .p-btn{width:100%}
   .p-gallery{grid-template-columns:1fr 1fr}
 }
+
+/* butang Maxcheck di sebelah BM | EN */
+.p-mx{display:inline-flex;align-items:center;flex:none;height:34px;padding:0 13px;border-radius:999px;border:1.5px solid var(--red);color:var(--red);font-size:12.5px;font-weight:800;white-space:nowrap}
+.p-mx:hover{background:var(--red);color:#fff;text-decoration:none}
+.p-mx[aria-current]{background:var(--red);color:#fff}
+.p-nav+.p-mx{margin-left:0}
+@media (max-width:560px){.p-nav{display:none}.p-mx{margin-left:auto}.p-top{gap:7px}.p-mx{padding:0 10px;font-size:11.5px}}

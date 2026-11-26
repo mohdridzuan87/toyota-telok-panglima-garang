@@ -14,6 +14,7 @@ Price facts (data checked 25 November 2026):
 - [Home (English)](https://wanjasni.my/en/)
 - [Full Toyota price list (English)](https://wanjasni.my/en/price/)
 - [Senarai harga penuh Toyota (Bahasa Malaysia)](https://wanjasni.my/harga/)
+- [Toyota Maxcheck periodic service schedules by model](https://wanjasni.my/maxcheck/) (English; Bahasa Malaysia: https://wanjasni.my/maxcheck/?lang=bm)
 
 ## Toyota models
 - [Toyota Vios](https://wanjasni.my/en/price/vios/): Sedan, OTR RM90,600 to RM109,900 (4 variants), November 2026 rebate up to RM14,000. Bahasa Malaysia: https://wanjasni.my/harga/vios/

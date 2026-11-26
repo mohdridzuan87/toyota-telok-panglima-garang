@@ -452,42 +452,12 @@ html.theme-apple .pick,html.theme-stripe .pick{color:#f5f5f7}
 .foot .fine.privacy{margin-top:10px}
 .foot .fine.privacy a{text-decoration:underline}
 
-/* MAXCHECK: pilih model -> jadual service berkala rasmi (gambar muka surat) */
-.mx-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:34px}
-.mx-group h3{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}
-.mx-models{display:flex;flex-wrap:wrap;gap:8px}
-.mx-models button{padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:13.5px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s}
-.mx-models button:hover{border-color:#8a8a92}
-.mx-models button.on{background:var(--ink);border-color:var(--ink);color:#fff}
-.mx-view{margin-top:28px;background:#fff;color:#111;border:1px solid var(--line);border-radius:18px;padding:18px}
-.mx-view{scroll-margin-top:4px}
-.mx-view[hidden]{display:none}
-.mx-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.mx-kicker{font-size:12px;font-weight:700;color:var(--red);letter-spacing:.04em}
-.mx-head h3{font-size:clamp(22px,3vw,30px);line-height:1.15;margin:2px 0;color:#111;background:none;-webkit-text-fill-color:currentColor}
-.mx-eff{font-size:12.5px;color:#6a6a72}
-.mx-close{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:#fff;color:#111;font-size:16px;cursor:pointer;flex:none}
-.mx-pick{margin:14px 0 8px;font-size:13px;color:#55555e}
-.mx-variants{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
-.mx-variants button{flex:none;max-width:260px;text-align:left;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#111;font-size:12.5px;font-weight:700;line-height:1.3;cursor:pointer}
-.mx-variants button small{display:block;font-weight:500;color:#6a6a72;font-size:11.5px;margin-top:2px}
-.mx-variants button.on{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
-.mx-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
-.mx-tools .mx-zoom,.mx-tools .mx-full{padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#111;font-size:13px;font-weight:700;cursor:pointer}
-.mx-tools .mx-wa{margin-left:auto;padding:9px 16px;font-size:13px}
-.mx-frame{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
-.mx-frame img{display:block;width:100%;height:auto;max-width:none;cursor:zoom-in}
-.mx-frame.zoomed img{width:1150px}
-.mx-hint{display:none;font-size:12px;color:#6a6a72;margin-top:6px}
-.mx-frame.zoomed+.mx-hint{display:block}
-.mx-src{margin-top:14px;font-size:13px}
-.mx-src a{text-decoration:underline;text-underline-offset:3px}
-.mx-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);display:flex;flex-direction:column;padding:10px}
-.mx-ov-close{align-self:flex-end;margin-bottom:8px;padding:10px 16px;border:0;border-radius:10px;background:#fff;color:#111;font-weight:700;cursor:pointer}
-.mx-ov-scroll{flex:1;overflow:auto;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}
-.mx-ov-scroll img{display:block;width:max(100%,1700px);height:auto;max-width:none}
-html.mx-lock{overflow:hidden}
-@media (max-width:620px){.mx-view{padding:12px;border-radius:14px}.mx-tools .mx-wa{margin-left:0;width:100%;justify-content:center}.mx-list{grid-template-columns:1fr;gap:14px}}
 
-/* paparan Maxcheck tidak ikut kesan "naik" tema (supaya pautan terus mendarat tepat) */
-#mxView{opacity:1!important;transform:none!important}
+/* butang Maxcheck di sebelah BM | EN */
+.btn-mx{display:inline-flex;align-items:center;justify-content:center;flex:none;height:36px;padding:0 13px;border-radius:10px;border:1.5px solid var(--red);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.01em;white-space:nowrap;transition:background .2s,color .2s}
+.btn-mx:hover{background:var(--red);color:#fff}
+html.theme-stripe .btn-mx,html.theme-apple .btn-mx{color:var(--red);border-radius:999px}
+html.theme-stripe .btn-mx:hover,html.theme-apple .btn-mx:hover{color:#fff}
+@media (max-width:980px){.btn-mx{margin-left:auto}.btn-mx+.lang{margin-left:0}}
+@media (max-width:420px){.top{gap:7px}.top .btn-mx{height:34px;padding:0 9px;font-size:11.5px}.top .lang a{padding:7px 8px}.top .btn-wa{padding-left:14px;padding-right:14px}}
+@media (max-width:359px){.top .brand-emblem{width:26px}.top{padding-left:10px;padding-right:10px;gap:5px}.top .btn-mx{padding:0 7px;font-size:11px}}

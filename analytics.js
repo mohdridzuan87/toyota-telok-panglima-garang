@@ -15,7 +15,7 @@
   const area = a => a.id === "rSend" ? "kalkulator" : a.id === "mAsk" ? "kad_model"
     : a.closest(".float-wa") || a.classList.contains("float-wa") ? "butang_terapung"
     : a.closest("header") ? "atas" : a.closest("footer") ? "bawah" : a.closest(".sa-card") ? "kad_wan"
-    : a.closest(".pick, .pick-res") ? "pilih_model" : a.closest(".p-cta, .p-actions") ? "halaman_harga" : "lain";
+    : a.closest(".mx-view") ? "maxcheck" : a.closest(".pick, .pick-res") ? "pilih_model" : a.closest(".p-cta, .p-actions") ? "halaman_harga" : "lain";
   document.addEventListener("click", e => {
     const a = e.target.closest && e.target.closest("a[href]");
     if (!a) return;

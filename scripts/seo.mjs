@@ -120,9 +120,10 @@ const waBtn = (msg, label, cls = "") => `<a class="p-btn p-wa ${cls}" href="${es
 const urlOf = (lang, id) => `/${TXT[lang].dir}/${id ? id + "/" : ""}`;
 
 // Rangka halaman statik (satu gaya cerah yang kemas; tidak perlukan JavaScript)
-function shell(lang, { id, title, desc, body, jsonld, date, waMsg, v }) {
+function shell(lang, { id, title, desc, body, jsonld, date, waMsg, v, paths, head = "", scripts = "", bodyClass = "" }) {
   const T = TXT[lang], other = lang === "ms" ? "en" : "ms";
-  const self = HOME + urlOf(lang, id);
+  const P = paths || { ms: urlOf("ms", id), en: urlOf("en", id) };
+  const self = HOME + P[lang];
   return `<!doctype html>
 ${MARK}
 <html lang="${lang}">
@@ -132,9 +133,9 @@ ${MARK}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${self}">
-<link rel="alternate" hreflang="ms" href="${HOME + urlOf("ms", id)}">
-<link rel="alternate" hreflang="en" href="${HOME + urlOf("en", id)}">
-<link rel="alternate" hreflang="x-default" href="${HOME + urlOf("ms", id)}">
+<link rel="alternate" hreflang="ms" href="${HOME + P.ms}">
+<link rel="alternate" hreflang="en" href="${HOME + P.en}">
+<link rel="alternate" hreflang="x-default" href="${HOME + P.ms}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="${T.og}">
 <meta property="og:title" content="${esc(title)}">
@@ -149,13 +150,14 @@ ${MARK}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pages.css?v=${v}">
 <script src="/analytics.js?v=1" defer></script>
-${jsonld.map(ld).join("\n")}
+${head}${jsonld.map(ld).join("\n")}
 </head>
-<body>
+<body${bodyClass ? ` class="${bodyClass}"` : ""}>
 <header class="p-top">
   <a class="p-brand" href="${T.home}"><img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span></a>
-  <nav class="p-nav"><a href="${urlOf(lang)}">${T.navList}</a><a class="p-hide" href="${T.home}#kalkulator">${T.navCalc}</a><a href="${T.home}#maxcheck">Maxcheck</a></nav>
-  <div class="p-lang"><a href="${urlOf("ms", id)}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${urlOf("en", id)}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
+  <nav class="p-nav"><a href="${urlOf(lang)}">${T.navList}</a><a class="p-hide" href="${T.home}#kalkulator">${T.navCalc}</a></nav>
+  <a class="p-mx" href="/maxcheck/"${bodyClass === "mx-page" ? ' aria-current="page"' : ""}>Maxcheck</a>
+  <div class="p-lang"><a href="${P.ms}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${P.en}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
   <a class="p-tt" href="${TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok @wan.jasni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6Z"/></svg></a>
   ${waBtn(waMsg, `<span class="p-hide">${T.wa}</span>`, "p-top-wa")}
 </header>
@@ -171,7 +173,7 @@ ${body}
     <p>${T.privacy}</p>
   </div>
 </footer>
-</body>
+${scripts}</body>
 </html>
 `;
 }
@@ -222,7 +224,7 @@ function modelPage(lang, D, m, ctx) {
   <h2>${T.h2Price(van)}</h2>
   ${priceTable(lang, m, `Toyota ${n}: ${T.h2Price(van)}`)}
   ${van ? "" : `<p class="p-note">${T.assume(ctx.month[lang])}</p>`}
-  <div class="p-actions">${van ? "" : `<a class="p-btn p-blue" href="${T.home}?model=${m.id}#kalkulator">${T.calcFull}</a>`}<a class="p-btn p-ghost" href="${T.home}?model=${m.id}#model">${T.seePhotos}</a>${MX[m.id] ? `<a class="p-btn p-ghost" href="${T.home}?maxcheck=${MX[m.id]}#maxcheck">${T.mxLink}</a>` : ""}${waBtn(T.waMsg(n), T.wa)}</div>
+  <div class="p-actions">${van ? "" : `<a class="p-btn p-blue" href="${T.home}?model=${m.id}#kalkulator">${T.calcFull}</a>`}<a class="p-btn p-ghost" href="${T.home}?model=${m.id}#model">${T.seePhotos}</a>${MX[m.id] ? `<a class="p-btn p-ghost" href="/maxcheck/?model=${MX[m.id]}">${T.mxLink}</a>` : ""}${waBtn(T.waMsg(n), T.wa)}</div>
 </section>
 ${colourBlocks ? `<section>
   <h2>${T.h2Colour(esc(n))}</h2>
@@ -252,6 +254,89 @@ ${colourBlocks ? `<section>
   const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
   return shell(lang, { id: m.id, title: T.title(n, ctx.year, van), desc: T.desc(n, ctx.year, from, ctx.date[lang], van), body,
     jsonld: [crumbs([[T.navHome, T.home], [T.navList, urlOf(lang)], ["Toyota " + n, urlOf(lang, m.id)]]), carLd, faqLd], date: ctx.date[lang], waMsg: T.waMsg(n), v: ctx.v });
+}
+
+// SATU halaman /maxcheck/ (arahan Wan): English secara lalai, butang BM | EN tukar bahasa di halaman sama (?lang=bm)
+function maxcheckPage(MXD, ctx, root) {
+  const E = TXT.en, M = TXT.ms, url = HOME + "/maxcheck/";
+  const n = MXD.groups.reduce((a, g) => a + g.models.length, 0);
+  const day = loc => new Date(MXD.checkedAt + "T00:00:00Z").toLocaleDateString(loc, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  const dEn = day("en-GB"), dBm = day("ms-MY");
+  const stamp = f => { const t = readFileSync(path.join(root, f), "utf8").replace(/\r/g, ""); return [...t].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7).toString(36); };
+  // dua bahasa dalam HTML: .l-en dipapar secara lalai, .l-bm bila html.bm
+  const L = (en, bm) => `<span class="l-en">${en}</span><span class="l-bm" lang="ms">${bm}</span>`;
+  const A = (cls, enHref, bmHref, en, bm, extra = "") => `<a class="l-en ${cls}" href="${enHref}"${extra}>${en}</a><a class="l-bm ${cls}" lang="ms" href="${bmHref}"${extra}>${bm}</a>`;
+  const ext = ' target="_blank" rel="noopener"';
+  const waTop = A("p-btn p-wa p-top-wa", esc(waLink(E.waGeneral)), esc(waLink(M.waGeneral)), `${WAICO}<span class="p-hide">${E.wa}</span>`, `${WAICO}<span class="p-hide">${M.wa}</span>`, ext);
+  const waFoot = A("p-btn p-wa", esc(waLink(E.waGeneral)), esc(waLink(M.waGeneral)), `${WAICO}<span>WhatsApp 016-331 3607</span>`, `${WAICO}<span>WhatsApp 016-331 3607</span>`, ext);
+  const title = `Toyota Maxcheck Service Schedule ${ctx.year} for Every Model | Wan Jasni`;
+  const titleBm = `Jadual Service Maxcheck Toyota ${ctx.year} Setiap Model | Wan Jasni`;
+  const desc = `Toyota Maxcheck periodic service schedules for ${n} models by model code: intervals, parts, labour and package prices. View instantly, no download. Jadual service Maxcheck setiap model.`;
+  return `<!doctype html>
+${MARK}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+<script>(function(){var l=new URLSearchParams(location.search).get("lang");if(l==="bm"||l==="ms"){var h=document.documentElement;h.className="bm";h.lang="ms";document.title=${JSON.stringify(titleBm)};}})();</script>
+<meta name="description" content="${esc(desc)}">
+<link rel="canonical" href="${url}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_MY">
+<meta property="og:locale:alternate" content="ms_MY">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:image" content="${HOME}/img/og.jpg?v=3">
+<meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/img/icon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="icon" href="/img/icon-192.png?v=2" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png?v=2">
+<link rel="manifest" href="/manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/pages.css?v=${ctx.v}">
+<link rel="stylesheet" href="/maxcheck.css?v=${stamp("maxcheck.css")}">
+<script src="/analytics.js?v=1" defer></script>
+${ld(crumbs([["Home", "/en/"], ["Maxcheck", "/maxcheck/"]]))}
+</head>
+<body class="mx-page">
+<header class="p-top">
+  ${A("p-brand", "/en/", "/", '<img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span>', '<img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span>')}
+  <nav class="p-nav">${A("", E.home.replace(/\/$/, "/") + "price/", "/harga/", E.navList, M.navList)}${A("p-hide", "/en/#kalkulator", "/#kalkulator", E.navCalc, M.navCalc)}</nav>
+  <a class="p-mx" href="/maxcheck/" aria-current="page">Maxcheck</a>
+  <div class="p-lang" role="group" aria-label="Language / Bahasa"><a href="/maxcheck/?lang=bm" data-lang="bm" lang="ms">BM</a><a href="/maxcheck/" data-lang="en" aria-current="page">EN</a></div>
+  <a class="p-tt" href="${TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok @wan.jasni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6Z"/></svg></a>
+  ${waTop}
+</header>
+<main class="p-wrap">
+<nav class="p-crumb" aria-label="Breadcrumb">${A("", "/en/", "/", E.navHome, M.navHome)} › <span>Maxcheck</span></nav>
+<section id="maxcheck">
+  <div class="p-hero">
+    <p class="p-eye">Service · ${L(E.updated(dEn), M.updated(dBm))}</p>
+    <h1>${L("Toyota Maxcheck service schedule", "Jadual service Maxcheck Toyota")}</h1>
+    <p class="p-lead">${L(`Choose your model to see its Maxcheck periodic service schedule straight away, no download needed. Based on Maxcheck on the Toyota Malaysia website (checked ${dEn}), subject to change by Toyota without notice.`, `Tekan model kereta awak, terus keluar jadual service berkala Maxcheck, tak perlu download. Rujukan Maxcheck di laman Toyota Malaysia (semakan ${dBm}), tertakluk pada perubahan oleh Toyota tanpa notis.`)}</p>
+  </div>
+  <div class="mx-list" id="mxList">${MXD.groups.map(g => `<div class="mx-group"><h3>${esc(g.name === "OTHERS" ? "Others" : g.name)}</h3><div class="mx-models">${g.models.map(m => `<button type="button" data-id="${m.id}">${esc(m.name)}</button>`).join("")}</div></div>`).join("")}</div>
+  <div class="mx-view" id="mxView" hidden></div>
+  <noscript><p class="p-note">Enable JavaScript to view the schedules, or open the Maxcheck page on the Toyota Malaysia website.</p></noscript>
+  <p class="mx-src"><a href="${esc(MXD.source)}" target="_blank" rel="noopener">${L("Source: Maxcheck on the Toyota Malaysia website ›", "Sumber: Maxcheck di laman Toyota Malaysia ›")}</a></p>
+</section>
+</main>
+<footer class="p-foot">
+  <div class="p-wrap">
+    <div class="p-me"><img src="/img/wan-card.webp?v=1" alt="Wan Jasni, Toyota Sales Advisor" width="64" height="84" loading="lazy">
+      <div><b>Wan Jasni</b><span>Toyota Sales Advisor · Panglima City Motor Sdn Bhd</span><span>Lot 7159, Jalan Klang, Batu 8, 42500 Telok Panglima Garang, Selangor</span></div></div>
+    ${waFoot}
+    <p>${L(E.foot(ctx.date.en), M.foot(ctx.date.ms))}</p>
+    <p>${L(E.privacy, M.privacy)}</p>
+  </div>
+</footer>
+<script src="/maxcheck/data.js?v=${stamp("maxcheck/data.js")}"></script>
+<script src="/maxcheck-ui.js?v=${stamp("maxcheck-ui.js")}"></script>
+</body>
+</html>
+`;
 }
 
 function hubPage(lang, D, ctx) {
@@ -313,6 +398,7 @@ Price facts (data checked ${ctx.date.en}):
 - [Home (English)](${HOME}/en/)
 - [Full Toyota price list (English)](${HOME}/en/price/)
 - [Senarai harga penuh Toyota (Bahasa Malaysia)](${HOME}/harga/)
+- [Toyota Maxcheck periodic service schedules by model](${HOME}/maxcheck/) (English; Bahasa Malaysia: ${HOME}/maxcheck/?lang=bm)
 
 ## Toyota models
 ${lines.join("\n")}
@@ -323,6 +409,7 @@ function sitemap(D, lastmod) {
   const pair = (ms, en) => [ms, en].map(loc => `  <url><loc>${HOME}${loc}</loc><lastmod>${lastmod}</lastmod>
     <xhtml:link rel="alternate" hreflang="ms" href="${HOME}${ms}"/><xhtml:link rel="alternate" hreflang="en" href="${HOME}${en}"/></url>`).join("\n");
   const rows = [pair("/", "/en/"), pair(urlOf("ms"), urlOf("en")), ...D.models.map(m => pair(urlOf("ms", m.id), urlOf("en", m.id)))];
+  rows.splice(1, 0, `  <url><loc>${HOME}/maxcheck/</loc><lastmod>${lastmod}</lastmod></url>`);
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${rows.join("\n")}
@@ -360,6 +447,11 @@ export function buildSeo(root, data) {
     if (!re.test(a)) throw new Error("Penanda SEO-HARGA tiada dalam " + rel);
     const b = a.replace(re, () => homeBlock(lang, D, ctx));
     if (b !== a) writeFileSync(f, b);
+  }
+  const mxFile = path.join(root, "maxcheck", "data.js");
+  if (existsSync(mxFile)) {
+    const c = { window: {} }; vm.runInNewContext(readFileSync(mxFile, "utf8"), c);
+    write("maxcheck/index.html", maxcheckPage(c.window.MAXCHECK, ctx, root)); pages += 1;
   }
   write("llms.txt", llmsTxt(D, ctx));
   write("sitemap.xml", sitemap(D, D.updatedAt || D.checkedAt));
