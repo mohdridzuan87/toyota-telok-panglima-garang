@@ -105,5 +105,14 @@
 
   // pautan terus: /maxcheck/?model=vios (boleh tambah &lang=bm)
   const q = new URLSearchParams(location.search), want = q.get("model") || q.get("maxcheck");
-  if (want) { open(want, false); if (!view.hidden) requestAnimationFrame(() => view.scrollIntoView({ behavior: "auto", block: "start" })); }
+  if (want) {
+    open(want, false);
+    if (!view.hidden) {
+      // skrol terus (tanpa animasi) selepas gambar & laman siap dimuat; dua kali kerana gambar boleh lewat
+      const jump = () => { start(); view.scrollIntoView({ behavior: "instant", block: "start" }); };
+      const im = view.querySelector(".mx-frame img");
+      if (!im.complete) im.addEventListener("load", jump, { once: true });
+      if (document.readyState === "complete") setTimeout(jump, 100); else addEventListener("load", () => { setTimeout(jump, 100); setTimeout(jump, 900); });
+    }
+  }
 })();
