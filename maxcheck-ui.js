@@ -10,7 +10,6 @@
     variant: "Choose your variant (check the model code in your vehicle grant)", code: "Code", noteFor: "for",
     zoom: "Zoom in", fit: "Fit to screen", full: "Full screen", close: "Close",
     swipe: "Swipe left and right to see the part names and prices.", eff: d => `Effective ${d}`,
-    wa: n => `Hi Wan Jasni, I'd like to ask about Maxcheck service for my Toyota ${n}.`, ask: "Ask Wan Jasni",
     month: d => d,
     alt: (m, v) => `Toyota ${m} Maxcheck periodic service schedule, ${v}`,
     date: iso => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
@@ -19,7 +18,6 @@
     variant: "Pilih varian kereta awak (tengok kod model dalam geran)", code: "Kod", noteFor: "untuk",
     zoom: "Besarkan", fit: "Muat skrin", full: "Skrin penuh", close: "Tutup",
     swipe: "Leret ke kiri dan kanan untuk tengok nama parts & harga.", eff: d => `Berkuat kuasa ${d}`,
-    wa: n => `Salam Wan Jasni, saya nak tanya pasal service Maxcheck untuk Toyota ${n}.`, ask: "Tanya Wan Jasni",
     month: d => d.replace(/January|February|March|May|June|July|August|October|December/, x => ({ January: "Januari", February: "Februari", March: "Mac", May: "Mei", June: "Jun", July: "Julai", August: "Ogos", October: "Oktober", December: "Disember" })[x]),
     alt: (m, v) => `Jadual service berkala Maxcheck Toyota ${m}, ${v}`,
     date: iso => new Date(iso + "T00:00:00Z").toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
@@ -44,7 +42,7 @@
         <button type="button" class="mx-close" aria-label="${T.close}">✕</button></div>
       ${m.pages.length > 1 ? `<p class="mx-pick">${T.variant}</p><div class="mx-variants">${m.pages.map((x, i) => `<button type="button" data-page="${i}" class="${i === page ? "on" : ""}">${esc(x.label)}${x.code || x.note ? `<small>${esc(x.code)}${x.note ? ` · ${T.noteFor} ${esc(T.month(x.note))}` : ""}</small>` : ""}</button>`).join("")}</div>` : `<p class="mx-pick"><b>${esc(p.label)}</b></p>`}
       <div class="mx-tools"><button type="button" class="mx-zoom">${zoom ? T.fit : T.zoom}</button><button type="button" class="mx-full">${T.full}</button>
-        <a class="p-btn p-wa mx-wa" target="_blank" rel="noopener" href="https://wa.me/60163313607?text=${encodeURIComponent(T.wa(m.name))}">${T.ask}</a></div>
+</div>
       <div class="mx-frame${zoom ? " zoomed" : ""}" tabindex="0"><img src="${BASE + p.img}" width="${p.w}" height="${p.h}" alt="${esc(T.alt(m.name, p.label))}"></div>
       <p class="mx-hint">${T.swipe}</p>`;
     start();
