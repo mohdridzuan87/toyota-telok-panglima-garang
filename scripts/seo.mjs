@@ -24,6 +24,7 @@ const BM_MONTH = { January: "Januari", February: "Februari", March: "Mac", May: 
 const TXT = {
   ms: {
     dir: "harga", home: "/", locale: "ms-MY", og: "ms_MY",
+    privacy: "Laman ni guna Google Analytics (cookies) untuk kira pelawat dan klik butang. Nama atau nombor telefon awak tak dihantar kepada Google Analytics. <a href=\"https://policies.google.com/technologies/partner-sites\" target=\"_blank\" rel=\"noopener\">Cara Google guna data</a>.",
     month: s => s.replace(/[A-Za-z]+/, w => BM_MONTH[w] || w),
     navHome: "Utama", navList: "Semua harga", navCalc: "Kalkulator", wa: "WhatsApp Wan Jasni",
     waMsg: n => `Salam Wan Jasni, saya nak tanya pasal Toyota ${n}.`, waGeneral: "Salam Wan Jasni, saya nak tanya pasal kereta Toyota.",
@@ -66,6 +67,7 @@ const TXT = {
   },
   en: {
     dir: "en/price", home: "/en/", locale: "en-MY", og: "en_MY",
+    privacy: "This site uses Google Analytics (cookies) to count visitors and button taps. Your name and phone number are not sent to Google Analytics. <a href=\"https://policies.google.com/technologies/partner-sites\" target=\"_blank\" rel=\"noopener\">How Google uses data</a>.",
     month: s => s,
     navHome: "Home", navList: "All prices", navCalc: "Calculator", wa: "WhatsApp Wan Jasni",
     waMsg: n => `Hi Wan Jasni, I'd like to ask about the Toyota ${n}.`, waGeneral: "Hi Wan Jasni, I'd like to ask about a Toyota.",
@@ -142,6 +144,7 @@ ${MARK}
 <link rel="manifest" href="/manifest.webmanifest">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pages.css?v=${v}">
+<script src="/analytics.js?v=1" defer></script>
 ${jsonld.map(ld).join("\n")}
 </head>
 <body>
@@ -161,6 +164,7 @@ ${body}
       <div><b>Wan Jasni</b><span>Toyota Sales Advisor · Panglima City Motor Sdn Bhd</span><span>Lot 7159, Jalan Klang, Batu 8, 42500 Telok Panglima Garang, Selangor</span></div></div>
     ${waBtn(waMsg, "WhatsApp 016-331 3607")}
     <p>${T.foot(date)}</p>
+    <p>${T.privacy}</p>
   </div>
 </footer>
 </body>

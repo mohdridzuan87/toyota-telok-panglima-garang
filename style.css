@@ -448,3 +448,6 @@ html.theme-apple .quiz.jodoh{--jd-card:#fff;--jd-line:var(--a-line);--jd-text:va
 @media (prefers-reduced-motion:reduce){.quiz.jodoh *,.jd-res *,.jd-match,.jd-pulse{animation:none!important;transition:none!important}}
 /* Kad keputusan sentiasa gelap: teks putih dalam semua tema (tema Apple/Stripe tukar warna teks seksyen kepada gelap) */
 html.theme-apple .pick,html.theme-stripe .pick{color:#f5f5f7}
+
+.foot .fine.privacy{margin-top:10px}
+.foot .fine.privacy a{text-decoration:underline}
