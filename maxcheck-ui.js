@@ -79,10 +79,12 @@
   const want = new URLSearchParams(location.search).get("maxcheck");
   if (want) {
     open(want, false);
-    addEventListener("load", () => setTimeout(() => {
+    const jump = () => {
       const target = view.hidden ? sec : view;
       const box = sec.parentElement.classList.contains("pin-spacer") ? sec.parentElement : null;
       scrollTo({ top: (box && target === sec ? box : target).getBoundingClientRect().top + scrollY - 76, behavior: "instant" });
-    }, 900));
+    };
+    // dua kali: gambar di atas boleh siap dimuat lewat dan mengubah kedudukan
+    addEventListener("load", () => { setTimeout(jump, 900); setTimeout(jump, 2200); });
   }
 })();
