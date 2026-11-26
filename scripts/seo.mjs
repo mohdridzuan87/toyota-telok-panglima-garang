@@ -14,6 +14,8 @@ const MARK = "<!-- Dijana oleh scripts/seo.mjs — jangan sunting tangan -->";
 // Andaian ansuran = nilai lalai kalkulator laman
 const DEP = 10, YEARS = 9, RATE = 2.3;
 
+// id model laman -> id jadual Maxcheck (scripts/maxcheck.py)
+const MX = { vios: "vios", yaris: "yaris", "yaris-cross": "yaris-cross-bsuv", corolla: "corolla-altis", "corolla-cross": "corolla-cross", camry: "camry", veloz: "veloz", zenix: "innova-zenix-hev", fortuner: "fortuner", hilux: "hilux", hiace: "hiace", "hiace-slwb": "hiace", harrier: "harrier", bz4x: "bz4x-hev", "urban-cruiser": "urban-cruiser", alphard: "alphard", vellfire: "vellfire", gr86: "gr-86", "gr-yaris": "gr-yaris", "gr-corolla": "gr-corolla" };
 const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const rm = n => "RM" + Math.round(n).toLocaleString("en-MY");
 const minColour = g => g.cols && g.cols.length ? Math.min(...g.cols.map(c => c.p || 0)) : 0; // >0 = semua warna berbayar
@@ -43,6 +45,7 @@ const TXT = {
     th: ["Varian", "Harga OTR tanpa rebate*", "Rebate", "Anggaran sebulan"],
     assume: mo => `Anggaran sebulan: deposit ${DEP}%, loan ${YEARS} tahun, kadar ${RATE.toFixed(2)}% setahun, selepas tolak rebate ${mo} (kalau ada), warna paling murah. Belum masuk insurans. Kelulusan dan kadar sebenar ikut bank.`,
     mustColour: p => `semua warna +${p} ke atas (dah dikira dalam ansuran)`,
+    mxLink: "Jadual service Maxcheck",
     calcFull: "Kira ansuran penuh", seePhotos: "Tukar warna & tengok gambar",
     h2Colour: n => `Warna Toyota ${n}`, colourNote: "Gambar sekadar ilustrasi, ikut gambar rasmi Toyota.",
     photoAlt: (n, c) => `Toyota ${n} warna ${c}`,
@@ -86,6 +89,7 @@ const TXT = {
     th: ["Variant", "OTR price before rebate*", "Rebate", "Estimated monthly"],
     assume: mo => `Monthly estimate: ${DEP}% deposit, ${YEARS}-year loan, ${RATE.toFixed(2)}% flat rate per year, after the ${mo} rebate (if any), with the lowest-priced colour. Excludes insurance. Actual rate and approval depend on the bank.`,
     mustColour: p => `every colour adds ${p} or more (included in monthly)`,
+    mxLink: "Maxcheck service schedule",
     calcFull: "Full instalment calculator", seePhotos: "Switch colours & see photos",
     h2Colour: n => `Toyota ${n} colours`, colourNote: "Pictures are for illustration, from Toyota's official images.",
     photoAlt: (n, c) => `Toyota ${n} in ${c}`,
@@ -150,7 +154,7 @@ ${jsonld.map(ld).join("\n")}
 <body>
 <header class="p-top">
   <a class="p-brand" href="${T.home}"><img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span></a>
-  <nav class="p-nav"><a href="${urlOf(lang)}">${T.navList}</a><a class="p-hide" href="${T.home}#kalkulator">${T.navCalc}</a></nav>
+  <nav class="p-nav"><a href="${urlOf(lang)}">${T.navList}</a><a class="p-hide" href="${T.home}#kalkulator">${T.navCalc}</a><a href="${T.home}#maxcheck">Maxcheck</a></nav>
   <div class="p-lang"><a href="${urlOf("ms", id)}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${urlOf("en", id)}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
   <a class="p-tt" href="${TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok @wan.jasni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6Z"/></svg></a>
   ${waBtn(waMsg, `<span class="p-hide">${T.wa}</span>`, "p-top-wa")}
@@ -218,7 +222,7 @@ function modelPage(lang, D, m, ctx) {
   <h2>${T.h2Price(van)}</h2>
   ${priceTable(lang, m, `Toyota ${n}: ${T.h2Price(van)}`)}
   ${van ? "" : `<p class="p-note">${T.assume(ctx.month[lang])}</p>`}
-  <div class="p-actions">${van ? "" : `<a class="p-btn p-blue" href="${T.home}?model=${m.id}#kalkulator">${T.calcFull}</a>`}<a class="p-btn p-ghost" href="${T.home}?model=${m.id}#model">${T.seePhotos}</a>${waBtn(T.waMsg(n), T.wa)}</div>
+  <div class="p-actions">${van ? "" : `<a class="p-btn p-blue" href="${T.home}?model=${m.id}#kalkulator">${T.calcFull}</a>`}<a class="p-btn p-ghost" href="${T.home}?model=${m.id}#model">${T.seePhotos}</a>${MX[m.id] ? `<a class="p-btn p-ghost" href="${T.home}?maxcheck=${MX[m.id]}#maxcheck">${T.mxLink}</a>` : ""}${waBtn(T.waMsg(n), T.wa)}</div>
 </section>
 ${colourBlocks ? `<section>
   <h2>${T.h2Colour(esc(n))}</h2>
