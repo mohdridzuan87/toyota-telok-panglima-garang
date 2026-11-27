@@ -28,10 +28,16 @@
 .mx-frame.zoomed+.mx-hint{display:block}
 .mx-src{margin-top:14px;font-size:13px}
 .mx-src a{text-decoration:underline;text-underline-offset:3px}
-.mx-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);display:flex;flex-direction:column;padding:10px}
-.mx-ov-close{align-self:flex-end;margin-bottom:8px;padding:10px 16px;border:0;border-radius:10px;background:#fff;color:#111;font-weight:700;cursor:pointer}
-.mx-ov-scroll{flex:1;overflow:auto;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}
-.mx-ov-scroll img{display:block;width:max(100%,1700px);height:auto;max-width:none}
+.mx-overlay{position:fixed;inset:0;z-index:1000;background:#111;display:flex;flex-direction:column;gap:8px;padding:8px}
+.mx-ov-bar{display:flex;gap:8px;flex:none}
+.mx-ov-bar button{min-height:40px;padding:9px 14px;border:0;border-radius:10px;background:#fff;color:#111;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.mx-ov-bar button[hidden]{display:none}
+.mx-ov-bar button[aria-pressed="true"]{background:#d6001c;color:#fff}
+.mx-ov-bar .mx-ov-close{margin-left:auto}
+.mx-ov-scroll{flex:1;min-height:0;display:flex;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.mx-ov-page{position:relative;flex:none;margin:auto;overflow:hidden;background:#fff}
+.mx-ov-page img{position:absolute;top:0;left:0;max-width:none;transform-origin:0 0;cursor:zoom-in}
+.mx-overlay.zoomed .mx-ov-page img{cursor:zoom-out}
 html.mx-lock{overflow:hidden}
 @media (max-width:620px){.mx-view{padding:12px;border-radius:14px}.mx-list{grid-template-columns:1fr;gap:14px}}
 .mx-view{scroll-margin-top:0}

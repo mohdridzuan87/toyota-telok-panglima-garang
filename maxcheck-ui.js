@@ -13,7 +13,7 @@
   const texts = () => {
     const t = EN ? {
       variant: PL ? "Choose the buyer type" : "Choose your variant (check the model code in your vehicle grant)", code: "Code", noteFor: "for",
-      zoom: "Zoom in", fit: "Fit to screen", full: "Full screen", close: "Close",
+      zoom: "Zoom in", fit: "Fit to screen", full: "Full screen", close: "Close", rotate: "Rotate",
       swipe: PL ? "Swipe left and right to see every variant, price and colour." : "Swipe left and right to see the part names and prices.",
       eff: d => `Effective ${d}`, month: d => d, kicker: PL ? "Price list · Peninsular Malaysia" : "Maxcheck",
       types: { ip: "Individual", cp: "Company (private)", cc: "Company (commercial)", "ip+cp": "Individual & company (private)" },
@@ -27,7 +27,7 @@
       date: iso => day("en-GB", iso)
     } : {
       variant: PL ? "Pilih jenis pembeli" : "Pilih varian kereta awak (tengok kod model dalam geran)", code: "Kod", noteFor: "untuk",
-      zoom: "Besarkan", fit: "Muat skrin", full: "Skrin penuh", close: "Tutup",
+      zoom: "Besarkan", fit: "Muat skrin", full: "Skrin penuh", close: "Tutup", rotate: "Pusing",
       swipe: PL ? "Leret ke kiri dan kanan untuk tengok semua varian, harga & warna." : "Leret ke kiri dan kanan untuk tengok nama parts & harga.",
       eff: d => `Berkuat kuasa ${d}`, month: bmMonth, kicker: PL ? "Senarai harga · Semenanjung" : "Maxcheck",
       types: { ip: "Individu", cp: "Syarikat (persendirian)", cc: "Syarikat (komersial)", "ip+cp": "Individu & syarikat (persendirian)" },
@@ -154,16 +154,48 @@
   });
   view.addEventListener("click", e => { if (e.target.tagName === "IMG" && e.target.closest(".mx-frame")) fullscreen(); });
 
+  // skrin penuh: mula dengan seluruh muka surat muat dalam skrin; ketik gambar / butang untuk zoom.
+  // Di telefon tegak, butang "Pusing" putarkan helaian melintang supaya penuh skrin.
   function fullscreen() {
     const p = cur.pages[page];
     const o = document.createElement("div"); o.className = "mx-overlay"; o.setAttribute("role", "dialog"); o.setAttribute("aria-modal", "true");
-    o.innerHTML = `<button type="button" class="mx-ov-close">✕ ${T.close}</button><div class="mx-ov-scroll"><img src="${BASE + p.img}" alt="${esc(T.alt(cur.name, T.label(p)))}" width="${p.w}" height="${p.h}"></div>`;
-    const done = () => { o.remove(); document.documentElement.classList.remove("mx-lock"); removeEventListener("keydown", key); };
+    o.innerHTML = `<div class="mx-ov-bar"><button type="button" class="mx-ov-zoom">${T.zoom}</button><button type="button" class="mx-ov-rot" hidden>${T.rotate}</button><button type="button" class="mx-ov-close">✕ ${T.close}</button></div>
+      <div class="mx-ov-scroll"><div class="mx-ov-page"><img src="${BASE + p.img}" alt="${esc(T.alt(cur.name, T.label(p)))}"></div></div>`;
+    const box = o.querySelector(".mx-ov-scroll"), sheet = o.querySelector(".mx-ov-page"), img = sheet.querySelector("img");
+    const zb = o.querySelector(".mx-ov-zoom"), rb = o.querySelector(".mx-ov-rot");
+    let big = false, turned = false;
+    const fitScale = t => Math.min(box.clientWidth / (t ? p.h : p.w), box.clientHeight / (t ? p.w : p.h));
+    const layout = () => {
+      const canTurn = fitScale(true) > fitScale(false) * 1.15; // hanya bila memusing menjadikan helaian jauh lebih besar
+      if (!canTurn) turned = false;
+      rb.hidden = !canTurn;
+      const fit = fitScale(turned), s = big ? Math.max(fit * 2, Math.min(1, 1700 / p.w)) : fit;
+      const w = Math.floor(p.w * s), h = Math.floor(p.h * s);
+      sheet.style.width = (turned ? h : w) + "px"; sheet.style.height = (turned ? w : h) + "px";
+      img.style.width = w + "px"; img.style.height = h + "px";
+      img.style.transform = turned ? `translateX(${h}px) rotate(90deg)` : "none";
+      o.classList.toggle("zoomed", big);
+      zb.textContent = big ? T.fit : T.zoom; rb.setAttribute("aria-pressed", turned ? "true" : "false");
+    };
+    // zoom masuk berpusat pada titik yang diketik (atau tengah helaian)
+    const toggle = pt => {
+      const r = sheet.getBoundingClientRect();
+      const fx = pt ? (pt.x - r.left) / r.width : 0.5, fy = pt ? (pt.y - r.top) / r.height : 0.5;
+      big = !big; layout();
+      box.scrollLeft = big ? sheet.offsetWidth * fx - box.clientWidth / 2 : 0;
+      box.scrollTop = big ? sheet.offsetHeight * fy - box.clientHeight / 2 : 0;
+    };
+    const done = () => { o.remove(); document.documentElement.classList.remove("mx-lock"); removeEventListener("keydown", key); removeEventListener("resize", layout); };
     const key = e => { if (e.key === "Escape") done(); };
+    zb.addEventListener("click", () => toggle());
+    rb.addEventListener("click", () => { turned = !turned; big = false; layout(); });
+    img.addEventListener("click", e => toggle({ x: e.clientX, y: e.clientY }));
     o.querySelector(".mx-ov-close").addEventListener("click", done);
     addEventListener("keydown", key);
+    addEventListener("resize", layout);
     document.documentElement.classList.add("mx-lock");
     document.body.appendChild(o);
+    layout();
     o.querySelector(".mx-ov-close").focus();
   }
 
