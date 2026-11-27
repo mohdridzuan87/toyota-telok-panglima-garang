@@ -486,3 +486,5 @@ html.theme-stripe .hero .hero-grid{padding-top:64px}
 /* gaya Apple: tiada kereta di atas gambar Wan */
 html.theme-apple .hero .hero-car{display:none}
 .hero .hero-copy{min-width:0}
+/* kad Wan: nombor telefon mesti putih atas butang hijau (gaya apple/stripe warnakan semua span kad kelabu) */
+html .hero .sa-card .btn-wa span{color:#fff;-webkit-text-fill-color:#fff}
