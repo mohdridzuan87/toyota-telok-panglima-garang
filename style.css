@@ -472,13 +472,17 @@ html.theme-stripe .btn-mx:hover,html.theme-apple .btn-mx:hover{color:#fff}
 @media (min-width:621px) and (max-width:700px){.top .btn-wa{padding:10px 12px}}
 
 /* header: Wan besar di atas, tajuk bermula di paras dada (muka sentiasa bersih) */
-.hero .hero-copy{--wh:min(clamp(360px,62vh,540px),calc((100vw - 48px)*760/495))}
-.hero .hero-wan{margin:0 auto;height:var(--wh);width:calc(var(--wh)*495/760);max-width:100%;pointer-events:none}
-.hero .hero-wan img{display:block;width:100%;height:100%;object-fit:contain;object-position:50% 0;-webkit-mask-image:linear-gradient(#000 42%,rgba(0,0,0,.14) 55%,transparent 72%);mask-image:linear-gradient(#000 42%,rgba(0,0,0,.14) 55%,transparent 72%)}
-.hero .hero-wan+*{position:relative;z-index:2;margin-top:calc(var(--wh)*-.42)}
+.hero .hero-copy{--wh:min(clamp(560px,92vh,820px),calc((100vw - 32px)*1759/1098))}
+.hero .hero-wan{margin:0 auto;height:var(--wh);width:calc(var(--wh)*1098/1759);max-width:100%;align-self:center;flex:none;pointer-events:none}
+.hero .hero-wan img{display:block;width:100%;height:100%;object-fit:contain;object-position:50% 0;-webkit-mask-image:linear-gradient(#000 40%,rgba(0,0,0,.3) 49%,rgba(0,0,0,.2) 90%,transparent);mask-image:linear-gradient(#000 40%,rgba(0,0,0,.3) 49%,rgba(0,0,0,.2) 90%,transparent)}
+.hero .hero-wan+*{position:relative;z-index:2;margin-top:calc(var(--wh)*-.54)}
+.hero .hero-wan~*{position:relative;z-index:2}
+html.theme-apple .hero .lead,html.theme-stripe .hero .lead{color:#2f3a4a;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 3px rgba(255,255,255,.9)}
+html:not(.theme-apple):not(.theme-stripe) .hero .lead{text-shadow:0 0 8px #000,0 0 3px #000}
 .hero .sa-card.nophoto{padding-left:20px}
 .hero .hero-wan+.eyebrow{text-shadow:0 0 10px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)}
 html:not(.theme-apple):not(.theme-stripe) .hero .hero-wan+.eyebrow{text-shadow:0 0 10px #000,0 0 4px #000}
 html.theme-stripe .hero .hero-grid{padding-top:64px}
 /* gaya Apple: tiada kereta di atas gambar Wan */
 html.theme-apple .hero .hero-car{display:none}
+.hero .hero-copy{min-width:0}
