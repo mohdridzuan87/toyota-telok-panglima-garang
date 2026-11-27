@@ -160,6 +160,7 @@ ${MARK}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pages.css?v=${v}">
 <script src="/analytics.js?v=1" defer></script>
+<script src="/open-app.js?v=1" defer></script>
 ${head}${jsonld.map(ld).join("\n")}
 </head>
 <body${bodyClass ? ` class="${bodyClass}"` : ""}>
@@ -373,6 +374,7 @@ ${MARK}
 <link rel="stylesheet" href="/pages.css?v=${ctx.v}">
 <link rel="stylesheet" href="/maxcheck.css?v=${stamp("maxcheck.css")}">
 <script src="/analytics.js?v=1" defer></script>
+<script src="/open-app.js?v=1" defer></script>
 ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 </head>
 <body class="mx-page">

@@ -488,3 +488,13 @@ html.theme-apple .hero .hero-car{display:none}
 .hero .hero-copy{min-width:0}
 /* kad Wan: nombor telefon mesti putih atas butang hijau (gaya apple/stripe warnakan semua span kad kelabu) */
 html .hero .sa-card .btn-wa span{color:#fff;-webkit-text-fill-color:#fff}
+
+/* kad Wan Jasni: butang TikTok di bawah butang WhatsApp, sama lebar */
+.sa-btns{display:flex;flex-direction:column;align-items:stretch;gap:8px;width:max-content;margin-top:8px}
+html .sa-card .sa-btns .btn{width:auto;margin:0;justify-content:center}
+.sa-card .btn-tiktok{background:#000;border:1px solid #303036;color:#fff}
+.sa-card .btn-tiktok:hover{background:#17171a}
+.btn-tiktok.sm{padding:7px 12px;font-size:13px;border-radius:999px}
+.btn-tiktok.sm .ico{width:16px;height:16px;flex:none}
+html .hero .sa-card .btn-tiktok span{display:inline;color:#fff;-webkit-text-fill-color:#fff;font-size:inherit;text-transform:none;letter-spacing:0}
+html.theme-apple .sa-card .sa-btns{min-width:200px}
