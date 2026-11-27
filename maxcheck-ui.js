@@ -175,7 +175,8 @@
   const markLang = () => {
     langBtns.forEach(a => { if (a.dataset.lang === (EN ? "en" : "bm")) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
     // butang Price & Maxcheck kekalkan bahasa pilihan
-    document.querySelectorAll(".p-top a.p-mx").forEach(a => a.setAttribute("href", a.getAttribute("href").split("?")[0] + (EN ? "" : "?lang=bm")));
+    document.querySelectorAll(".p-top a.p-mx:not(.p-home)").forEach(a => a.setAttribute("href", a.getAttribute("href").split("?")[0] + (EN ? "" : "?lang=bm")));
+    const home = document.querySelector(".p-top a.p-home"); if (home) home.setAttribute("href", EN ? "/en/" : "/");
   };
   const urlFor = () => { const q = new URLSearchParams(); if (!EN) q.set("lang", "bm"); if (cur && !view.hidden) q.set("model", cur.id); const s = q.toString(); return location.pathname + (s ? "?" + s : ""); };
   langBtns.forEach(a => a.addEventListener("click", e => {

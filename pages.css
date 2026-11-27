@@ -106,7 +106,12 @@ main section.p-cta{background:var(--soft);border-radius:22px;padding:28px 20px;t
 .p-mx:hover{background:var(--red);color:#fff;text-decoration:none}
 .p-mx[aria-current]{background:var(--red);color:#fff}
 .p-nav+.p-mx{margin-left:0}
-@media (max-width:880px){.p-nav{display:none}.p-brand+.p-nav+.p-mx{margin-left:auto}.p-top{gap:7px}.p-mx{padding:0 10px;font-size:11.5px}}
+@media (max-width:960px){.p-nav{display:none}.p-brand+.p-nav+.p-mx{margin-left:auto}.p-top{gap:7px}.p-mx{padding:0 10px;font-size:11.5px}}
 .p-mx+.p-mx{margin-left:0}
-@media (max-width:420px){.p-top{gap:5px;padding:9px 8px}.p-brand img{width:28px}.p-mx{height:32px;padding:0 8px;font-size:11px}.p-lang a{padding:6px 7px;font-size:11px}.p-tt,.p-top .p-top-wa{width:36px;height:36px;min-height:36px}}
-@media (max-width:359px){.p-top{gap:4px;padding-left:6px;padding-right:6px}.p-brand{display:none}.p-brand+.p-nav+.p-mx{margin-left:0}.p-top-wa{margin-left:auto}}
+@media (max-width:480px){.p-top{gap:5px;padding:9px 8px}.p-brand img{width:28px}.p-mx{height:32px;padding:0 8px;font-size:11px}.p-lang a{padding:6px 7px;font-size:11px}.p-tt,.p-top .p-top-wa{width:36px;height:36px;min-height:36px}}
+/* butang Home (halaman Price & Maxcheck): tulisan di skrin lebar, ikon rumah di telefon */
+.p-home svg{display:none;width:17px;height:17px;fill:currentColor}
+@media (max-width:399px){.p-top .p-home{width:32px;padding:0;justify-content:center}.p-home svg{display:block}.p-home span{display:none}}
+/* skrin sangat sempit: logo disorok, semua butang rapat & di tengah (jangan tolak satu butang ke tepi) */
+@media (max-width:359px){.p-top{gap:4px;padding-left:6px;padding-right:6px}}
+@media (max-width:349px){.p-top{justify-content:center}html body .p-top a.p-brand.p-brand{display:none!important}.p-top .p-brand+.p-nav+.p-mx{margin-left:0}}
