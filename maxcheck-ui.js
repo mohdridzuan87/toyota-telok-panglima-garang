@@ -60,7 +60,7 @@
     view.hidden = false;
     view.innerHTML = `<div class="mx-head"><div><p class="mx-kicker">${T.kicker}${p.code ? ` · ${T.code} ${esc(p.code)}` : ""}</p><h3>Toyota ${esc(m.name)}</h3><p class="mx-eff">${effOf(p) ? esc(T.eff(T.month(effOf(p)))) : ""}</p></div>
         <button type="button" class="mx-close" aria-label="${T.close}">✕</button></div>
-      ${PL && m.covers && m.covers.length ? `<p class="mx-covers">${T.covers} <b>${m.covers.map(esc).join(" · ")}</b></p>` : ""}
+      ${PL && m.variants && m.variants.length ? `<p class="mx-covers">${T.covers} <b>${m.variants.map(esc).join(" · ")}</b></p>` : ""}
       ${m.pages.length > 1 ? `<p class="mx-pick">${T.variant}</p><div class="mx-variants">${m.pages.map(choice).join("")}</div>` : `<p class="mx-pick"><b>${esc(T.label(p))}</b></p>`}
       <div class="mx-share"><button type="button" class="mx-wa">${WAICO}<span>${T.share}</span></button><button type="button" class="mx-dl">${DLICO}<span>${T.download}</span></button></div>
       <p class="mx-sharemsg" role="status" hidden></p>
@@ -72,10 +72,11 @@
   // di telefon (dibesarkan): Maxcheck mula di lajur pakej supaya jarak service terus nampak; senarai harga mula dari kiri
   const start = () => { const f = frame(); if (!f) return; const img = f.querySelector("img"); const go = () => { f.scrollLeft = zoom && !PL ? Math.max(0, img.clientWidth * 0.39) : 0; }; if (img.complete) go(); else img.addEventListener("load", go, { once: true }); };
   function open(id, scroll = true) {
-    const m = all.find(x => x.id === id); if (!m) return;
+    // senarai harga: satu butang setiap model, jadi pautan lama ?model=vios-hev buka "vios"
+    const m = all.find(x => x.id === id) || (PL && all.find(x => x.id === id.replace(/-hev$/, ""))); if (!m) return;
     cur = m; page = 0; render();
     history.replaceState(null, "", location.pathname + "?" + (EN ? "" : "lang=bm&") + "model=" + m.id);
-    list.querySelectorAll("button").forEach(b => { const on = b.dataset.id === id; b.classList.toggle("on", on); b.setAttribute("aria-expanded", on ? "true" : "false"); });
+    list.querySelectorAll("button").forEach(b => { const on = b.dataset.id === m.id; b.classList.toggle("on", on); b.setAttribute("aria-expanded", on ? "true" : "false"); });
     if (scroll) {
       // tunggu gambar siap dahulu, supaya skrol tidak terhenti separuh jalan
       const im = view.querySelector(".mx-frame img"); let done = false;

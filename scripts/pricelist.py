@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Senarai harga rasmi: baca laman price-list Toyota Malaysia (Semenanjung sahaja), tukar setiap PDF
 kepada gambar (pelawat nampak terus tanpa download), dan tulis pricelist/data.js.
-Beberapa model berkongsi PDF yang sama (cth. Vios & Vios HEV) — gambar dikongsi.
+Satu butang setiap model: petrol, HEV & GR Sport model yang sama berkongsi senarai harga (cth. Vios).
+Hanya model BEV yang ada senarai harga sendiri diasingkan (Hilux BEV).
 Dijalankan GitHub Actions setiap minggu (pricelist.yml). Perlu: pip install pymupdf pillow
 Jika laman/PDF gagal dibaca, skrip keluar dengan ralat atau mengekalkan versi lama."""
 import datetime, hashlib, io, json, re, sys, urllib.parse, urllib.request
@@ -25,7 +26,7 @@ NAMES = {"gr86": "GR86", "gr-corolla": "GR Corolla", "gr-yaris": "GR Yaris", "bz
          "corolla": "Corolla", "corolla-cross": "Corolla Cross", "camry": "Camry", "veloz": "Veloz", "zenix": "Innova Zenix",
          "fortuner": "Fortuner", "hilux": "Hilux", "hiace": "Hiace", "hiace-slwb": "Hiace SLWB", "harrier": "Harrier"}
 # susunan butang & kumpulan jenis badan
-BODY = {"SEDAN": ["vios", "corolla", "camry"], "SUV": ["yaris-cross", "corolla-cross", "fortuner", "harrier"],
+BODY = {"SEDAN": ["vios", "corolla", "camry"], "SUV": ["yaris-cross", "corolla-cross", "fortuner", "harrier", "bz4x", "urban-cruiser"],
         "MPV": ["veloz", "zenix", "alphard", "vellfire"], "PICKUP & VAN": ["hilux", "hiace", "hiace-slwb"],
         "HATCHBACK": ["yaris"], "GR LINEUP": ["gr86", "gr-yaris", "gr-corolla"]}
 ORDER = ["vios", "yaris", "yaris-cross", "corolla", "corolla-cross", "camry", "veloz", "zenix", "fortuner", "hilux",
@@ -41,15 +42,12 @@ def fetch(url):
         return r.read()
 
 
-def power_of(seg, name, classes):
-    s = (name + " " + " ".join(classes or [])).lower()
-    if re.search(r"\bbev\b|battery electric", s) or seg in EV_SEG:
-        return "bev"
-    return "hev" if re.search(r"hybrid|\bhev\b", s) else "ice"
+def is_bev(name, classes):
+    return bool(re.search(r"\bbev\b|battery electric", (name + " " + " ".join(classes or [])).lower()))
 
 
 def read_models(html):
-    """window.data_price_list -> {(id, power): {variants:[], pdfs:{pdfLink:set(jenis pembeli)}}} untuk Semenanjung."""
+    """window.data_price_list -> {(id, "bev" atau ""): {variants:[], pdfs:{pdfLink:set(jenis pembeli)}}} untuk Semenanjung."""
     m = re.search(r"window\.data_price_list\s*=\s*(?=\{)", html)
     if not m:
         sys.exit("data_price_list tiada (struktur laman berubah?); data lama dikekalkan.")
@@ -71,12 +69,12 @@ def read_models(html):
                     name = " ".join(g["header"].split())
                     name = re.sub(r"Hybrid Electric", "HEV", name, flags=re.I)
                     name = re.sub(r"^CAMRY\b", "Camry", name)
-                    power = power_of(seg, name, g.get("class"))
+                    own_bev = mid not in EV_SEG and is_bev(name, g.get("class"))  # cth. Hilux BEV: senarai harga lain
                     pdfs = [(TYPES.get(p.get("type"), "ip"), p.get("pdfLink")) for p in g.get("priceTypes") or []]
                     pdfs = [(t, link) for t, link in pdfs if link and link.lower().endswith(".pdf")]
                     if not pdfs:
                         continue
-                    e = models.setdefault((mid, power), {"variants": [], "pdfs": {}, "tab": tab["id"]})
+                    e = models.setdefault((mid, "bev" if own_bev else ""), {"variants": [], "pdfs": {}, "tab": tab["id"]})
                     if name.lower() not in [v.lower() for v in e["variants"]]:
                         e["variants"].append(name)
                     for t, link in pdfs:
@@ -84,13 +82,9 @@ def read_models(html):
     return models
 
 
-def model_name(mid, power):
+def model_name(mid, kind):
     base = NAMES.get(mid) or " ".join(w.capitalize() for w in mid.split("-"))
-    if power == "hev":
-        return base + " HEV"
-    if power == "bev" and mid not in EV_SEG:
-        return base + " BEV"
-    return base
+    return base + " BEV" if kind == "bev" else base
 
 
 def body_of(mid, tab):
@@ -177,8 +171,8 @@ def main():
             failed.append("%s (%s)" % (link.rsplit("/", 1)[-1], e))
     old_models = {m["id"]: m for g in prev.get("groups", []) for m in g["models"]}
     entries = []
-    for (mid, power), e in found.items():
-        eid = mid + ("-hev" if power == "hev" else "-bev" if power == "bev" and mid not in EV_SEG else "")
+    for (mid, kind), e in found.items():
+        eid = mid + ("-bev" if kind else "")
         links = [link for link in e["pdfs"] if link in docs]
         links.sort(key=lambda link: (min(TYPE_ORDER.index(t) for t in e["pdfs"][link]), link))
         pages, effective = [], ""
@@ -193,17 +187,9 @@ def main():
                 continue
             if not pages:
                 continue
-        entries.append((mid, e["tab"], {"id": eid, "name": model_name(mid, power), "power": power, "variants": e["variants"], "effective": effective, "pages": pages}))
+        entries.append((mid, e["tab"], {"id": eid, "name": model_name(mid, kind), "variants": e["variants"], "effective": effective, "pages": pages}))
     if len(entries) < MIN_MODELS:
         sys.exit("Terlalu banyak PDF gagal (%d model berjaya); data lama dikekalkan." % len(entries))
-    # model yang berkongsi senarai harga: papar semua varian dalam PDF itu
-    for _, _, m in entries:
-        mine = {p["img"] for p in m["pages"]}
-        shared = []
-        for _, _, other in entries:
-            if mine & {p["img"] for p in other["pages"]}:
-                shared += [v for v in other["variants"] if v not in shared]
-        m["covers"] = shared
     entries.sort(key=lambda x: (ORDER.index(x[0]) if x[0] in ORDER else len(ORDER), x[2]["name"]))
     groups = []
     for body in list(BODY) + ["OTHERS"]:
@@ -224,7 +210,7 @@ def main():
         print("::warning::Gagal (versi lama dikekalkan jika ada): " + "; ".join(failed))
     for g in groups:
         for m in g["models"]:
-            print(" ", g["name"], "|", m["power"], "|", m["id"], "|", m["name"], "|", ",".join("+".join(p["types"]) for p in m["pages"]), "|", m["effective"] or "(tiada tarikh)")
+            print(" ", g["name"], "|", m["id"], "|", m["name"], "|", ",".join("+".join(p["types"]) for p in m["pages"]), "|", m["effective"] or "(tiada tarikh)")
 
 
 if __name__ == "__main__":

@@ -259,22 +259,26 @@ ${colourBlocks ? `<section>
 
 // Jenis kuasa jadual Maxcheck: BEV (elektrik penuh), HEV (hybrid), selebihnya petrol & diesel
 const BEV_IDS = new Set(["bz4x-hev", "urban-cruiser", "hilux-bev"]); // slug bZ4X Toyota ada "-hev" tetapi ia BEV
-const powerOf = (m, group) => m.power ? m.power : BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
+const powerOf = (m, group) => BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
+const modelBtn = m => `<button type="button" data-id="${m.id}">${esc(m.name)}</button>`;
+// kumpulan ikut jenis badan (Sedan, SUV, …)
+function bodyGrid(groups, L) {
+  const NAMES = { "SEDAN": "Sedan", "SUV": "SUV", "MPV": "MPV", "PICKUP & VAN": "Pickup &amp; Van", "HATCHBACK": "Hatchback", "GR LINEUP": "GR lineup", "OTHERS": L("Others", "Lain-lain") };
+  return `<div class="mx-list">${groups.filter(gr => gr.models.length).map(gr => `<div class="mx-group"><h3>${NAMES[gr.name] || esc(gr.name)}</h3><div class="mx-models">${gr.models.map(modelBtn).join("")}</div></div>`).join("")}</div>`;
+}
 function powerSections(MXD, L) {
   const all = MXD.groups.flatMap(gr => gr.models.map(m => ({ m, group: gr.name, p: powerOf(m, gr.name) })));
-  const btn = x => `<button type="button" data-id="${x.m.id}">${esc(x.m.name)}</button>`;
   const HEAD = {
     hev: ["HEV", L("Hybrid Electric", "Hybrid Electric")],
     ice: [L("Petrol &amp; Diesel", "Petrol &amp; Diesel"), L("Conventional engine", "Enjin biasa")],
     bev: ["BEV", L("Full electric", "Elektrik penuh")]
   };
-  const NAMES = { "SEDAN": "Sedan", "SUV": "SUV", "MPV": "MPV", "PICKUP & VAN": "Pickup &amp; Van", "HATCHBACK": "Hatchback", "GR LINEUP": "GR lineup", "OTHERS": L("Others", "Lain-lain") };
   return ["hev", "ice", "bev"].map(p => {
     const list = all.filter(x => x.p === p);
     if (!list.length) return "";
     const inner = p === "ice"
-      ? `<div class="mx-list">${MXD.groups.map(gr => { const mine = list.filter(x => x.group === gr.name); return mine.length ? `<div class="mx-group"><h3>${NAMES[gr.name] || esc(gr.name)}</h3><div class="mx-models">${mine.map(btn).join("")}</div></div>` : ""; }).join("")}</div>`
-      : `<div class="mx-models">${list.map(btn).join("")}</div>`;
+      ? bodyGrid(MXD.groups.map(gr => ({ name: gr.name, models: list.filter(x => x.group === gr.name).map(x => x.m) })), L)
+      : `<div class="mx-models">${list.map(x => modelBtn(x.m)).join("")}</div>`;
     return `<div class="mx-power mx-${p}"><div class="mx-power-h"><h2>${HEAD[p][0]}</h2><span>${HEAD[p][1]}</span></div>${inner}</div>`;
   }).join("");
 }
@@ -365,7 +369,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
     <h1>${L(C.h1[0], C.h1[1])}</h1>
     <p class="p-lead">${L(lead[0], lead[1])}</p>
   </div>
-  <div class="mx-powers" id="mxList">${powerSections(MXD, L)}</div>
+  <div class="mx-powers" id="mxList">${kind === "pl" ? `<div class="mx-power mx-ice">${bodyGrid(MXD.groups, L)}</div>` : powerSections(MXD, L)}</div>
   <div class="mx-view" id="mxView" hidden></div>
   <noscript><p class="p-note">${C.noscript}</p></noscript>
   <p class="mx-src"><a href="${esc(MXD.source)}" target="_blank" rel="noopener">${L(C.src[0], C.src[1])}</a></p>
