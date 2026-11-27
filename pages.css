@@ -127,6 +127,8 @@ main section.p-cta{background:var(--soft);border-radius:22px;padding:28px 20px;t
 .p-switch a{flex:1 1 0;display:flex;align-items:center;justify-content:center;min-height:42px;padding:6px 10px;border-radius:999px;color:var(--ink);font-size:13.5px;font-weight:700;text-align:center;line-height:1.2}
 .p-switch a:hover{text-decoration:none;background:#e9e9ee}
 .p-switch a[aria-current]{background:var(--red);color:#fff}
+@media (max-width:356px){.p-switch a{font-size:12px;padding:6px}}
+@media (max-width:332px){.p-switch a{font-size:11px;padding:6px 4px}}
 /* butang Home (halaman Price & Maxcheck): tulisan di skrin lebar, ikon rumah di telefon */
 .p-home svg{display:none;width:17px;height:17px;fill:currentColor}
 @media (max-width:399px){.p-top .p-home{width:32px;padding:0;justify-content:center}.p-home svg{display:block}.p-home span{display:none}}

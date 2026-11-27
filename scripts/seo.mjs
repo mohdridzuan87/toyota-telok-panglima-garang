@@ -28,7 +28,7 @@ const TXT = {
     dir: "harga", home: "/", locale: "ms-MY", og: "ms_MY",
     privacy: "Laman ni guna Google Analytics (cookies) untuk kira pelawat dan klik butang. Nama atau nombor telefon awak tak dihantar kepada Google Analytics. <a href=\"https://policies.google.com/technologies/partner-sites\" target=\"_blank\" rel=\"noopener\">Cara Google guna data</a>.",
     month: s => s.replace(/[A-Za-z]+/, w => BM_MONTH[w] || w),
-    navHome: "Utama", navList: "Rebate & Ansuran", swSheet: "Senarai Rasmi", swLabel: "Pilih paparan harga", navCalc: "Kalkulator", wa: "WhatsApp Wan Jasni",
+    navHome: "Utama", navList: "Rebate & Ansuran", swSheet: "Senarai Harga Rasmi", swLabel: "Pilih paparan harga", navCalc: "Kalkulator", wa: "WhatsApp Wan Jasni",
     waMsg: n => `Salam Wan Jasni, saya nak tanya pasal Toyota ${n}.`, waGeneral: "Salam Wan Jasni, saya nak tanya pasal kereta Toyota.",
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" },
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Elektrik (EV)" },
