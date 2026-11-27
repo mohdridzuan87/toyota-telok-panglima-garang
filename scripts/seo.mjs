@@ -28,7 +28,7 @@ const TXT = {
     dir: "harga", home: "/", locale: "ms-MY", og: "ms_MY",
     privacy: "Laman ni guna Google Analytics (cookies) untuk kira pelawat dan klik butang. Nama atau nombor telefon awak tak dihantar kepada Google Analytics. <a href=\"https://policies.google.com/technologies/partner-sites\" target=\"_blank\" rel=\"noopener\">Cara Google guna data</a>.",
     month: s => s.replace(/[A-Za-z]+/, w => BM_MONTH[w] || w),
-    navHome: "Utama", navList: "Semua harga", navCalc: "Kalkulator", wa: "WhatsApp Wan Jasni",
+    navHome: "Utama", navList: "Rebate & Ansuran", swSheet: "Senarai Rasmi", swLabel: "Pilih paparan harga", navCalc: "Kalkulator", wa: "WhatsApp Wan Jasni",
     waMsg: n => `Salam Wan Jasni, saya nak tanya pasal Toyota ${n}.`, waGeneral: "Salam Wan Jasni, saya nak tanya pasal kereta Toyota.",
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" },
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Elektrik (EV)" },
@@ -77,7 +77,7 @@ const TXT = {
     dir: "en/price", home: "/en/", locale: "en-MY", og: "en_MY",
     privacy: "This site uses Google Analytics (cookies) to count visitors and button taps. Your name and phone number are not sent to Google Analytics. <a href=\"https://policies.google.com/technologies/partner-sites\" target=\"_blank\" rel=\"noopener\">How Google uses data</a>.",
     month: s => s,
-    navHome: "Home", navList: "All prices", navCalc: "Calculator", wa: "WhatsApp Wan Jasni",
+    navHome: "Home", navList: "Rebate & Monthly", swSheet: "Official Price List", swLabel: "Choose a price view", navCalc: "Calculator", wa: "WhatsApp Wan Jasni",
     waMsg: n => `Hi Wan Jasni, I'd like to ask about the Toyota ${n}.`, waGeneral: "Hi Wan Jasni, I'd like to ask about a Toyota.",
     type: { Sedan: "Sedan", Hatchback: "Hatchback", SUV: "SUV", MPV: "MPV", Pickup: "Pickup", Van: "Van", Coupe: "Coupe" },
     fuel: { Petrol: "Petrol", HEV: "HEV", Diesel: "Diesel", EV: "Electric (EV)" },
@@ -165,8 +165,8 @@ ${head}${jsonld.map(ld).join("\n")}
 <body${bodyClass ? ` class="${bodyClass}"` : ""}>
 <header class="p-top">
   <a class="p-brand" href="${T.home}"><img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span></a>
-  <nav class="p-nav"><a href="${urlOf(lang)}"${id === "" ? ' aria-current="page"' : ""}>${T.navList}</a><a href="${T.home}#kalkulator">${T.navCalc}</a></nav>
-  <a class="p-mx" href="/pricelist/">Price</a>
+  <nav class="p-nav"><a href="${T.home}#kalkulator">${T.navCalc}</a></nav>
+  <a class="p-mx" href="/pricelist/" aria-current="true">Price</a>
   <a class="p-mx" href="/maxcheck/">Maxcheck</a>
   <div class="p-lang"><a href="${P.ms}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${P.en}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
   <a class="p-tt" href="${TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok @wan.jasni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6Z"/></svg></a>
@@ -208,6 +208,11 @@ ${gradeRows(lang, m)}
 </tbody></table></div>`;
 };
 
+// suis dua paparan di bawah butang Price: helaian rasmi Toyota <-> jadual rebate & ansuran
+const switchBar = lang => {
+  const T = TXT[lang];
+  return `<div class="p-switch" role="group" aria-label="${T.swLabel}"><a href="/pricelist/${lang === "ms" ? "?lang=bm" : ""}">${T.swSheet}</a><a href="${urlOf(lang)}" aria-current="true">${T.navList}</a></div>`;
+};
 function modelPage(lang, D, m, ctx) {
   const T = TXT[lang], n = m.name, van = m.type === "Van";
   const prices = m.grades.map(g => g.price), from = rm(Math.min(...prices)), to = rm(Math.max(...prices));
@@ -232,6 +237,7 @@ function modelPage(lang, D, m, ctx) {
   const others = D.models.filter(x => x.id !== m.id).map(x => `<a href="${urlOf(lang, x.id)}"><img src="/${esc(x.cut)}" alt="" loading="lazy" width="150" height="60"><b>${esc(x.name)}</b><span>${T.fromW} ${rm(Math.min(...x.grades.map(g => g.price)))}*</span></a>`).join("");
 
   const body = `<nav class="p-crumb" aria-label="Breadcrumb"><a href="${T.home}">${T.navHome}</a> › <a href="${urlOf(lang)}">${T.navList}</a> › <span>Toyota ${esc(n)}</span></nav>
+${switchBar(lang)}
 <section class="p-hero">
   <p class="p-eye">${T.type[m.type] || esc(m.type)} · ${T.updated(ctx.date[lang])}</p>
   <h1>${T.h1(esc(n), ctx.year)}</h1>
@@ -372,7 +378,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 <body class="mx-page">
 <header class="p-top">
   ${A("p-brand", "/en/", "/", '<span>Wan Jasni</span>', '<span>Wan Jasni</span>')}
-  <nav class="p-nav">${A("", E.home.replace(/\/$/, "/") + "price/", "/harga/", E.navList, M.navList)}${A("", "/en/#kalkulator", "/#kalkulator", E.navCalc, M.navCalc)}</nav>
+  <nav class="p-nav">${A("", "/en/#kalkulator", "/#kalkulator", E.navCalc, M.navCalc)}</nav>
   <a class="p-mx p-home" href="/en/" aria-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 11.5h3V21h5.500v-6h3v6H19v-9.500h3L12 3Z"/></svg><span>Home</span></a>
   <a class="p-mx" href="/pricelist/"${cur("pl")}>Price</a>
   <a class="p-mx" href="/maxcheck/"${cur("mx")}>Maxcheck</a>
@@ -383,6 +389,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 <main class="p-wrap">
 <nav class="p-crumb" aria-label="Breadcrumb">${A("", "/en/", "/", E.navHome, M.navHome)} › <span>${C.crumb}</span></nav>
 <section id="${C.section}">
+  ${kind === "pl" ? `<div class="p-switch" role="group" aria-label="${E.swLabel}">${A("", "/pricelist/", "/pricelist/?lang=bm", E.swSheet, M.swSheet, ' aria-current="true"')}${A("", "/en/price/", "/harga/", esc(E.navList), esc(M.navList))}</div>` : ""}
   <div class="p-hero">
     <p class="p-eye">${C.eye} · ${L(E.updated(dEn), M.updated(dBm))}</p>
     <h1>${L(C.h1[0], C.h1[1])}</h1>
@@ -413,6 +420,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 function hubPage(lang, D, ctx) {
   const T = TXT[lang], vars = D.models.reduce((a, m) => a + m.grades.length, 0);
   const body = `<nav class="p-crumb" aria-label="Breadcrumb"><a href="${T.home}">${T.navHome}</a> › <span>${T.navList}</span></nav>
+${switchBar(lang)}
 <section class="p-hero">
   <p class="p-eye">${T.updated(ctx.date[lang])} · Rebate ${ctx.month[lang]}</p>
   <h1>${T.hubH1(ctx.year)}</h1>
