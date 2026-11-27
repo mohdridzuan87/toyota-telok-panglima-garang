@@ -47,7 +47,7 @@ html.mx-lock{overflow:hidden}
 .l-bm{display:none!important}
 html.bm .l-en{display:none!important}
 html.bm .l-bm{display:revert!important}
-html.bm a.l-bm.p-btn,html.bm a.l-bm.p-brand{display:inline-flex!important}
+html.bm a.l-bm.p-btn,html.bm a.l-bm.p-brand,html.bm .p-top .p-nav a.l-bm{display:inline-flex!important}
 .mx-group h3{text-transform:uppercase}
 @media (max-width:760px){html.bm a.l-bm.p-hide{display:none!important}}
 

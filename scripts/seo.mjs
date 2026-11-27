@@ -155,7 +155,7 @@ ${head}${jsonld.map(ld).join("\n")}
 <body${bodyClass ? ` class="${bodyClass}"` : ""}>
 <header class="p-top">
   <a class="p-brand" href="${T.home}"><img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span></a>
-  <nav class="p-nav"><a href="${urlOf(lang)}">${T.navList}</a><a href="${T.home}#kalkulator">${T.navCalc}</a></nav>
+  <nav class="p-nav"><a href="${urlOf(lang)}"${id === "" ? ' aria-current="page"' : ""}>${T.navList}</a><a href="${T.home}#kalkulator">${T.navCalc}</a></nav>
   <a class="p-mx" href="/pricelist/">Price</a>
   <a class="p-mx" href="/maxcheck/">Maxcheck</a>
   <div class="p-lang"><a href="${P.ms}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${P.en}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
