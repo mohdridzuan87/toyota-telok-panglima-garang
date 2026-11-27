@@ -107,6 +107,7 @@ Insurans: masuk dalam loan (±${i})`,
   const HERO = ["vios", "yaris-cross", "corolla-cross", "hilux"].filter(byId);
   for (const m of M) { if (HERO.length >= 4) break; if (!HERO.includes(m.id)) HERO.push(m.id); }
   let heroI = Math.min(2, HERO.length - 1), heroTimer;
+  const noHeroCar = document.documentElement.classList.contains("theme-apple"); // gaya Apple: kereta hero disorok
   // Tema Apple: guna gambar warna rasmi Toyota (sudut depan 3/4, 900 px, lebih tajam) bukan potongan sisi 450 px
   const heroSrc = m => {
     if (document.documentElement.classList.contains("theme-apple"))
@@ -120,9 +121,11 @@ Insurans: masuk dalam loan (±${i})`,
     [...$("heroStrip").querySelectorAll("button")].forEach((b, j) => b.classList.toggle("on", j === i));
   };
   $("heroStrip").innerHTML = HERO.map(id => { const m = byId(id); return `<button type="button"><b>${m.name}</b><span>${L.from} ${rm(minPrice(m))}</span></button>`; }).join("") + `<a href="#model">${L.seeAll(M.length)}</a>`;
-  [...$("heroStrip").querySelectorAll("button")].forEach((b, i) => b.addEventListener("click", () => { clearInterval(heroTimer); heroSet(i); showModel(HERO[i]); }));
-  heroSet(heroI);
-  heroTimer = setInterval(() => heroSet((heroI + 1) % HERO.length), 4500);
+  [...$("heroStrip").querySelectorAll("button")].forEach((b, i) => b.addEventListener("click", () => {
+    clearInterval(heroTimer); showModel(HERO[i]);
+    if (noHeroCar) $("model").scrollIntoView({ behavior: "smooth" }); else heroSet(i); // tanpa kereta hero: terus ke model itu
+  }));
+  if (!noHeroCar) { heroSet(heroI); heroTimer = setInterval(() => heroSet((heroI + 1) % HERO.length), 4500); }
 
   /* ---------- Warnakan gambar (untuk warna yang Toyota tiada gambar) ---------- */
   const lum = h => { const n = parseInt(String(h || "#888").slice(1), 16); return ((n >> 16) & 255) * 0.299 + ((n >> 8) & 255) * 0.587 + (n & 255) * 0.114; };

@@ -480,3 +480,5 @@ html.theme-stripe .btn-mx:hover,html.theme-apple .btn-mx:hover{color:#fff}
 .hero .hero-wan+.eyebrow{text-shadow:0 0 10px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)}
 html:not(.theme-apple):not(.theme-stripe) .hero .hero-wan+.eyebrow{text-shadow:0 0 10px #000,0 0 4px #000}
 html.theme-stripe .hero .hero-grid{padding-top:64px}
+/* gaya Apple: tiada kereta di atas gambar Wan */
+html.theme-apple .hero .hero-car{display:none}
