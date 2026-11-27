@@ -18,7 +18,7 @@
     : a.closest(".mx-view") ? "maxcheck" : a.closest(".pick, .pick-res") ? "pilih_model" : a.closest(".p-cta, .p-actions") ? "halaman_harga" : "lain";
   document.addEventListener("click", e => {
     const a = e.target.closest && e.target.closest("a[href]");
-    if (!a) return;
+    if (!a || a.classList.contains("mx-wa-share")) return; // pelawat kongsi kepada orang lain
     const h = a.href;
     const name = /^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(h) ? "whatsapp_click"
       : /^https:\/\/(www\.)?tiktok\.com\//.test(h) ? "tiktok_click" : "";

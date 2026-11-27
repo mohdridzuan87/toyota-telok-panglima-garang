@@ -1,0 +1,55 @@
+name: Kemas kini senarai harga rasmi (pricelist)
+
+# Setiap minggu (Isnin 10:30 pagi waktu Malaysia): baca laman price-list Toyota Malaysia, jana semula gambar
+# senarai harga yang berubah, dan terbitkan. Boleh juga dijalankan manual (Run workflow).
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 2 * * 1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  pricelist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Pasang pustaka PDF & gambar
+        run: pip install -q "pymupdf>=1.24" "pillow>=10"
+      - name: Ambil senarai harga terkini
+        run: python scripts/pricelist.py
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Jana semula halaman /pricelist/
+        run: node scripts/seo.mjs
+      - name: Commit jika berubah
+        id: commit
+        run: |
+          git add -A pricelist maxcheck en harga llms.txt sitemap.xml index.html
+          if git diff --cached --quiet; then echo "Tiada perubahan"; echo "pushed=no" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Senarai harga rasmi dikemas kini automatik ($(date -u +%F))"
+          git pull --rebase -q
+          git push
+          echo "pushed=yes" >> "$GITHUB_OUTPUT"
+      - name: Sahkan laman langsung sudah guna data baru
+        if: steps.commit.outputs.pushed == 'yes'
+        run: |
+          want=$(grep -o '"checkedAt":"[0-9-]*"' pricelist/data.js)
+          for i in $(seq 1 20); do
+            got=$(curl -s "https://wanjasni.my/pricelist/data.js?nc=$RANDOM" | grep -o '"checkedAt":"[0-9-]*"' || true)
+            if [ "$got" = "$want" ]; then echo "Laman langsung terkini: $got"; exit 0; fi
+            sleep 30
+          done
+          echo "::error::Laman wanjasni.my belum guna senarai harga baru selepas 10 minit (dijangka $want, dapat '$got')."
+          exit 1

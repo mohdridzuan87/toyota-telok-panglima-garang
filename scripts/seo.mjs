@@ -156,7 +156,8 @@ ${head}${jsonld.map(ld).join("\n")}
 <header class="p-top">
   <a class="p-brand" href="${T.home}"><img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span></a>
   <nav class="p-nav"><a href="${urlOf(lang)}">${T.navList}</a><a class="p-hide" href="${T.home}#kalkulator">${T.navCalc}</a></nav>
-  <a class="p-mx" href="/maxcheck/"${bodyClass === "mx-page" ? ' aria-current="page"' : ""}>Maxcheck</a>
+  <a class="p-mx" href="/pricelist/">Price</a>
+  <a class="p-mx" href="/maxcheck/">Maxcheck</a>
   <div class="p-lang"><a href="${P.ms}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${P.en}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
   <a class="p-tt" href="${TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok @wan.jasni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6Z"/></svg></a>
   ${waBtn(waMsg, `<span class="p-hide">${T.wa}</span>`, "p-top-wa")}
@@ -258,7 +259,7 @@ ${colourBlocks ? `<section>
 
 // Jenis kuasa jadual Maxcheck: BEV (elektrik penuh), HEV (hybrid), selebihnya petrol & diesel
 const BEV_IDS = new Set(["bz4x-hev", "urban-cruiser", "hilux-bev"]); // slug bZ4X Toyota ada "-hev" tetapi ia BEV
-const powerOf = (m, group) => BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
+const powerOf = (m, group) => m.power ? m.power : BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
 function powerSections(MXD, L) {
   const all = MXD.groups.flatMap(gr => gr.models.map(m => ({ m, group: gr.name, p: powerOf(m, gr.name) })));
   const btn = x => `<button type="button" data-id="${x.m.id}">${esc(x.m.name)}</button>`;
@@ -278,10 +279,33 @@ function powerSections(MXD, L) {
   }).join("");
 }
 
-// SATU halaman /maxcheck/ (arahan Wan): English secara lalai, butang BM | EN tukar bahasa di halaman sama (?lang=bm)
-function maxcheckPage(MXD, ctx, root) {
-  const E = TXT.en, M = TXT.ms, url = HOME + "/maxcheck/";
+// /maxcheck/ dan /pricelist/ (arahan Wan): SATU halaman setiap satu, English lalai, butang BM | EN di halaman sama (?lang=bm)
+const SHEETS = {
+  mx: {
+    dir: "maxcheck", section: "maxcheck", crumb: "Maxcheck", global: "MAXCHECK",
+    title: y => `Toyota Maxcheck Service Schedule ${y} for Every Model | Wan Jasni`,
+    titleBm: y => `Jadual Service Maxcheck Toyota ${y} Setiap Model | Wan Jasni`,
+    desc: n => `Toyota Maxcheck periodic service schedules for ${n} models by model code: intervals, parts, labour and package prices. View instantly, no download. Jadual service Maxcheck setiap model.`,
+    eye: "Service", h1: ["Toyota Maxcheck service schedule", "Jadual service Maxcheck Toyota"],
+    lead: (dEn, dBm) => [`Choose your model to see its Maxcheck periodic service schedule straight away, then share it on WhatsApp or save the image. Based on Maxcheck on the Toyota Malaysia website (checked ${dEn}), subject to change by Toyota without notice.`, `Tekan model kereta awak, terus keluar jadual service berkala Maxcheck, boleh kongsi ke WhatsApp atau simpan gambarnya. Rujukan Maxcheck di laman Toyota Malaysia (semakan ${dBm}), tertakluk pada perubahan oleh Toyota tanpa notis.`],
+    noscript: "Enable JavaScript to view the schedules, or open the Maxcheck page on the Toyota Malaysia website.",
+    src: ["Source: Maxcheck on the Toyota Malaysia website ›", "Sumber: Maxcheck di laman Toyota Malaysia ›"]
+  },
+  pl: {
+    dir: "pricelist", section: "pricelist", crumb: "Price", global: "PRICELIST",
+    title: y => `Toyota Price List ${y} Peninsular Malaysia, All Models | Wan Jasni`,
+    titleBm: y => `Senarai Harga Toyota ${y} Semenanjung, Semua Model | Wan Jasni`,
+    desc: n => `Official Toyota price lists for ${n} models in Peninsular Malaysia: every variant, on-the-road price and colour. View instantly, share on WhatsApp or save the image. Senarai harga rasmi Toyota.`,
+    eye: "Peninsular Malaysia", h1: ["Toyota price list", "Senarai harga Toyota"],
+    lead: (dEn, dBm) => [`Choose your model to see its official price list straight away, then share it on WhatsApp or save the image. Peninsular Malaysia only, from the price list on the Toyota Malaysia website (checked ${dEn}). Prices may change at any time.`, `Tekan model kereta awak, terus keluar senarai harga rasmi, boleh kongsi ke WhatsApp atau simpan gambarnya. Untuk Semenanjung Malaysia sahaja, ikut senarai harga di laman Toyota Malaysia (semakan ${dBm}). Harga boleh berubah bila-bila masa.`],
+    noscript: "Enable JavaScript to view the price lists, or open the price list page on the Toyota Malaysia website.",
+    src: ["Source: price list on the Toyota Malaysia website ›", "Sumber: senarai harga di laman Toyota Malaysia ›"]
+  }
+};
+function sheetPage(kind, MXD, ctx, root) {
+  const C = SHEETS[kind], E = TXT.en, M = TXT.ms, path_ = `/${C.dir}/`, url = HOME + path_;
   const n = MXD.groups.reduce((a, g) => a + g.models.length, 0);
+  const cur = k => k === kind ? ' aria-current="page"' : "";
   const day = loc => new Date(MXD.checkedAt + "T00:00:00Z").toLocaleDateString(loc, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
   const dEn = day("en-GB"), dBm = day("ms-MY");
   const stamp = f => { const t = readFileSync(path.join(root, f), "utf8").replace(/\r/g, ""); return [...t].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7).toString(36); };
@@ -291,9 +315,10 @@ function maxcheckPage(MXD, ctx, root) {
   const ext = ' target="_blank" rel="noopener"';
   const waTop = A("p-btn p-wa p-top-wa", esc(waLink(E.waGeneral)), esc(waLink(M.waGeneral)), `${WAICO}<span class="p-hide">${E.wa}</span>`, `${WAICO}<span class="p-hide">${M.wa}</span>`, ext);
   const waFoot = A("p-btn p-wa", esc(waLink(E.waGeneral)), esc(waLink(M.waGeneral)), `${WAICO}<span>WhatsApp 016-331 3607</span>`, `${WAICO}<span>WhatsApp 016-331 3607</span>`, ext);
-  const title = `Toyota Maxcheck Service Schedule ${ctx.year} for Every Model | Wan Jasni`;
-  const titleBm = `Jadual Service Maxcheck Toyota ${ctx.year} Setiap Model | Wan Jasni`;
-  const desc = `Toyota Maxcheck periodic service schedules for ${n} models by model code: intervals, parts, labour and package prices. View instantly, no download. Jadual service Maxcheck setiap model.`;
+  const title = C.title(ctx.year);
+  const titleBm = C.titleBm(ctx.year);
+  const desc = C.desc(n);
+  const lead = C.lead(dEn, dBm);
   return `<!doctype html>
 ${MARK}
 <html lang="en">
@@ -320,29 +345,30 @@ ${MARK}
 <link rel="stylesheet" href="/pages.css?v=${ctx.v}">
 <link rel="stylesheet" href="/maxcheck.css?v=${stamp("maxcheck.css")}">
 <script src="/analytics.js?v=1" defer></script>
-${ld(crumbs([["Home", "/en/"], ["Maxcheck", "/maxcheck/"]]))}
+${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 </head>
 <body class="mx-page">
 <header class="p-top">
   ${A("p-brand", "/en/", "/", '<img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span>', '<img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span>')}
   <nav class="p-nav">${A("", E.home.replace(/\/$/, "/") + "price/", "/harga/", E.navList, M.navList)}${A("p-hide", "/en/#kalkulator", "/#kalkulator", E.navCalc, M.navCalc)}</nav>
-  <a class="p-mx" href="/maxcheck/" aria-current="page">Maxcheck</a>
-  <div class="p-lang" role="group" aria-label="Language / Bahasa"><a href="/maxcheck/?lang=bm" data-lang="bm" lang="ms">BM</a><a href="/maxcheck/" data-lang="en" aria-current="page">EN</a></div>
+  <a class="p-mx" href="/pricelist/"${cur("pl")}>Price</a>
+  <a class="p-mx" href="/maxcheck/"${cur("mx")}>Maxcheck</a>
+  <div class="p-lang" role="group" aria-label="Language / Bahasa"><a href="${path_}?lang=bm" data-lang="bm" lang="ms">BM</a><a href="${path_}" data-lang="en" aria-current="page">EN</a></div>
   <a class="p-tt" href="${TIKTOK}" target="_blank" rel="noopener" aria-label="TikTok @wan.jasni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.3-1.6Z"/></svg></a>
   ${waTop}
 </header>
 <main class="p-wrap">
-<nav class="p-crumb" aria-label="Breadcrumb">${A("", "/en/", "/", E.navHome, M.navHome)} › <span>Maxcheck</span></nav>
-<section id="maxcheck">
+<nav class="p-crumb" aria-label="Breadcrumb">${A("", "/en/", "/", E.navHome, M.navHome)} › <span>${C.crumb}</span></nav>
+<section id="${C.section}">
   <div class="p-hero">
-    <p class="p-eye">Service · ${L(E.updated(dEn), M.updated(dBm))}</p>
-    <h1>${L("Toyota Maxcheck service schedule", "Jadual service Maxcheck Toyota")}</h1>
-    <p class="p-lead">${L(`Choose your model to see its Maxcheck periodic service schedule straight away, no download needed. Based on Maxcheck on the Toyota Malaysia website (checked ${dEn}), subject to change by Toyota without notice.`, `Tekan model kereta awak, terus keluar jadual service berkala Maxcheck, tak perlu download. Rujukan Maxcheck di laman Toyota Malaysia (semakan ${dBm}), tertakluk pada perubahan oleh Toyota tanpa notis.`)}</p>
+    <p class="p-eye">${C.eye} · ${L(E.updated(dEn), M.updated(dBm))}</p>
+    <h1>${L(C.h1[0], C.h1[1])}</h1>
+    <p class="p-lead">${L(lead[0], lead[1])}</p>
   </div>
   <div class="mx-powers" id="mxList">${powerSections(MXD, L)}</div>
   <div class="mx-view" id="mxView" hidden></div>
-  <noscript><p class="p-note">Enable JavaScript to view the schedules, or open the Maxcheck page on the Toyota Malaysia website.</p></noscript>
-  <p class="mx-src"><a href="${esc(MXD.source)}" target="_blank" rel="noopener">${L("Source: Maxcheck on the Toyota Malaysia website ›", "Sumber: Maxcheck di laman Toyota Malaysia ›")}</a></p>
+  <noscript><p class="p-note">${C.noscript}</p></noscript>
+  <p class="mx-src"><a href="${esc(MXD.source)}" target="_blank" rel="noopener">${L(C.src[0], C.src[1])}</a></p>
 </section>
 </main>
 <footer class="p-foot">
@@ -354,7 +380,7 @@ ${ld(crumbs([["Home", "/en/"], ["Maxcheck", "/maxcheck/"]]))}
     <p>${L(E.privacy, M.privacy)}</p>
   </div>
 </footer>
-<script src="/maxcheck/data.js?v=${stamp("maxcheck/data.js")}"></script>
+<script src="${path_}data.js?v=${stamp(C.dir + "/data.js")}"></script>
 <script src="/maxcheck-ui.js?v=${stamp("maxcheck-ui.js")}"></script>
 </body>
 </html>
@@ -420,6 +446,7 @@ Price facts (data checked ${ctx.date.en}):
 - [Home (English)](${HOME}/en/)
 - [Full Toyota price list (English)](${HOME}/en/price/)
 - [Senarai harga penuh Toyota (Bahasa Malaysia)](${HOME}/harga/)
+- [Official Toyota price lists by model, Peninsular Malaysia](${HOME}/pricelist/) (English; Bahasa Malaysia: ${HOME}/pricelist/?lang=bm)
 - [Toyota Maxcheck periodic service schedules by model](${HOME}/maxcheck/) (English; Bahasa Malaysia: ${HOME}/maxcheck/?lang=bm)
 
 ## Toyota models
@@ -431,7 +458,7 @@ function sitemap(D, lastmod) {
   const pair = (ms, en) => [ms, en].map(loc => `  <url><loc>${HOME}${loc}</loc><lastmod>${lastmod}</lastmod>
     <xhtml:link rel="alternate" hreflang="ms" href="${HOME}${ms}"/><xhtml:link rel="alternate" hreflang="en" href="${HOME}${en}"/></url>`).join("\n");
   const rows = [pair("/", "/en/"), pair(urlOf("ms"), urlOf("en")), ...D.models.map(m => pair(urlOf("ms", m.id), urlOf("en", m.id)))];
-  rows.splice(1, 0, `  <url><loc>${HOME}/maxcheck/</loc><lastmod>${lastmod}</lastmod></url>`);
+  rows.splice(1, 0, ...["pricelist", "maxcheck"].map(p => `  <url><loc>${HOME}/${p}/</loc><lastmod>${lastmod}</lastmod></url>`));
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${rows.join("\n")}
@@ -470,10 +497,11 @@ export function buildSeo(root, data) {
     const b = a.replace(re, () => homeBlock(lang, D, ctx));
     if (b !== a) writeFileSync(f, b);
   }
-  const mxFile = path.join(root, "maxcheck", "data.js");
-  if (existsSync(mxFile)) {
-    const c = { window: {} }; vm.runInNewContext(readFileSync(mxFile, "utf8"), c);
-    write("maxcheck/index.html", maxcheckPage(c.window.MAXCHECK, ctx, root)); pages += 1;
+  for (const [kind, C] of Object.entries(SHEETS)) {
+    const file = path.join(root, C.dir, "data.js");
+    if (!existsSync(file)) continue;
+    const c = { window: {} }; vm.runInNewContext(readFileSync(file, "utf8"), c);
+    write(C.dir + "/index.html", sheetPage(kind, c.window[C.global], ctx, root)); pages += 1;
   }
   write("llms.txt", llmsTxt(D, ctx));
   write("sitemap.xml", sitemap(D, D.updatedAt || D.checkedAt));

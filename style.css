@@ -453,11 +453,11 @@ html.theme-apple .pick,html.theme-stripe .pick{color:#f5f5f7}
 .foot .fine.privacy a{text-decoration:underline}
 
 
-/* butang Maxcheck di sebelah BM | EN */
+/* butang Price & Maxcheck di sebelah BM | EN */
 .btn-mx{display:inline-flex;align-items:center;justify-content:center;flex:none;height:36px;padding:0 13px;border-radius:10px;border:1.5px solid var(--red);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.01em;white-space:nowrap;transition:background .2s,color .2s}
 .btn-mx:hover{background:var(--red);color:#fff}
 html.theme-stripe .btn-mx,html.theme-apple .btn-mx{color:var(--red);border-radius:999px}
 html.theme-stripe .btn-mx:hover,html.theme-apple .btn-mx:hover{color:#fff}
-@media (max-width:980px){.btn-mx{margin-left:auto}.btn-mx+.lang{margin-left:0}}
-@media (max-width:420px){.top{gap:7px}.top .btn-mx{height:34px;padding:0 9px;font-size:11.5px}.top .lang a{padding:7px 8px}.top .btn-wa{padding-left:14px;padding-right:14px}}
-@media (max-width:359px){.top .brand-emblem{width:26px}.top{padding-left:10px;padding-right:10px;gap:5px}.top .btn-mx{padding:0 7px;font-size:11px}}
+@media (max-width:980px){.btn-mx{margin-left:auto}.btn-mx+.btn-mx,.btn-mx+.lang{margin-left:0}}
+@media (max-width:520px){.top{gap:5px;padding-left:10px;padding-right:10px}.top .brand-emblem{width:28px}.top .btn-mx{height:32px;padding:0 8px;font-size:11px}.top .lang a{padding:6px 7px;font-size:11px}.top .btn-tt{width:36px;height:36px}.top .btn-wa{width:36px;height:36px;min-height:36px;padding:0;gap:0;justify-content:center;flex:none}}
+@media (max-width:359px){.top .brand-emblem{width:24px}.top{padding-left:8px;padding-right:8px;gap:4px}.top .btn-mx{padding:0 6px;font-size:10.5px}.top .lang a{padding:6px 5px}.top .btn-tt,.top .btn-wa{width:33px;height:34px;min-height:34px}}

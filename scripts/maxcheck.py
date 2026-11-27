@@ -15,8 +15,8 @@ DATA = OUT / "data.js"
 SITE = "https://www.toyota.com.my"
 PAGE = SITE + "/en/servicing-and-support/maxcheck.html"
 UA = {"User-Agent": "Mozilla/5.0 (wanjasni toyota site updater)"}
-RENDER_V = 4  # naikkan jika tetapan gambar berubah (jana semula semua)
-DPI = 170
+RENDER_V = 6  # naikkan jika tetapan gambar berubah (jana semula semua)
+DPI, WEBP_QUALITY = 240, 72  # ±2800 px lebar: cukup tajam untuk kongsi WhatsApp; semua gambar kekal bawah 40 MB
 MIN_MODELS = 25
 
 
@@ -117,17 +117,22 @@ def limit_generations(mid, pages):
     return [p for p, g in zip(pages, gens) if g is None or g in keep]
 
 
-def render(page):
-    pix = page.get_pixmap(dpi=DPI, alpha=False)
+def grab(page, dpi):
+    pix = page.get_pixmap(dpi=dpi, alpha=False)
     img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
     # buang ruang putih bawah/atas yang kosong
     gray = img.convert("L").point(lambda v: 255 if v > 248 else 0)
     box = Image.eval(gray, lambda v: 255 - v).getbbox()
     if box:
-        pad = 18
+        pad = round(18 * dpi / 170)
         img = img.crop((max(0, box[0] - pad), max(0, box[1] - pad), min(img.width, box[2] + pad), min(img.height, box[3] + pad)))
+    return img
+
+
+def render(page):
+    img = grab(page, DPI)
     buf = io.BytesIO()
-    img.save(buf, "WEBP", quality=82, method=6)
+    img.save(buf, "WEBP", quality=WEBP_QUALITY, method=6)
     return buf.getvalue(), img.width, img.height
 
 
@@ -193,8 +198,8 @@ def main():
     out = {"renderV": RENDER_V, "checkedAt": now, "source": PAGE, "groups": groups}
     DATA.write_text("// Dijana oleh scripts/maxcheck.py — jangan sunting tangan\nwindow.MAXCHECK = " +
                     json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8", newline="\n")
-    used = {p["img"].split("/", 1)[1] for g in groups for m in g["models"] for p in m["pages"]}
-    for f in IMG.glob("*.webp"):
+    used = {p[k].split("/", 1)[1] for g in groups for m in g["models"] for p in m["pages"] for k in ("img",)}
+    for f in list(IMG.glob("*.webp")) + list(IMG.glob("*.jpg")):
         if f.name not in used:
             f.unlink()
     npages = sum(len(m["pages"]) for g in groups for m in g["models"])
