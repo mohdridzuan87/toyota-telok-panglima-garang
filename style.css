@@ -461,3 +461,12 @@ html.theme-stripe .btn-mx:hover,html.theme-apple .btn-mx:hover{color:#fff}
 @media (max-width:980px){.btn-mx{margin-left:auto}.btn-mx+.btn-mx,.btn-mx+.lang{margin-left:0}}
 @media (max-width:520px){.top{gap:5px;padding-left:10px;padding-right:10px}.top .brand-emblem{width:28px}.top .btn-mx{height:32px;padding:0 8px;font-size:11px}.top .lang a{padding:6px 7px;font-size:11px}.top .btn-tt{width:36px;height:36px}.top .btn-wa{width:36px;height:36px;min-height:36px;padding:0;gap:0;justify-content:center;flex:none}}
 @media (max-width:359px){.top .brand-emblem{width:24px}.top{padding-left:8px;padding-right:8px;gap:4px}.top .btn-mx{padding:0 6px;font-size:10.5px}.top .lang a{padding:6px 5px}.top .btn-tt,.top .btn-wa{width:33px;height:34px;min-height:34px}}
+
+/* header laman utama: tiada pertindihan. Jenama tak boleh dihimpit; teks disorok bila tak cukup ruang (lebar diukur 27 Nov 2026) */
+.top .brand{flex:none}
+@media (max-width:1399px){.top .brand-sep,.top .brand-loc{display:none}}
+@media (min-width:981px) and (max-width:1180px){.top{gap:14px}.top .nav{gap:14px}.top .brand-mark{display:none}}
+@media (min-width:621px) and (max-width:980px){.top{gap:12px}}
+@media (max-width:800px){.top .brand-mark{display:none}}
+@media (max-width:700px){.top .btn-wa span{display:none}}
+@media (min-width:621px) and (max-width:700px){.top .btn-wa{padding:10px 12px}}
