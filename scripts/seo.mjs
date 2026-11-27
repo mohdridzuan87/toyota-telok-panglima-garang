@@ -12,7 +12,7 @@ const WA = "https://wa.me/60163313607";
 const TIKTOK = "https://www.tiktok.com/@wan.jasni";
 const MARK = "<!-- Dijana oleh scripts/seo.mjs — jangan sunting tangan -->";
 // Andaian ansuran = nilai lalai kalkulator laman
-const DEP = 10, YEARS = 9, RATE = 2.3;
+const DEP = 10, YEARS = 9, RATE = 2.3; // Wan: kekal 10%. Mesti sama dengan app.js (est) & nilai lalai slider #cDep
 
 // id model laman -> id jadual Maxcheck (scripts/maxcheck.py)
 const MX = { vios: "vios", yaris: "yaris", "yaris-cross": "yaris-cross-bsuv", corolla: "corolla-altis", "corolla-cross": "corolla-cross", camry: "camry", veloz: "veloz", zenix: "innova-zenix-hev", fortuner: "fortuner", hilux: "hilux", hiace: "hiace", "hiace-slwb": "hiace", harrier: "harrier", bz4x: "bz4x-hev", "urban-cruiser": "urban-cruiser", alphard: "alphard", vellfire: "vellfire", gr86: "gr-86", "gr-yaris": "gr-yaris", "gr-corolla": "gr-corolla" };
@@ -46,6 +46,11 @@ const TXT = {
     assume: mo => `Anggaran sebulan: deposit ${DEP}%, loan ${YEARS} tahun, kadar ${RATE.toFixed(2)}% setahun, selepas tolak rebate ${mo} (kalau ada), warna paling murah. Belum masuk insurans. Kelulusan dan kadar sebenar ikut bank.`,
     mustColour: p => `semua warna +${p} ke atas (dah dikira dalam ansuran)`,
     mxLink: "Jadual service Maxcheck",
+    calcLbl: "Asas kiraan ansuran:",
+    calcBits: (mo, reb, colour) => [`deposit ${DEP}%`, `loan ${YEARS} tahun`, `kadar flat ${RATE.toFixed(2)}% setahun`, reb ? `selepas rebate ${mo}` : `tiada rebate ${mo}`, ...(colour ? ["termasuk harga warna paling murah"] : []), "tak termasuk insurans"],
+    calcWarn: "Contoh kiraan sahaja, bukan tawaran deposit 0%. Deposit dan kelulusan sebenar ikut bank.",
+    calcOk: "Anggaran sahaja, ikut kelulusan bank.",
+    calcVan: "Tiada anggaran ansuran untuk van.",
     calcFull: "Kira ansuran penuh", seePhotos: "Tukar warna & tengok gambar",
     h2Colour: n => `Warna Toyota ${n}`, colourNote: "Gambar sekadar ilustrasi, ikut gambar rasmi Toyota.",
     photoAlt: (n, c) => `Toyota ${n} warna ${c}`,
@@ -90,6 +95,11 @@ const TXT = {
     assume: mo => `Monthly estimate: ${DEP}% deposit, ${YEARS}-year loan, ${RATE.toFixed(2)}% flat rate per year, after the ${mo} rebate (if any), with the lowest-priced colour. Excludes insurance. Actual rate and approval depend on the bank.`,
     mustColour: p => `every colour adds ${p} or more (included in monthly)`,
     mxLink: "Maxcheck service schedule",
+    calcLbl: "Monthly estimate based on:",
+    calcBits: (mo, reb, colour) => [`${DEP}% down payment`, `${YEARS}-year loan`, `${RATE.toFixed(2)}% flat rate per year`, reb ? `after ${mo} rebate` : `no ${mo} rebate`, ...(colour ? ["lowest colour price included"] : []), "excludes insurance"],
+    calcWarn: "Example only, not a 0% deposit offer. The actual deposit and approval depend on the bank.",
+    calcOk: "Estimate only, subject to bank approval.",
+    calcVan: "No monthly estimate for vans.",
     calcFull: "Full instalment calculator", seePhotos: "Switch colours & see photos",
     h2Colour: n => `Toyota ${n} colours`, colourNote: "Pictures are for illustration, from Toyota's official images.",
     photoAlt: (n, c) => `Toyota ${n} in ${c}`,
@@ -184,6 +194,13 @@ const gradeRows = (lang, m) => {
   const T = TXT[lang], van = m.type === "Van";
   return m.grades.map(g => `<tr><th scope="row">${esc(g.name)}<small>${T.fuel[g.fuel] || esc(g.fuel)}${!van && minColour(g) ? " · " + T.mustColour(rm(minColour(g))) : ""}</small></th><td>${rm(g.price)}</td><td class="p-reb">${g.rebate ? "−" + rm(g.rebate) : "–"}</td>${van ? "" : `<td><b>±${rm(monthly(g))}</b></td>`}</tr>`).join("\n");
 };
+// nota "asas kiraan" untuk satu model (dipapar di sebelah nama model)
+const calcNote = (lang, m, ctx) => {
+  const T = TXT[lang];
+  if (m.type === "Van") return `<p class="p-calc">${T.calcVan}</p>`;
+  const bits = T.calcBits(ctx.month[lang], m.grades.some(g => g.rebate), m.grades.some(g => minColour(g)));
+  return `<p class="p-calc"><b>${T.calcLbl}</b> ${bits.join(" · ")}. <em>${DEP < 10 ? T.calcWarn : T.calcOk}</em></p>`;
+};
 const priceTable = (lang, m, caption) => {
   const T = TXT[lang], heads = m.type === "Van" ? T.th.slice(0, 3) : T.th;
   return `<div class="p-table"><table><caption class="p-sr">${esc(caption)}</caption><thead><tr>${heads.map(h => `<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>
@@ -222,7 +239,8 @@ function modelPage(lang, D, m, ctx) {
   <img class="p-car" src="/${esc(m.cut)}" alt="Toyota ${esc(n)} ${ctx.year}" width="720" height="300" fetchpriority="high">
 </section>
 <section>
-  <h2>${T.h2Price(van)}</h2>
+  <div class="p-mhead"><h2>${T.h2Price(van)}</h2>
+    ${calcNote(lang, m, ctx)}</div>
   ${priceTable(lang, m, `Toyota ${n}: ${T.h2Price(van)}`)}
   ${van ? "" : `<p class="p-note">${T.assume(ctx.month[lang])}</p>`}
   <div class="p-actions">${van ? "" : `<a class="p-btn p-blue" href="${T.home}?model=${m.id}#kalkulator">${T.calcFull}</a>`}<a class="p-btn p-ghost" href="${T.home}?model=${m.id}#model">${T.seePhotos}</a>${MX[m.id] ? `<a class="p-btn p-ghost" href="/maxcheck/?model=${MX[m.id]}">${T.mxLink}</a>` : ""}${waBtn(T.waMsg(n), T.wa)}</div>
@@ -402,7 +420,8 @@ function hubPage(lang, D, ctx) {
   <p class="p-jump">${D.models.map(m => `<a href="#${m.id}">${esc(m.name)}</a>`).join("")}</p>
 </section>
 ${D.models.map(m => `<section id="${m.id}">
-  <h2><a href="${urlOf(lang, m.id)}">Toyota ${esc(m.name)} ›</a></h2>
+  <div class="p-mhead"><h2><a href="${urlOf(lang, m.id)}">Toyota ${esc(m.name)} ›</a></h2>
+    ${calcNote(lang, m, ctx)}</div>
   ${priceTable(lang, m, "Toyota " + m.name)}
 </section>`).join("\n")}
 <p class="p-note">${T.assume(ctx.month[lang])}</p>

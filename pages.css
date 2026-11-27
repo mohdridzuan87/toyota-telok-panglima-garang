@@ -116,6 +116,12 @@ main section.p-cta{background:var(--soft);border-radius:22px;padding:28px 20px;t
 .p-top .p-nav a:hover{background:#0066cc;color:#fff;text-decoration:none}
 .p-top .p-nav a[aria-current]{background:#0066cc;color:#fff}
 @media (max-width:480px){.p-top .p-nav a{height:32px;padding:0 12px;font-size:11px}}
+/* nota asas kiraan di sebelah nama model (turun ke bawah tajuk di telefon) */
+.p-mhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-bottom:14px}
+.p-mhead h2{margin:0}
+.p-calc{flex:1 1 300px;min-width:0;padding:9px 13px;border-radius:12px;background:var(--soft);font-size:12.5px;line-height:1.5;color:#3a3a3f}
+.p-calc b{color:var(--ink)}
+.p-calc em{display:block;font-style:normal;color:#9a0014}
 /* butang Home (halaman Price & Maxcheck): tulisan di skrin lebar, ikon rumah di telefon */
 .p-home svg{display:none;width:17px;height:17px;fill:currentColor}
 @media (max-width:399px){.p-top .p-home{width:32px;padding:0;justify-content:center}.p-home svg{display:block}.p-home span{display:none}}
