@@ -75,3 +75,6 @@ html.bm a.l-bm.p-btn,html.bm a.l-bm.p-brand{display:inline-flex!important}
 .mx-covers{margin-top:12px;font-size:13px;color:#55555e}
 .mx-covers b{color:#111;font-weight:600}
 @media (max-width:620px){.mx-share button{flex:1 1 140px;padding:10px 12px;font-size:13px}}
+
+/* header halaman Price & Maxcheck tanpa logo Toyota; di telefon butang dipusatkan */
+@media (max-width:760px){.mx-page .p-top{justify-content:center}html body.mx-page .p-top a.p-brand.p-brand{display:none!important}.mx-page .p-top .p-brand+.p-nav+.p-mx{margin-left:0}}

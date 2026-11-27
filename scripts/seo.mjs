@@ -353,7 +353,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 </head>
 <body class="mx-page">
 <header class="p-top">
-  ${A("p-brand", "/en/", "/", '<img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span>', '<img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span>')}
+  ${A("p-brand", "/en/", "/", '<span>Wan Jasni</span>', '<span>Wan Jasni</span>')}
   <nav class="p-nav">${A("", E.home.replace(/\/$/, "/") + "price/", "/harga/", E.navList, M.navList)}${A("p-hide", "/en/#kalkulator", "/#kalkulator", E.navCalc, M.navCalc)}</nav>
   <a class="p-mx p-home" href="/en/" aria-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 11.5h3V21h5.500v-6h3v6H19v-9.500h3L12 3Z"/></svg><span>Home</span></a>
   <a class="p-mx" href="/pricelist/"${cur("pl")}>Price</a>
