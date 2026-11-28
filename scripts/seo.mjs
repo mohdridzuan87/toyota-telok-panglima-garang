@@ -309,6 +309,7 @@ function powerSections(MXD, L) {
 }
 
 // /maxcheck/ dan /pricelist/ (arahan Wan): SATU halaman setiap satu, English lalai, butang BM | EN di halaman sama (?lang=bm)
+const BR_BASE = "https://mohdridzuan87.github.io/wanjasni-brochure/"; // repo berasingan untuk gambar e-brochure (laman utama kekal kecil)
 const SHEETS = {
   mx: {
     dir: "maxcheck", section: "maxcheck", crumb: "Maxcheck", global: "MAXCHECK",
@@ -329,14 +330,25 @@ const SHEETS = {
     lead: (dEn, dBm) => [`Choose your model to see its official price list straight away, then share it on WhatsApp or save the image. Peninsular Malaysia only, from the price list on the Toyota Malaysia website (checked ${dEn}). Prices may change at any time.`, `Tekan model kereta awak, terus keluar senarai harga rasmi, boleh kongsi ke WhatsApp atau simpan gambarnya. Untuk Semenanjung Malaysia sahaja, ikut senarai harga di laman Toyota Malaysia (semakan ${dBm}). Harga boleh berubah bila-bila masa.`],
     noscript: "Enable JavaScript to view the price lists, or open the price list page on the Toyota Malaysia website.",
     src: ["Source: price list on the Toyota Malaysia website ›", "Sumber: senarai harga di laman Toyota Malaysia ›"]
+  },
+  br: {
+    dir: "brochure", section: "brochure", crumb: "Brochure", remote: true,
+    source: "https://www.toyota.com.my/en/price-and-model-tools/model-brochures.html",
+    title: y => `Toyota e-Brochure ${y} Malaysia, Every Model | Wan Jasni`,
+    titleBm: y => `E-Brochure Toyota ${y} Malaysia, Semua Model | Wan Jasni`,
+    desc: () => "Read the official Toyota Malaysia e-brochure for every model straight away, full screen on your phone in portrait or landscape, and share the PDF on WhatsApp. E-brochure rasmi Toyota setiap model.",
+    eye: "E-brochure", h1: ["Toyota e-brochure", "E-brochure Toyota"],
+    lead: () => ["Choose your model and variant to read its official e-brochure straight away, no download needed. View it full screen in portrait or landscape, then share the PDF on WhatsApp. From the model brochures page on the Toyota Malaysia website.", "Tekan model dan varian kereta awak, terus keluar e-brochure rasmi, tak perlu download. Boleh tengok skrin penuh, tegak atau melintang, dan kongsi PDF ke WhatsApp. Rujukan e-brochure di laman Toyota Malaysia."],
+    noscript: "Enable JavaScript to view the brochures, or open the model brochures page on the Toyota Malaysia website.",
+    src: ["Source: model brochures on the Toyota Malaysia website ›", "Sumber: e-brochure di laman Toyota Malaysia ›"]
   }
 };
 function sheetPage(kind, MXD, ctx, root) {
   const C = SHEETS[kind], E = TXT.en, M = TXT.ms, path_ = `/${C.dir}/`, url = HOME + path_;
-  const n = MXD.groups.reduce((a, g) => a + g.models.length, 0);
+  const n = MXD ? MXD.groups.reduce((a, g) => a + g.models.length, 0) : 0;
   const cur = k => k === kind ? ' aria-current="page"' : "";
   const day = loc => new Date(MXD.checkedAt + "T00:00:00Z").toLocaleDateString(loc, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
-  const dEn = day("en-GB"), dBm = day("ms-MY");
+  const dEn = MXD ? day("en-GB") : "", dBm = MXD ? day("ms-MY") : "";
   const stamp = f => { const t = readFileSync(path.join(root, f), "utf8").replace(/\r/g, ""); return [...t].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7).toString(36); };
   // dua bahasa dalam HTML: .l-en dipapar secara lalai, .l-bm bila html.bm
   const L = (en, bm) => `<span class="l-en">${en}</span><span class="l-bm" lang="ms">${bm}</span>`;
@@ -393,14 +405,15 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
 <section id="${C.section}">
   ${kind === "pl" ? `<div class="p-switch" role="group" aria-label="${E.swLabel}">${A("", "/pricelist/", "/pricelist/?lang=bm", E.swSheet, M.swSheet, ' aria-current="true"')}${A("", "/en/price/", "/harga/", esc(E.navList), esc(M.navList))}</div>` : ""}
   <div class="p-hero">
-    <p class="p-eye">${C.eye} · ${L(E.updated(dEn), M.updated(dBm))}</p>
+    <p class="p-eye">${C.eye}${MXD ? ` · ${L(E.updated(dEn), M.updated(dBm))}` : '<span id="brChecked"></span>'}</p>
     <h1>${L(C.h1[0], C.h1[1])}</h1>
     <p class="p-lead">${L(lead[0], lead[1])}</p>
   </div>
-  <div class="mx-powers" id="mxList">${kind === "pl" ? `<div class="mx-power mx-ice">${bodyGrid(MXD.groups, L)}</div>` : powerSections(MXD, L)}</div>
-  <div class="mx-view" id="mxView" hidden></div>
+  ${kind === "br" ? `<div class="br-grid" id="brList"><p class="p-note">${L("Loading brochures…", "Sedang memuatkan e-brochure…")}</p></div>
+  <div class="mx-view br-view" id="brView" hidden></div>` : `<div class="mx-powers" id="mxList">${kind === "pl" ? `<div class="mx-power mx-ice">${bodyGrid(MXD.groups, L)}</div>` : powerSections(MXD, L)}</div>
+  <div class="mx-view" id="mxView" hidden></div>`}
   <noscript><p class="p-note">${C.noscript}</p></noscript>
-  <p class="mx-src"><a href="${esc(MXD.source)}" target="_blank" rel="noopener">${L(C.src[0], C.src[1])}</a></p>
+  <p class="mx-src"><a href="${esc(MXD ? MXD.source : C.source)}" target="_blank" rel="noopener">${L(C.src[0], C.src[1])}</a></p>
 </section>
 </main>
 <footer class="p-foot">
@@ -412,8 +425,11 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
     <p>${L(E.privacy, M.privacy)}</p>
   </div>
 </footer>
-<script src="${path_}data.js?v=${stamp(C.dir + "/data.js")}"></script>
-<script src="/maxcheck-ui.js?v=${stamp("maxcheck-ui.js")}"></script>
+${C.remote ? `<script>window.BR_BASE = ${JSON.stringify(BR_BASE)};</script>
+<script src="${BR_BASE}data.js"></script>
+<script src="/brochure-ui.js?v=${stamp("brochure-ui.js")}"></script>
+<link rel="preconnect" href="${BR_BASE.replace(/\/[^/]*\/$/, "")}">` : `<script src="${path_}data.js?v=${stamp(C.dir + "/data.js")}"></script>
+<script src="/maxcheck-ui.js?v=${stamp("maxcheck-ui.js")}"></script>`}
 </body>
 </html>
 `;
@@ -480,6 +496,7 @@ Price facts (data checked ${ctx.date.en}):
 - [Home (English)](${HOME}/en/)
 - [Full Toyota price list (English)](${HOME}/en/price/)
 - [Senarai harga penuh Toyota (Bahasa Malaysia)](${HOME}/harga/)
+- [Official Toyota e-brochures by model, view online and share as PDF](${HOME}/brochure/) (English; Bahasa Malaysia: ${HOME}/brochure/?lang=bm)
 - [Official Toyota price lists by model, Peninsular Malaysia](${HOME}/pricelist/) (English; Bahasa Malaysia: ${HOME}/pricelist/?lang=bm)
 - [Toyota Maxcheck periodic service schedules by model](${HOME}/maxcheck/) (English; Bahasa Malaysia: ${HOME}/maxcheck/?lang=bm)
 
@@ -492,7 +509,7 @@ function sitemap(D, lastmod) {
   const pair = (ms, en) => [ms, en].map(loc => `  <url><loc>${HOME}${loc}</loc><lastmod>${lastmod}</lastmod>
     <xhtml:link rel="alternate" hreflang="ms" href="${HOME}${ms}"/><xhtml:link rel="alternate" hreflang="en" href="${HOME}${en}"/></url>`).join("\n");
   const rows = [pair("/", "/en/"), pair(urlOf("ms"), urlOf("en")), ...D.models.map(m => pair(urlOf("ms", m.id), urlOf("en", m.id)))];
-  rows.splice(1, 0, ...["pricelist", "maxcheck"].map(p => `  <url><loc>${HOME}/${p}/</loc><lastmod>${lastmod}</lastmod></url>`));
+  rows.splice(1, 0, ...["pricelist", "maxcheck", "brochure"].map(p => `  <url><loc>${HOME}/${p}/</loc><lastmod>${lastmod}</lastmod></url>`));
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${rows.join("\n")}
@@ -532,6 +549,7 @@ export function buildSeo(root, data) {
     if (b !== a) writeFileSync(f, b);
   }
   for (const [kind, C] of Object.entries(SHEETS)) {
+    if (C.remote) { write(C.dir + "/index.html", sheetPage(kind, null, ctx, root)); pages += 1; continue; }
     const file = path.join(root, C.dir, "data.js");
     if (!existsSync(file)) continue;
     const c = { window: {} }; vm.runInNewContext(readFileSync(file, "utf8"), c);

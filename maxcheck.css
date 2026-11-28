@@ -79,3 +79,45 @@ html.bm .p-switch a.l-bm{display:flex!important}
 
 /* header halaman Price & Maxcheck tanpa logo Toyota; di telefon butang dipusatkan */
 @media (max-width:760px){.mx-page .p-top{justify-content:center}html body.mx-page .p-top a.p-brand.p-brand{display:none!important}.mx-page .p-top .p-brand+.p-nav+.p-mx{margin-left:0}}
+
+/* /brochure/: kad model, muka surat e-brochure, skrin penuh */
+.br-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:28px}
+.br-card{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:0 0 12px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--ink);text-align:left;cursor:pointer;overflow:hidden;font:inherit;transition:border-color .15s,box-shadow .15s}
+.br-card:hover{border-color:#8a8a92}
+.br-card.on{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.br-img{display:block;width:100%;aspect-ratio:5/6;background:#e9e9ee;margin-bottom:8px}
+.br-img img{display:block;width:100%;height:100%;object-fit:cover}
+.br-card b{padding:0 12px;font-size:15px}
+.br-card small{padding:0 12px;font-size:12px;color:var(--grey)}
+@media (max-width:420px){.br-grid{grid-template-columns:1fr 1fr;gap:10px}}
+.br-view{scroll-margin-top:0}
+.br-actions a,.br-actions button{text-decoration:none}
+.br-actions .br-full{background:var(--ink);border-color:var(--ink);color:#fff}
+.br-actions .br-pdf{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#111;font-size:14px;font-weight:700}
+.br-actions .br-pdf svg{width:19px;height:19px;fill:currentColor}
+.br-actions .mx-wa{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:999px;background:var(--wa);color:#fff;font-size:14px;font-weight:700}
+.br-actions .mx-wa svg{width:19px;height:19px;fill:currentColor}
+@media (max-width:620px){.br-actions>*{flex:1 1 140px;font-size:13px!important;padding:10px 12px!important}}
+.br-hint{display:block;margin:4px 0 12px}
+.br-pages{display:flex;flex-direction:column;gap:12px}
+.br-page{position:relative;display:block;padding:0;border:1px solid var(--line);border-radius:12px;background:#f4f4f6;overflow:hidden;cursor:zoom-in}
+.br-page img{display:block;width:100%;height:auto}
+.br-page span{position:absolute;right:8px;bottom:8px;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:11.5px;font-weight:700}
+.br-ov{position:fixed;inset:0;z-index:1000;background:#111;display:flex;flex-direction:column}
+.br-ov-bar{display:flex;align-items:center;gap:8px;padding:8px;flex:none}
+.br-ov-bar button{min-height:40px;padding:9px 14px;border:0;border-radius:10px;background:#fff;color:#111;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.br-ov-count{flex:1;text-align:center;color:#fff;font-size:13px;font-weight:700}
+.br-ov-pager{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
+.br-ov-pager::-webkit-scrollbar{display:none}
+.br-ov-slide{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0 4px 8px}
+.br-ov-slide img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;cursor:zoom-in}
+.br-ov.zoomed .br-ov-pager{overflow-x:hidden}
+.br-ov-slide.zoomed{display:block;overflow:auto;-webkit-overflow-scrolling:touch}
+.br-ov-slide.zoomed img{max-width:none;max-height:none;width:max(220%,1400px);cursor:zoom-out}
+.br-ov-nav{position:absolute;top:50%;width:44px;height:64px;margin-top:-32px;border:0;border-radius:12px;background:rgba(255,255,255,.18);color:#fff;font-size:34px;line-height:1;cursor:pointer}
+.br-ov-nav:disabled{opacity:0;pointer-events:none}
+.br-ov-prev{left:6px}.br-ov-next{right:6px}
+.br-ov.zoomed .br-ov-nav{display:none}
+@media (hover:none){.br-ov-nav{width:36px;background:rgba(255,255,255,.12)}}
+/* telefon melintang: bar terapung supaya muka surat guna seluruh tinggi skrin */
+@media (max-height:500px){.br-ov-bar{position:absolute;top:0;left:0;right:0;z-index:2;padding:6px;pointer-events:none}.br-ov-bar>*{pointer-events:auto}.br-ov-bar button{min-height:34px;padding:6px 12px;background:rgba(255,255,255,.88)}.br-ov-count{text-shadow:0 1px 4px #000}.br-ov-slide{padding:0}}

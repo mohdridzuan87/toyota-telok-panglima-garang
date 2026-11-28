@@ -498,3 +498,7 @@ html .sa-card .sa-btns .btn{width:auto;margin:0;justify-content:center}
 .btn-tiktok.sm .ico{width:16px;height:16px;flex:none}
 html .hero .sa-card .btn-tiktok span{display:inline;color:#fff;-webkit-text-fill-color:#fff;font-size:inherit;text-transform:none;letter-spacing:0}
 html.theme-apple .sa-card .sa-btns{min-width:200px}
+
+/* header laman utama dengan 3 pil (Brochure, Price, Maxcheck): saiz padat pada telefon sempit (diukur 28 Nov 2026) */
+@media (max-width:399px){.top{padding-left:8px;padding-right:8px;gap:4px}.top .btn-mx{padding:0 6px;font-size:10.5px}.top .lang a{padding:6px 5px}.top .btn-tt,.top .btn-wa{width:33px;height:34px;min-height:34px;min-width:0;padding:0}}
+@media (max-width:340px){.top{padding-left:5px;padding-right:5px;gap:3px}.top .btn-mx{padding:0 5px;font-size:10px;height:30px}.top .lang a{padding:5px 4px;font-size:10px}.top .btn-tt,.top .btn-wa{width:30px;height:30px;min-height:30px}.top .btn-tt .ico,.top .btn-wa .ico{width:17px;height:17px}}
