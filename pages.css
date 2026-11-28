@@ -138,3 +138,6 @@ main section.p-cta{background:var(--soft);border-radius:22px;padding:28px 20px;t
 /* baris Loan Calculator (telefon/tablet): logo Toyota hitam di paling kiri, butang kekal di tengah */
 .p-top .p-nav .p-navlogo{display:none}
 @media (max-width:960px){.p-top .p-nav{position:relative}.p-top .p-nav .p-navlogo{display:block;position:absolute;left:4px;top:calc(50% + 3.5px);transform:translateY(-50%);width:38px;height:auto;filter:brightness(0);pointer-events:none}}
+/* header dengan 4 pil (Home, Brochure, Price, Maxcheck): saiz padat supaya satu baris (diukur 28 Nov 2026) */
+@media (max-width:429px){.p-top{gap:3px;padding-left:5px;padding-right:5px}.p-top .p-mx{height:30px;padding:0 6px;font-size:10.5px}.p-top .p-home{width:30px}.p-lang a{padding:5px 5px;font-size:10.5px}.p-tt,.p-top .p-top-wa{width:32px;height:32px;min-height:32px}.p-tt svg,.p-top .p-top-wa svg{width:17px;height:17px}}
+@media (max-width:359px){.p-top{gap:2px;padding-left:3px;padding-right:3px}.p-top .p-mx{height:28px;padding:0 4px;font-size:9.5px;border-width:1px}.p-top .p-home{width:28px}.p-home svg{width:14px;height:14px}.p-lang a{padding:5px 4px;font-size:9.5px}.p-tt,.p-top .p-top-wa{width:28px;height:28px;min-height:28px}.p-tt svg,.p-top .p-top-wa svg{width:15px;height:15px}}

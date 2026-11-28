@@ -167,6 +167,7 @@ ${head}${jsonld.map(ld).join("\n")}
 <header class="p-top">
   <a class="p-brand" href="${T.home}"><img src="/img/toyota-emblem.svg" alt="Toyota" width="34" height="22"><span>Wan Jasni</span></a>
   <nav class="p-nav"><img class="p-navlogo" src="/img/toyota-emblem.svg" alt="Toyota" width="40" height="26"><a href="${T.home}#kalkulator">${T.navCalc}</a></nav>
+  <a class="p-mx" href="/brochure/${lang === "ms" ? "?lang=bm" : ""}">Brochure</a>
   <a class="p-mx" href="/pricelist/" aria-current="true">Price</a>
   <a class="p-mx" href="/maxcheck/">Maxcheck</a>
   <div class="p-lang"><a href="${P.ms}"${lang === "ms" ? ' aria-current="page"' : ""} hreflang="ms">BM</a><a href="${P.en}"${lang === "en" ? ' aria-current="page"' : ""} hreflang="en">EN</a></div>
@@ -285,7 +286,15 @@ ${colourBlocks ? `<section>
 // Jenis kuasa jadual Maxcheck: BEV (elektrik penuh), HEV (hybrid), selebihnya petrol & diesel
 const BEV_IDS = new Set(["bz4x-hev", "urban-cruiser", "hilux-bev"]); // slug bZ4X Toyota ada "-hev" tetapi ia BEV
 const powerOf = (m, group) => BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
-const modelBtn = m => `<button type="button" data-id="${m.id}">${esc(m.name)}</button>`;
+// gambar sisi kereta (img/side, dijana scripts/sides.py dari menu Models Toyota Malaysia)
+let SIDES = {};
+const sideKey = s => String(s).toUpperCase().replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().replace(/^(ALL-NEW|NEW)\s+/, "").replace("HYBRID ELECTRIC", "HEV").replace(/^GR 86$/, "GR86").replace(/^COROLLA ALTIS$/, "COROLLA");
+const sideFam = k => k.replace(/\s+(HEV GR SPORT|GR SPORT|HEV|BEV|SLWB)$/, "");
+function sideFor(name) {
+  const k = sideKey(name), f = sideFam(k);
+  return SIDES[k] || SIDES[f] || Object.entries(SIDES).find(([n]) => sideFam(n) === f)?.[1] || "";
+}
+const modelBtn = m => { const src = sideFor(m.name); return `<button type="button" class="mx-card" data-id="${m.id}"><span class="mx-cimg${src ? "" : " none"}">${src ? `<img src="/${src}" alt="" loading="lazy">` : '<img src="/img/toyota-emblem.svg" alt="" loading="lazy">'}</span><b>${esc(m.name)}</b></button>`; };
 // kumpulan ikut jenis badan (Sedan, SUV, …)
 function bodyGrid(groups, L) {
   const NAMES = { "SEDAN": "Sedan", "SUV": "SUV", "MPV": "MPV", "PICKUP & VAN": "Pickup &amp; Van", "HATCHBACK": "Hatchback", "GR LINEUP": "GR lineup", "OTHERS": L("Others", "Lain-lain") };
@@ -394,6 +403,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
   ${A("p-brand", "/en/", "/", '<span>Wan Jasni</span>', '<span>Wan Jasni</span>')}
   <nav class="p-nav"><img class="p-navlogo" src="/img/toyota-emblem.svg" alt="Toyota" width="40" height="26">${A("", "/en/#kalkulator", "/#kalkulator", E.navCalc, M.navCalc)}</nav>
   <a class="p-mx p-home" href="/en/" aria-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 11.5h3V21h5.500v-6h3v6H19v-9.500h3L12 3Z"/></svg><span>Home</span></a>
+  <a class="p-mx" href="/brochure/"${cur("br")}>Brochure</a>
   <a class="p-mx" href="/pricelist/"${cur("pl")}>Price</a>
   <a class="p-mx" href="/maxcheck/"${cur("mx")}>Maxcheck</a>
   <div class="p-lang" role="group" aria-label="Language / Bahasa"><a href="${path_}?lang=bm" data-lang="bm" lang="ms">BM</a><a href="${path_}" data-lang="en" aria-current="page">EN</a></div>
@@ -519,6 +529,7 @@ ${rows.join("\n")}
 
 export function buildSeo(root, data) {
   let D = data;
+  try { SIDES = JSON.parse(readFileSync(path.join(root, "img", "side", "index.json"), "utf8")); } catch { SIDES = {}; }
   if (!D) { const c = { window: {} }; vm.runInNewContext(readFileSync(path.join(root, "data.js"), "utf8"), c); D = c.window.TOYOTA; }
   if (!D || !D.models || D.models.length < 8) throw new Error("Data model tak cukup; halaman SEO tidak diubah.");
   const when = new Date((D.checkedAt || D.updatedAt) + "T00:00:00Z");

@@ -125,3 +125,17 @@ html.bm .p-switch a.l-bm{display:flex!important}
 /* kad brochure: gambar sisi kereta (menu Models Toyota Malaysia) */
 .br-img.side{aspect-ratio:16/8;background:linear-gradient(#f6f6f8,#e9e9ee);display:flex;align-items:flex-end;justify-content:center;padding:10px 10px 8px}
 .br-img.side img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+
+/* kad model bergambar sisi (gaya halaman brochure) untuk /pricelist/ & /maxcheck/ */
+.mx-power .mx-list{display:block;margin-top:0}
+.mx-group+.mx-group{margin-top:18px}
+.mx-models{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mx-models .mx-card{display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:0 0 10px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);text-align:left;cursor:pointer;overflow:hidden;font:inherit}
+.mx-models .mx-card:hover{border-color:#8a8a92}
+.mx-models .mx-card.on{background:#fff;color:var(--ink);border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.mx-cimg{display:flex;align-items:flex-end;justify-content:center;width:100%;aspect-ratio:16/8;padding:8px 8px 6px;margin-bottom:8px;background:linear-gradient(#f6f6f8,#e9e9ee)}
+.mx-cimg img{display:block;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+.mx-cimg.none{align-items:center}
+.mx-cimg.none img{width:34%;height:auto;opacity:.18;filter:grayscale(1)}
+.mx-card b{padding:0 10px;font-size:14px;line-height:1.25}
+@media (max-width:420px){.mx-models{grid-template-columns:1fr 1fr;gap:8px}.mx-card b{font-size:13px}}

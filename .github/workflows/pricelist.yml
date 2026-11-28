@@ -26,6 +26,8 @@ jobs:
         run: pip install -q "pymupdf>=1.24" "pillow>=10"
       - name: Ambil senarai harga terkini
         run: python scripts/pricelist.py
+      - name: Gambar sisi kereta (menu Models Toyota) untuk kad model
+        run: python scripts/sides.py || echo "::warning::gambar sisi gagal, guna yang lama"
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -34,7 +36,7 @@ jobs:
       - name: Commit jika berubah
         id: commit
         run: |
-          git add -A pricelist maxcheck en harga llms.txt sitemap.xml index.html
+          git add -A img/side pricelist maxcheck en harga llms.txt sitemap.xml index.html
           if git diff --cached --quiet; then echo "Tiada perubahan"; echo "pushed=no" >> "$GITHUB_OUTPUT"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
