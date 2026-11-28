@@ -43,7 +43,7 @@
   function grid() {
     const chk = document.getElementById("brChecked"); if (chk && B.checkedAt) chk.textContent = T.updated(day(B.checkedAt));
     list.innerHTML = B.models.map(m => `<button type="button" class="br-card${cur && cur.id === m.id ? " on" : ""}" data-id="${esc(m.id)}" aria-expanded="${cur && cur.id === m.id ? "true" : "false"}">
-      <span class="br-img">${m.thumb ? `<img src="${BASE + m.thumb}" alt="Toyota ${esc(m.name)}" width="480" height="576" loading="lazy">` : ""}</span>
+      <span class="br-img${m.side ? " side" : ""}">${m.side || m.thumb ? `<img src="${BASE + (m.side || m.thumb)}" alt="Toyota ${esc(m.name)}" loading="lazy">` : ""}</span>
       <b>${esc(m.name)}</b><small>${esc(m.type)} · ${T.variants(m.variants.length)}</small></button>`).join("");
   }
   function render() {

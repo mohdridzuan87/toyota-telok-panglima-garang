@@ -121,3 +121,7 @@ html.bm .p-switch a.l-bm{display:flex!important}
 @media (hover:none){.br-ov-nav{width:36px;background:rgba(255,255,255,.12)}}
 /* telefon melintang: bar terapung supaya muka surat guna seluruh tinggi skrin */
 @media (max-height:500px){.br-ov-bar{position:absolute;top:0;left:0;right:0;z-index:2;padding:6px;pointer-events:none}.br-ov-bar>*{pointer-events:auto}.br-ov-bar button{min-height:34px;padding:6px 12px;background:rgba(255,255,255,.88)}.br-ov-count{text-shadow:0 1px 4px #000}.br-ov-slide{padding:0}}
+
+/* kad brochure: gambar sisi kereta (menu Models Toyota Malaysia) */
+.br-img.side{aspect-ratio:16/8;background:linear-gradient(#f6f6f8,#e9e9ee);display:flex;align-items:flex-end;justify-content:center;padding:10px 10px 8px}
+.br-img.side img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
