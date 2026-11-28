@@ -287,14 +287,14 @@ ${colourBlocks ? `<section>
 const BEV_IDS = new Set(["bz4x-hev", "urban-cruiser", "hilux-bev"]); // slug bZ4X Toyota ada "-hev" tetapi ia BEV
 const powerOf = (m, group) => BEV_IDS.has(m.id) || /\bBEV\b/i.test(m.name) ? "bev" : /\bHEV\b|hybrid/i.test(m.name) || /-hev$/.test(m.id) || m.id === "prius" || /HYBRID/i.test(group) ? "hev" : "ice";
 // gambar sisi kereta (img/side, dijana scripts/sides.py dari menu Models Toyota Malaysia)
-let SIDES = {};
+let SIDES = {}, SIDES_EXTRA = {};
 const sideKey = s => String(s).toUpperCase().replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().replace(/^(ALL-NEW|NEW)\s+/, "").replace("HYBRID ELECTRIC", "HEV").replace(/^GR 86$/, "GR86").replace(/^COROLLA ALTIS$/, "COROLLA");
 const sideFam = k => k.replace(/\s+(HEV GR SPORT|GR SPORT|HEV|BEV|SLWB)$/, "");
 function sideFor(name) {
   const k = sideKey(name), f = sideFam(k);
-  return SIDES[k] || SIDES[f] || Object.entries(SIDES).find(([n]) => sideFam(n) === f)?.[1] || "";
+  return SIDES[k] || SIDES[f] || Object.entries(SIDES).find(([n]) => sideFam(n) === f)?.[1] || SIDES_EXTRA[k] || "";
 }
-const modelBtn = m => { const src = sideFor(m.name); return `<button type="button" class="mx-card" data-id="${m.id}"><span class="mx-cimg${src ? "" : " none"}">${src ? `<img src="/${src}" alt="" loading="lazy">` : '<img src="/img/toyota-emblem.svg" alt="" loading="lazy">'}</span><b>${esc(m.name)}</b></button>`; };
+const modelBtn = m => { const src = sideFor(m.name); return `<button type="button" class="mx-card" data-id="${m.id}"><span class="mx-cimg${src ? "" : " none"}">${src ? `<img src="/${src}"${src.startsWith("img/side/") ? ' class="faces-left"' : ""} alt="" loading="lazy">` : '<img src="/img/toyota-emblem.svg" alt="" loading="lazy">'}</span><b>${esc(m.name)}</b></button>`; };
 // kumpulan ikut jenis badan (Sedan, SUV, …)
 function bodyGrid(groups, L) {
   const NAMES = { "SEDAN": "Sedan", "SUV": "SUV", "MPV": "MPV", "PICKUP & VAN": "Pickup &amp; Van", "HATCHBACK": "Hatchback", "GR LINEUP": "GR lineup", "OTHERS": L("Others", "Lain-lain") };
@@ -530,6 +530,8 @@ ${rows.join("\n")}
 export function buildSeo(root, data) {
   let D = data;
   try { SIDES = JSON.parse(readFileSync(path.join(root, "img", "side", "index.json"), "utf8")); } catch { SIDES = {}; }
+  // model lama (tiada dalam menu Toyota): gambar dari arkib laman Toyota Malaysia, disimpan menghadap kanan
+  try { SIDES_EXTRA = JSON.parse(readFileSync(path.join(root, "img", "side-extra", "index.json"), "utf8")); } catch { SIDES_EXTRA = {}; }
   if (!D) { const c = { window: {} }; vm.runInNewContext(readFileSync(path.join(root, "data.js"), "utf8"), c); D = c.window.TOYOTA; }
   if (!D || !D.models || D.models.length < 8) throw new Error("Data model tak cukup; halaman SEO tidak diubah.");
   const when = new Date((D.checkedAt || D.updatedAt) + "T00:00:00Z");
