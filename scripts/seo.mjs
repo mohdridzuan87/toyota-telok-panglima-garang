@@ -307,7 +307,7 @@ function powerSections(MXD, L) {
     ice: [L("Petrol &amp; Diesel", "Petrol &amp; Diesel"), L("Conventional engine", "Enjin biasa")],
     bev: ["BEV", L("Full electric", "Elektrik penuh")]
   };
-  return ["hev", "ice", "bev"].map(p => {
+  return ["bev", "hev", "ice"].map(p => { // Wan: BEV di atas HEV
     const list = all.filter(x => x.p === p);
     if (!list.length) return "";
     const inner = p === "ice"
