@@ -135,3 +135,6 @@ main section.p-cta{background:var(--soft);border-radius:22px;padding:28px 20px;t
 /* skrin sangat sempit: logo disorok, semua butang rapat & di tengah (jangan tolak satu butang ke tepi) */
 @media (max-width:359px){.p-top{gap:4px;padding-left:6px;padding-right:6px}}
 @media (max-width:349px){.p-top{justify-content:center}html body .p-top a.p-brand.p-brand{display:none!important}.p-top .p-brand+.p-nav+.p-mx{margin-left:0}}
+/* baris Loan Calculator (telefon/tablet): logo Toyota hitam di paling kiri, butang kekal di tengah */
+.p-top .p-nav .p-navlogo{display:none}
+@media (max-width:960px){.p-top .p-nav{position:relative}.p-top .p-nav .p-navlogo{display:block;position:absolute;left:4px;top:calc(50% + 3.5px);transform:translateY(-50%);width:38px;height:auto;filter:brightness(0);pointer-events:none}}

@@ -506,3 +506,7 @@ html.theme-apple .sa-card .sa-btns{min-width:200px}
 /* logo Toyota hitam di penjuru kiri atas header gambar (ganti logo di bar atas) */
 .hero .hero-logo{position:absolute;z-index:3;top:18px;left:max(16px,calc((100vw - 1180px)/2));width:clamp(52px,7vw,76px);height:auto;filter:brightness(0);pointer-events:none}
 html:not(.theme-apple):not(.theme-stripe) .hero .hero-logo{filter:brightness(0) invert(1)}
+
+/* menu laman utama: "Loan Calculator" sentiasa satu baris (981-1100px) */
+.top .nav a{white-space:nowrap}
+@media (min-width:981px) and (max-width:1100px){.top{gap:10px}.top .nav{gap:12px;font-size:12px}.top .btn-wa{padding-left:14px;padding-right:14px}}
