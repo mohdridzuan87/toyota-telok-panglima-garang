@@ -142,3 +142,6 @@ html.bm .p-switch a.l-bm{display:flex!important}
 
 /* Maxcheck: semua kereta menghadap kanan (gambar menu Toyota asalnya menghadap kiri) */
 #maxcheck .mx-cimg img.faces-left{transform:scaleX(-1)}
+
+.mx-credit{margin-top:6px;font-size:11.5px;color:var(--grey)}
+.mx-credit a{color:inherit;text-decoration:underline}

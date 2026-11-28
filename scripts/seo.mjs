@@ -424,6 +424,7 @@ ${ld(crumbs([["Home", "/en/"], [C.crumb, path_]]))}
   <div class="mx-view" id="mxView" hidden></div>`}
   <noscript><p class="p-note">${C.noscript}</p></noscript>
   <p class="mx-src"><a href="${esc(MXD ? MXD.source : C.source)}" target="_blank" rel="noopener">${L(C.src[0], C.src[1])}</a></p>
+  ${kind === "mx" ? `<p class="mx-credit">${L("Photos of older models: C-HR by ГП and Unser by Wilzz99", "Gambar model lama: C-HR oleh ГП dan Unser oleh Wilzz99")}, <a href="https://commons.wikimedia.org/wiki/File:Toyota_CH-R_Hybrid.jpg" target="_blank" rel="noopener">Wikimedia Commons</a> (<a href="https://commons.wikimedia.org/wiki/File:1997_Toyota_Kijang_1.8_LGX_wagon_(KF80;_12-25-2018),_Tangerang.jpg" target="_blank" rel="noopener">2</a>), <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>, ${L("background removed", "latar dibuang")}.</p>` : ""}
 </section>
 </main>
 <footer class="p-foot">
