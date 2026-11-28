@@ -502,3 +502,7 @@ html.theme-apple .sa-card .sa-btns{min-width:200px}
 /* header laman utama dengan 3 pil (Brochure, Price, Maxcheck): saiz padat pada telefon sempit (diukur 28 Nov 2026) */
 @media (max-width:399px){.top{padding-left:8px;padding-right:8px;gap:4px}.top .btn-mx{padding:0 6px;font-size:10.5px}.top .lang a{padding:6px 5px}.top .btn-tt,.top .btn-wa{width:33px;height:34px;min-height:34px;min-width:0;padding:0}}
 @media (max-width:340px){.top{padding-left:5px;padding-right:5px;gap:3px}.top .btn-mx{padding:0 5px;font-size:10px;height:30px}.top .lang a{padding:5px 4px;font-size:10px}.top .btn-tt,.top .btn-wa{width:30px;height:30px;min-height:30px}.top .btn-tt .ico,.top .btn-wa .ico{width:17px;height:17px}}
+
+/* logo Toyota hitam di penjuru kiri atas header gambar (ganti logo di bar atas) */
+.hero .hero-logo{position:absolute;z-index:3;top:18px;left:max(16px,calc((100vw - 1180px)/2));width:clamp(52px,7vw,76px);height:auto;filter:brightness(0);pointer-events:none}
+html:not(.theme-apple):not(.theme-stripe) .hero .hero-logo{filter:brightness(0) invert(1)}
