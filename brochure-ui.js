@@ -10,7 +10,7 @@
   const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   const bmMonth = d => d.replace(/January|February|March|May|June|July|August|October|December/, x => ({ January: "Januari", February: "Februari", March: "Mac", May: "Mei", June: "Jun", July: "Julai", August: "Ogos", October: "Oktober", December: "Disember" })[x]);
   const texts = () => EN ? {
-    pick: "Choose a variant", pages: n => `${n} pages`, full: "Full screen", share: "Share PDF to WhatsApp", pdf: "Open PDF",
+    pick: "Choose a variant", lang: "Brochure language", pages: n => `${n} pages`, full: "Full screen", share: "Share PDF to WhatsApp", pdf: "Open PDF",
     close: "Close", zoom: "Zoom in", fit: "Fit", prev: "Previous page", next: "Next page", covers: "This e-brochure covers:",
     tapHint: "Tap any page to view it full screen. Turn your phone sideways for wide pages.",
     variants: n => n > 1 ? `${n} variants` : "1 e-brochure", updated: d => ` · Updated: ${d}`,
@@ -18,7 +18,7 @@
     msg: (n, pdf, link) => `Toyota ${n} e-brochure (PDF, official from Toyota Malaysia):\n${pdf}\n\nView online: ${link}`,
     alt: (n, i, t) => `Toyota ${n} e-brochure, page ${i} of ${t}`
   } : {
-    pick: "Pilih varian", pages: n => `${n} muka surat`, full: "Skrin penuh", share: "Kongsi PDF ke WhatsApp", pdf: "Buka PDF",
+    pick: "Pilih varian", lang: "Bahasa brochure", pages: n => `${n} muka surat`, full: "Skrin penuh", share: "Kongsi PDF ke WhatsApp", pdf: "Buka PDF",
     close: "Tutup", zoom: "Besarkan", fit: "Muat skrin", prev: "Muka surat sebelum", next: "Muka surat seterusnya", covers: "E-brochure ni untuk:",
     tapHint: "Tekan mana-mana muka surat untuk tengok skrin penuh. Pusing telefon melintang untuk muka surat yang lebar.",
     variants: n => n > 1 ? `${n} varian` : "1 e-brochure", updated: d => ` · Dikemas kini: ${d}`,
@@ -33,11 +33,12 @@
   const FULLICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z"/></svg>';
   const PDFICO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l6 6v14H6V2Zm7 1.5V9h5.5L13 3.5ZM8 13v2h8v-2H8Zm0 4v2h6v-2H8Z"/></svg>';
 
-  let cur = null, vi = 0;
-  const doc = () => B.docs[cur.variants[vi].doc];
+  let cur = null, vi = 0, li = 0;
+  const langs = () => cur.variants[vi].langs || [];
+  const doc = () => B.docs[langs().length ? langs()[Math.min(li, langs().length - 1)].doc : cur.variants[vi].doc];
   const vname = v => v.names.join(" · ");
-  const link = () => `${SITE}?${EN ? "" : "lang=bm&"}model=${cur.id}${cur.variants.length > 1 ? "&v=" + cur.variants[vi].id : ""}`;
-  const setUrl = () => { const q = new URLSearchParams(); if (!EN) q.set("lang", "bm"); if (cur && !view.hidden) { q.set("model", cur.id); if (cur.variants.length > 1) q.set("v", cur.variants[vi].id); } const s = q.toString(); history.replaceState(null, "", location.pathname + (s ? "?" + s : "")); };
+  const link = () => `${SITE}?${EN ? "" : "lang=bm&"}model=${cur.id}${cur.variants.length > 1 ? "&v=" + cur.variants[vi].id : ""}${langs().length && li ? "&l=" + li : ""}`;
+  const setUrl = () => { const q = new URLSearchParams(); if (!EN) q.set("lang", "bm"); if (cur && !view.hidden) { q.set("model", cur.id); if (cur.variants.length > 1) q.set("v", cur.variants[vi].id); if (langs().length && li) q.set("l", li); } const s = q.toString(); history.replaceState(null, "", location.pathname + (s ? "?" + s : "")); };
 
   function grid() {
     const chk = document.getElementById("brChecked"); if (chk && B.checkedAt) chk.textContent = T.updated(day(B.checkedAt));
@@ -52,6 +53,7 @@
         <button type="button" class="mx-close" aria-label="${T.close}">✕</button></div>
       ${m.variants.length > 1 ? `<p class="mx-pick">${T.pick}</p><div class="mx-variants">${m.variants.map((x, i) => `<button type="button" data-v="${i}" class="${i === vi ? "on" : ""}">${esc(vname(x))}</button>`).join("")}</div>`
         : `<p class="mx-pick"><b>${esc(vname(v))}</b></p>`}
+      ${langs().length ? `<p class="mx-pick">${T.lang}</p><div class="mx-variants br-langs">${langs().map((x, i) => `<button type="button" data-l="${i}" class="${i === li ? "on" : ""}">${esc(x.lang)}</button>`).join("")}</div>` : ""}
       ${v.names.length > 1 ? `<p class="mx-covers">${T.covers} <b>${esc(v.names.join(" · "))}</b></p>` : ""}
       <div class="mx-share br-actions">
         <button type="button" class="br-full">${FULLICO}<span>${T.full}</span></button>
@@ -63,7 +65,7 @@
   }
   function open(id, v, scroll = true) {
     const m = B.models.find(x => x.id === id); if (!m) return;
-    cur = m; vi = Math.max(0, m.variants.findIndex(x => x.id === v));
+    cur = m; vi = Math.max(0, m.variants.findIndex(x => x.id === v)); li = 0;
     list.querySelectorAll(".br-card").forEach(b => { const on = b.dataset.id === id; b.classList.toggle("on", on); b.setAttribute("aria-expanded", on ? "true" : "false"); });
     render(); setUrl();
     if (scroll) requestAnimationFrame(() => view.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -71,7 +73,8 @@
   list.addEventListener("click", e => { const b = e.target.closest(".br-card"); if (b) open(b.dataset.id); });
   view.addEventListener("click", e => {
     const t = e.target.closest("button"); if (!t) return;
-    if (t.dataset.v !== undefined) { vi = +t.dataset.v; render(); setUrl(); return; }
+    if (t.dataset.v !== undefined) { vi = +t.dataset.v; li = 0; render(); setUrl(); return; }
+    if (t.dataset.l !== undefined) { li = +t.dataset.l; render(); setUrl(); return; }
     if (t.classList.contains("mx-close")) { view.hidden = true; view.innerHTML = ""; cur = null; grid(); setUrl(); return; }
     if (t.classList.contains("br-full")) { full(0); return; }
     if (t.classList.contains("br-page")) full(+t.dataset.p);
@@ -137,6 +140,7 @@
   const q = new URLSearchParams(location.search);
   if (q.get("model")) {
     open(q.get("model"), q.get("v"), false);
+    if (cur && langs()[+q.get("l")]) { li = +q.get("l"); render(); setUrl(); }
     if (cur) { const jump = () => view.scrollIntoView({ behavior: "instant", block: "start" }); if (document.readyState === "complete") setTimeout(jump, 80); else addEventListener("load", () => setTimeout(jump, 80)); }
   }
 })();
